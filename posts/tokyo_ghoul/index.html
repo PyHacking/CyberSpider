@@ -6,7 +6,7 @@
   
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Tokyo Ghoul is a medium difficulty linux box." />
+<meta name="description" content="Writeup of Tokyo Ghoul from Try Hack Me." />
 <meta name="keywords" content="" />
 
   <meta name="robots" content="noodp" />
@@ -48,7 +48,7 @@
 <meta property="og:locale" content="en" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="THM Writeup - Tokyo Ghoul (Medium)">
-<meta property="og:description" content="Tokyo Ghoul is a medium difficulty linux box." />
+<meta property="og:description" content="Writeup of Tokyo Ghoul from Try Hack Me." />
 <meta property="og:url" content="/posts/tokyo_ghoul/" />
 <meta property="og:site_name" content="CyberSpider" />
 
@@ -149,6 +149,8 @@
       #<a href="/tags/medium/">medium</a>&nbsp;
       
       #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/local_file_inclusion/">Local_FIle_Inclusion</a>&nbsp;
       
     </span>
   
@@ -1145,9 +1147,7 @@ We have find a possible hash:</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>User kamishiro may run the following commands on vagrant.vm:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL<span style="color:#f92672">)</span> /usr/bin/python3 /home/kamishiro/jail.py
-</span></span></code></pre></div><ol start="2">
-<li>I see the code of <code>/home/kamishiro/jail.py</code>:</li>
-</ol>
+</span></span></code></pre></div><p>I see the code of <code>/home/kamishiro/jail.py</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>kamishiro@vagrant:~$ cat /home/kamishiro/jail.py
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#! /usr/bin/python3</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#-*- coding:utf-8 -*-</span>
@@ -1210,6 +1210,13 @@ We have find a possible hash:</p>
         <hr />
     </div>
     <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/chocolate_factory/">
+                <span class="button__icon">←</span>
+                <span class="button__text">HTB Writeup - Chocolate Factory (Easy)</span>
+            </a>
+        </span>
         
         
         <span class="button next">

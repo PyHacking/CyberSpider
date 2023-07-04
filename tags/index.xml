@@ -28,21 +28,21 @@
     </item>
     
     <item>
-      <title>linux</title>
-      <link>/tags/linux/</link>
+      <title>LFI</title>
+      <link>/tags/lfi/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/tags/linux/</guid>
+      <guid>/tags/lfi/</guid>
       <description></description>
       <content></content>
     </item>
     
     <item>
-      <title>Local_FIle_Inclusion</title>
-      <link>/tags/local_file_inclusion/</link>
+      <title>linux</title>
+      <link>/tags/linux/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/tags/local_file_inclusion/</guid>
+      <guid>/tags/linux/</guid>
       <description></description>
       <content></content>
     </item>

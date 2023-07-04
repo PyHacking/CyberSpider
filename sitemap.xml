@@ -11,13 +11,10 @@
     <loc>/tags/easy/</loc>
     <lastmod>2023-07-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/chocolate_factory/</loc>
+    <loc>/tags/lfi/</loc>
     <lastmod>2023-07-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/linux/</loc>
-    <lastmod>2023-07-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/local_file_inclusion/</loc>
     <lastmod>2023-07-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/medium/</loc>
@@ -30,6 +27,9 @@
     <lastmod>2023-07-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/thm/</loc>
+    <lastmod>2023-07-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/posts/chocolate_factory/</loc>
     <lastmod>2023-07-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/posts/tokyo_ghoul/</loc>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Local_FIle_Inclusion on CyberSpider</title>
-    <link>/tags/local_file_inclusion/</link>
-    <description>Recent content in Local_FIle_Inclusion on CyberSpider</description>
+    <title>LFI on CyberSpider</title>
+    <link>/tags/lfi/</link>
+    <description>Recent content in LFI on CyberSpider</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 04 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/local_file_inclusion/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/lfi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>THM Writeup - Tokyo Ghoul (Medium)</title>
       <link>/posts/tokyo_ghoul/</link>

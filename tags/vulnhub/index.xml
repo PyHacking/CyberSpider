@@ -14,11 +14,11 @@
       
       <guid>/posts/death_note/</guid>
       <description>The Death Note machine is an easy linux box.
-Nmap Scan I do a scan with nmap
+Nmap Scan I do a scan with nmap:
 ┌──(kali㉿kali)-[~] └─$ nmap -A -sV -sC 10.0.0.2 Starting Nmap 7.93 ( https://nmap.org ) at 2023-02-12 11:39 EST Nmap scan report for deathnote.vuln (10.0.0.2) Host is up (0.00082s latency). Not shown: 998 closed tcp ports (conn-refused) PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0) | ssh-hostkey: | 2048 5eb8ff2dacc7e93c992f3bfcda5ca353 (RSA) | 256 a8f3819d0adc169a49eebc24e4655ca6 (ECDSA) |_ 256 4f20c32d19755be81f320175c2709a7e (ED25519) 80/tcp open http Apache httpd 2.</description>
       <content>&lt;p&gt;The &lt;code&gt;Death Note&lt;/code&gt; machine is an easy linux box.&lt;/p&gt;
 &lt;h2 id=&#34;nmap-scan&#34;&gt;Nmap Scan&lt;/h2&gt;
-&lt;p&gt;I do a scan with &lt;code&gt;nmap&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I do a scan with &lt;code&gt;nmap&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ nmap -A -sV -sC 10.0.0.2
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.93 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2023-02-12 11:39 EST
@@ -39,7 +39,7 @@ Nmap Scan I do a scan with nmap
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 7.85 seconds
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;directory-enumeration&#34;&gt;Directory Enumeration&lt;/h2&gt;
-&lt;p&gt;I do a directory enumeration with &lt;code&gt;gobuster&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I do a directory enumeration with `gobuster:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ gobuster dir -u http://deathnote.vuln/wordpress/   -w  /usr/share/wordlists/dirb/big.txt
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;===============================================================&lt;/span&gt;
@@ -190,7 +190,7 @@ Nmap Scan I do a scan with nmap
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-kira
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;vertical-privilege-escalation&#34;&gt;Vertical Privilege Escalation&lt;/h1&gt;
 &lt;h2 id=&#34;mysql&#34;&gt;MySql&lt;/h2&gt;
-&lt;p&gt;I do access to &lt;code&gt;mysql&lt;/code&gt; and I  find the kira&amp;rsquo;s credentials&lt;/p&gt;
+&lt;p&gt;I do access to &lt;code&gt;mysql&lt;/code&gt; and I  find the kira&amp;rsquo;s credentials:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;l@deathnote:~$ mysql -u l --password&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;death4me --host&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;127.0.0.1
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Welcome to the MariaDB monitor.  Commands end with ; or &lt;span style=&#34;color:#ae81ff&#34;&gt;\g&lt;/span&gt;.
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Your MariaDB connection id is &lt;span style=&#34;color:#ae81ff&#34;&gt;42&lt;/span&gt;
@@ -243,7 +243,7 @@ Nmap Scan I do a scan with nmap
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MariaDB &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;wordpress&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&amp;gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I can&amp;rsquo;t crack kira&amp;rsquo;s hash&lt;/p&gt;
-&lt;p&gt;After many enumeration I find this directory and many file :&lt;/p&gt;
+&lt;p&gt;After many enumeration I find this directory and many file:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;l@deathnote:/$ cd opt
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;l@deathnote:/opt$ ls -all
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;total &lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;

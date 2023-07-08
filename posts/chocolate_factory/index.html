@@ -164,7 +164,7 @@
   <div class="post-content"><div>
         <p><code>Chocolate Factory</code> is a easy difficulty linux box.</p>
 <h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>I do a scan with <code>nmap</code></p>
+<p>I do a scan with <code>nmap</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ nmap -sV -sC 10.10.5.181      
 </span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-12-13 14:10 EST
@@ -566,7 +566,7 @@
 - Password: cn7824
 </code></pre><p>What is Charlie&rsquo;s password? <code>cn7824</code></p>
 <h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>I do a directory enumeration with <code>gobuster</code></p>
+<p>I do a directory enumeration with <code>gobuster</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo gobuster dir -u http://10.10.5.181/ -w /home/prowl/SecLists/Discovery/Web-Content/big.txt 
 </span></span><span style="display:flex;"><span>

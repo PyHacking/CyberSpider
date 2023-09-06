@@ -3,24 +3,39 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/</loc>
-    <lastmod>2023-08-23T00:00:00+00:00</lastmod>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/easy/</loc>
-    <lastmod>2023-08-23T00:00:00+00:00</lastmod>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/htb/</loc>
-    <lastmod>2023-08-23T00:00:00+00:00</lastmod>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/keeper/</loc>
-    <lastmod>2023-08-23T00:00:00+00:00</lastmod>
+    <loc>/posts/pilgrimage/</loc>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/lfi/</loc>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/linux/</loc>
-    <lastmod>2023-08-23T00:00:00+00:00</lastmod>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/posts/</loc>
-    <lastmod>2023-08-23T00:00:00+00:00</lastmod>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/</loc>
+    <lastmod>2023-09-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/grpc/</loc>
+    <lastmod>2023-09-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/posts/pc/</loc>
+    <lastmod>2023-09-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/rce/</loc>
+    <lastmod>2023-09-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/posts/keeper/</loc>
     <lastmod>2023-08-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/posts/bank/</loc>
@@ -45,12 +60,6 @@
     <lastmod>2023-07-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/posts/beep/</loc>
-    <lastmod>2023-07-19T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/lfi/</loc>
-    <lastmod>2023-07-19T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/rce/</loc>
     <lastmod>2023-07-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/cve-2018-15133/</loc>

